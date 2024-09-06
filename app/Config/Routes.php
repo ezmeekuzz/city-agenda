@@ -58,6 +58,14 @@ $routes->post('/admin/addevent/insert', 'Admin\AddEventController::insert');
 $routes->get('/admin/event-masterlist', 'Admin\EventMasterlistController::index');
 $routes->get('/admin/eventmasterlist/getData', 'Admin\EventMasterlistController::getData');
 $routes->delete('/admin/eventmasterlist/delete/(:num)', 'Admin\EventMasterlistController::delete/$1');
+$routes->get('/admin/edit-event/(:num)', 'Admin\EditEventController::index/$1');
+$routes->post('/admin/editevent/getCities', 'Admin\EditEventController::getCities');
+$routes->post('/admin/editevent/update', 'Admin\EditEventController::update');
+$routes->get('/admin/add-ticketing/(:num)', 'Admin\AddTicketingController::index/$1');
+$routes->post('/admin/addticketing/insert', 'Admin\AddTicketingController::insert');
+$routes->get('/admin/ticket-masterlist', 'Admin\TicketMasterlistController::index');
+$routes->get('/admin/ticketmasterlist/getData', 'Admin\TicketMasterlistController::getData');
+$routes->delete('/admin/ticketmasterlist/delete/(:num)', 'Admin\TicketMasterlistController::delete/$1');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');
 $routes->post('/subscribe', 'SubscribeController::index');

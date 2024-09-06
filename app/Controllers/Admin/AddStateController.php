@@ -11,7 +11,7 @@ class AddStateController extends SessionController
     public function index()
     {
         $data = [
-            'title' => 'Add City | Add State',
+            'title' => 'City Agenda | Add State',
             'currentpage' => 'addstate'
         ];
         return view('pages/admin/addstate', $data);

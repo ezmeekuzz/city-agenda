@@ -4,16 +4,16 @@ namespace App\Models\Admin;
 
 use CodeIgniter\Model;
 
-class EventsModel extends Model
+class TicketsModel extends Model
 {
-    protected $table            = 'events';
-    protected $primaryKey       = 'event_id';
+    protected $table            = 'tickets';
+    protected $primaryKey       = 'ticket_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'user_id', 'publishstatus', 'eventbanner', 'category_id', 'eventname', 'slug', 'shortdescription', 'eventtype', 'eventdate', 'eventstartingtime', 'eventendingtime', 'recurrence', 'locationname', 'state_id', 'city_id', 'event_image', 'event_video', 'eventdescription', 'eventdescription'
+        'event_id', 'tickettype', 'ticketname', 'ticketdescription', 'availablequantity', 'soldticket', 'price', 'salesstart', 'salesend'
     ];
 
     protected bool $allowEmptyInserts = false;

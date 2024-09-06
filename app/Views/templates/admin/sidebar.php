@@ -56,7 +56,7 @@
                                     <li class="<?php if($currentpage === 'blogmasterlist') { echo 'active'; } ?>"> <a href='/admin/blog-masterlist'>Blog Masterlist</a></li>
                                 </ul>
                             </li>
-                            <li class="<?php if($currentpage === 'addevent' || $currentpage === 'eventmasterlist') { echo 'active'; } ?>">
+                            <li class="<?php if($currentpage === 'addevent' || $currentpage === 'eventmasterlist' || $currentpage === 'ticketmasterlist') { echo 'active'; } ?>">
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <i class="nav-icon fa fa-calendar"></i>
                                     <span class="nav-title">Event</span>
@@ -64,6 +64,7 @@
                                 <ul aria-expanded="false">
                                     <li class="<?php if($currentpage === 'addevent') { echo 'active'; } ?>"><a href='/admin/add-event'>Add Event</a></li>
                                     <li class="<?php if($currentpage === 'eventmasterlist') { echo 'active'; } ?>"> <a href='/admin/event-masterlist'>Event Masterlist</a></li>
+                                    <li class="<?php if($currentpage === 'ticketmasterlist') { echo 'active'; } ?>"> <a href='/admin/ticket-masterlist'>Ticket Masterlist</a></li>
                                 </ul>
                             </li>
                             <li class="<?php if($currentpage === 'messages') { echo 'active'; } ?>"><a href="/admin/messages"><i class="nav-icon ti ti-envelope"></i><span class="nav-title">Messages</span></a> </li>

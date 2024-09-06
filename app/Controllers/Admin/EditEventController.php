@@ -13,46 +13,80 @@ use App\Models\Admin\SpeakersModel;
 use App\Models\Admin\SponsorsModel;
 use App\Models\Admin\FaqsModel;
 
-class AddEventController extends SessionController
+class EditEventController extends SessionController
 {
-    public function index()
+    public function index($id)
     {
         $categoriesModel = new CategoriesModel();
         $stateModel = new StatesModel();
+        $eventsModel = new EventsModel();
+        $agendasModel = new AgendasModel();
+        $speakersModel = new SpeakersModel();
+        $sponsorsModel = new SponsorsModel();
+        $faqsModel = new FaqsModel();
         $categoryList = $categoriesModel->findAll();
         $stateList = $stateModel->findAll();
+        $agendasList = $agendasModel->where('event_id', $id)->findAll();
+        $speakersList = $speakersModel->where('event_id', $id)->findAll();
+        $sponsorsList = $sponsorsModel->where('event_id', $id)->findAll();
+        $faqsList = $faqsModel->where('event_id', $id)->findAll();
+        $eventDetails = $eventsModel
+        ->join('states', 'states.state_id=events.state_id', 'left')
+        ->join('cities', 'cities.city_id=events.city_id', 'left')
+        ->join('users', 'users.user_id=events.user_id', 'left')
+        ->join('categories', 'categories.category_id=events.category_id', 'left')
+        ->where('events.event_id', $id)
+        ->first();
         $data = [
-            'title' => 'City Agenda | Add Event',
-            'currentpage' => 'addevent',
+            'title' => 'City Agenda | Edit Event',
+            'currentpage' => 'eventmasterlist',
             'categoryList' => $categoryList,
             'stateList' => $stateList,
+            'eventDetails' => $eventDetails,
+            'agendasList' => $agendasList,
+            'speakersList' => $speakersList,
+            'sponsorsList' => $sponsorsList,
+            'faqsList' => $faqsList,
         ];
-        return view('pages/admin/addevent', $data);
+        return view('pages/admin/editevent', $data);
     }
     public function getCities()
     {
-        $cityModel = new CitiesModel();
-        $state_id = $this->request->getPost('state_id');
-        $cities = $cityModel->where('state_id', $state_id)->findAll();
+        if ($this->request->isAJAX()) {
+            // Get the state_id from the AJAX request
+            $stateId = $this->request->getPost('state_id');
 
-        return $this->response->setJSON($cities);
+            // Load the City model
+            $cityModel = new CitiesModel();
+
+            // Retrieve cities based on the state_id
+            $cities = $cityModel->where('state_id', $stateId)->findAll();
+
+            // Prepare the response array
+            $data = [];
+            foreach ($cities as $city) {
+                $data[] = [
+                    'city_id' => $city['city_id'], // Adjust the column names to match your database schema
+                    'cityname' => $city['cityname'], // Adjust the column names to match your database schema
+                ];
+            }
+
+            // Return the response in JSON format
+            return $this->response->setJSON($data);
+        }
+
+        // If not an AJAX request, you can return a 404 or redirect
+        return redirect()->to('/');
     }
-    public function insert()
+    public function update()
     {
         $eventModel = new EventsModel();
         $agendasModel = new AgendasModel();
         $speakersModel = new SpeakersModel();
         $sponsorsModel = new SponsorsModel();
         $faqsModel = new FaqsModel();
-
-        $eventBannerFile = $this->request->getFile('eventbanner');
-        if (!$eventBannerFile || !$eventBannerFile->isValid()) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Event banner is required.',
-                'errorCode' => 'MISSING_FILE',
-            ]);
-        }
+        $event_id = $this->request->getPost('event_id');
+        $eventDetails = $eventModel->find($event_id);
         $requiredFields = [
             'category_id', 'eventname', 'shortdescription', 'eventtype',
             'eventdate', 'eventstartingtime', 'eventendingtime', 
@@ -94,30 +128,51 @@ class AddEventController extends SessionController
     
         // Handle eventbanner file upload
         $eventBannerFile = $this->request->getFile('eventbanner');
-        if ($eventBannerFile && $eventBannerFile->isValid()) {
+        if ($eventBannerFile && $eventBannerFile->isValid() && !$eventBannerFile->hasMoved()) {
             $newBannerName = $eventBannerFile->getRandomName();
+        
+            // Check if there is an existing banner file to remove
+            if (!empty($eventDetails['eventbanner']) && file_exists(FCPATH . $eventDetails['eventbanner'])) {
+                unlink(FCPATH . $eventDetails['eventbanner']);
+            }
+        
+            // Move the new banner file and update event data
             $eventBannerFile->move(FCPATH . 'uploads/event_banners', $newBannerName);
             $eventData['eventbanner'] = 'uploads/event_banners/' . $newBannerName;
         }
     
         // Handle event_image file upload
         $eventImageFile = $this->request->getFile('event_image');
-        if ($eventImageFile && $eventImageFile->isValid()) {
+        if ($eventImageFile && $eventImageFile->isValid() && !$eventImageFile->hasMoved()) {
             $newImageName = $eventImageFile->getRandomName();
+        
+            // Check if there is an existing image file to remove
+            if (!empty($eventDetails['event_image']) && file_exists(FCPATH . $eventDetails['event_image'])) {
+                unlink(FCPATH . $eventDetails['event_image']);
+            }
+        
+            // Move the new image file and update event data
             $eventImageFile->move(FCPATH . 'uploads/event_images', $newImageName);
             $eventData['event_image'] = 'uploads/event_images/' . $newImageName;
         }
-    
+        
         // Handle event_video file upload
         $eventVideoFile = $this->request->getFile('event_video');
-        if ($eventVideoFile && $eventVideoFile->isValid()) {
+        if ($eventVideoFile && $eventVideoFile->isValid() && !$eventVideoFile->hasMoved()) {
             $newVideoName = $eventVideoFile->getRandomName();
+        
+            // Check if there is an existing video file to remove
+            if (!empty($eventDetails['event_video']) && file_exists(FCPATH . $eventDetails['event_video'])) {
+                unlink(FCPATH . $eventDetails['event_video']);
+            }
+        
+            // Move the new video file and update event data
             $eventVideoFile->move(FCPATH . 'uploads/event_videos', $newVideoName);
             $eventData['event_video'] = 'uploads/event_videos/' . $newVideoName;
         }
     
         // Insert event data into the database
-        $eventId = $eventModel->insert($eventData);
+        $eventModel->update($event_id, $eventData);
         $this->dynamicRoutes();
 
         $slotTitles = $this->request->getPost('slotTitle');
@@ -126,6 +181,7 @@ class AddEventController extends SessionController
         $slotEndTimes = $this->request->getPost('slotEndTime');
 
         if ($slotTitles && is_array($slotTitles)) {
+            $agendasModel->where('event_id', $event_id)->delete();
             foreach ($slotTitles as $index => $title) {
                 // Check if any of the fields are empty
                 if (empty($title) || empty($slotDescriptions[$index]) || empty($slotStartTimes[$index]) || empty($slotEndTimes[$index])) {
@@ -138,7 +194,7 @@ class AddEventController extends SessionController
         
                 // If all fields are filled, proceed with the insertion
                 $agendasModel->insert([
-                    'event_id' => $eventId,
+                    'event_id' => $event_id,
                     'agenda_title' => $title,
                     'agenda_description' => $slotDescriptions[$index] ?? '',
                     'agenda_start_time' => $slotStartTimes[$index] ?? '',
@@ -158,6 +214,7 @@ class AddEventController extends SessionController
         
         // Ensure all the required arrays are available and have the same count
         if ($speakerNames && is_array($speakerNames) && count($speakerNames) === count($speakerJobs)) {
+            $speakersModel->where('event_id', $event_id)->delete();
             foreach ($speakerNames as $index => $name) {
                 // Ensure that the index exists in both arrays before accessing them
                 if (empty($name) || empty($speakerJobs[$index])) {
@@ -189,7 +246,7 @@ class AddEventController extends SessionController
         
                 // Prepare data for insertion
                 $speakerData = [
-                    'event_id' => $eventId,
+                    'event_id' => $event_id,
                     'name' => $name,
                     'job' => $speakerJobs[$index],
                     'image' => $newSpeakerImageName ? 'uploads/speaker_images/' . $newSpeakerImageName : '',
@@ -220,6 +277,7 @@ class AddEventController extends SessionController
         $sponsorDescriptions = $this->request->getPost('sponsorDescription');
         $sponsorLogos = $this->request->getFileMultiple('sponsorLogo');
         if ($sponsorDescriptions && is_array($sponsorDescriptions)) {
+            $sponsorsModel->where('event_id', $event_id)->delete();
             foreach ($sponsorDescriptions as $index => $description) {
                 // Check if description is provided and not empty
                 if (empty($description)) {
@@ -252,7 +310,7 @@ class AddEventController extends SessionController
         
                 // Proceed with insertion if all required fields are valid
                 if (!$sponsorsModel->insert([
-                    'event_id' => $eventId,
+                    'event_id' => $event_id,
                     'sponsor_description' => $description,
                     'sponsor_logo' => $newSponsorLogoName ? 'uploads/sponsor_logos/' . $newSponsorLogoName : ''
                 ])) {
@@ -271,6 +329,7 @@ class AddEventController extends SessionController
         $answers = $this->request->getPost('answer');
 
         if ($questions && is_array($questions)) {
+            $faqsModel->where('event_id', $event_id)->delete();
             foreach ($questions as $index => $question) {
                 // Check if the question is provided and not empty
                 if (empty($question)) {
@@ -292,7 +351,7 @@ class AddEventController extends SessionController
         
                 // Proceed with insertion if all required fields are valid
                 if (!$faqsModel->insert([
-                    'event_id' => $eventId,
+                    'event_id' => $event_id,
                     'question' => $question,
                     'answer' => $answers[$index],
                 ])) {
@@ -308,8 +367,7 @@ class AddEventController extends SessionController
         // Prepare and return the response
         $response = [
             'success' => true,
-            'message' => 'Event successfully added',
-            'redirect' => '/admin/add-ticketing/' . $eventId
+            'message' => 'Event successfully updated',
         ];
     
         return $this->response->setJSON($response);
@@ -334,5 +392,5 @@ class AddEventController extends SessionController
         $filePath = ROOTPATH . 'app/Config/EventsRoutes.php';
     
         file_put_contents($filePath, $output);
-    }     
+    }  
 }

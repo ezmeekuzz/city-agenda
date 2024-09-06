@@ -50,31 +50,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the display based on the default selected option
     toggleRecurrenceOptions();
-    $('#state_id').on('change', function() {
+    var stateId = $('#state_id').val();
+
+    // Check if state ID has a value
+    if (stateId) {
+        // Trigger the AJAX request to load cities based on the selected state
+        loadCities(stateId);
+    }
+
+    // Function to load cities based on state ID
+    function loadCities(stateId) {
+        $.ajax({
+            url: '/admin/editevent/getCities', // Replace with your actual URL
+            type: 'POST',
+            data: {state_id: stateId},
+            success: function(data) {
+                $('#city_id').empty().append('<option></option>');
+            
+                $.each(data, function(key, city) {
+                    var selected = (city.city_id == selectedCityId) ? ' selected' : '';
+                    $('#city_id').append('<option value="' + city.city_id + '"' + selected + '>' + city.cityname + '</option>');
+                });
+    
+                $('#city_id').trigger("chosen:updated");
+            },
+            error: function(xhr, status, error) {
+                console.error("An error occurred while fetching cities: " + error);
+            }
+        });
+    }
+
+    // On state change, load cities
+    $('#state_id').change(function () {
         var stateId = $(this).val();
-        
-        if (stateId) {
-            $.ajax({
-                url: '/admin/addevent/getCities',
-                type: 'POST',
-                data: {state_id: stateId},
-                dataType: 'json',
-                success: function(data) {
-                    $('#city_id').empty().append('<option></option>');
-                    
-                    $.each(data, function(key, city) {
-                        $('#city_id').append('<option value="' + city.city_id + '">' + city.cityname + '</option>');
-                    });
-                    
-                    $('#city_id').trigger("chosen:updated");
-                },
-                error: function(xhr, status, error) {
-                    console.error("An error occurred while fetching cities: " + error);
-                }
-            });
-        } else {
-            $('#city_id').empty().append('<option></option>').trigger("chosen:updated");
-        }
+        loadCities(stateId);
     });
 
     $('#eventdescription').summernote({
@@ -245,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         faqItem.querySelector('.remove-faq').addEventListener('click', function() {
             faqItem.remove();
         });
-    });  
+    });     
 });
 let map;
 let marker;
@@ -274,6 +283,12 @@ function initMap() {
             geocodeAddress(geocoder, map, marker, address);
         }
     });
+
+    // Automatically geocode the address if the input has a value on page load
+    const address = document.getElementById('locationname').value;
+    if(address !== null && address !== "") {
+        geocodeAddress(geocoder, map, marker, address);
+    }
 
     // Add event listener to update the map on marker drag
     google.maps.event.addListener(marker, 'dragend', function () {
@@ -308,7 +323,7 @@ $(document).ready(function () {
         // Send AJAX request
         $.ajax({
             type: 'POST',
-            url: '/admin/addevent/insert',
+            url: '/admin/editevent/update',
             data: new FormData(this),
             contentType: false,
             cache: false,
@@ -335,7 +350,7 @@ $(document).ready(function () {
                         text: response.message,
                     }).then(() => {
                         // Redirect after successful submission
-                        window.location.href = response.redirect;
+                        window.location.reload();
                     });
                 } else {
                     // Handle server-side validation errors

@@ -27,6 +27,7 @@ $(document).ready(function () {
                 "data": null,
                 "render": function (data, type, row) {
                     return `<a href="/admin/edit-event/${row.event_id}" title="Edit" class="edit-btn" data-id="${row.event_id}" style="color: blue;"><i class="fa fa-edit" style="font-size: 18px;"></i></a>
+                            <a href="/admin/add-ticketing/${row.event_id}" title="Add Ticketing" class="ticketing-btn" data-id="${row.event_id}" style="color: green;"><i class="fa fa-ticket" style="font-size: 18px;"></i></a>
                             <a href="#" title="Delete" class="delete-btn" data-id="${row.event_id}" style="color: red;"><i class="fa fa-trash" style="font-size: 18px;"></i></a>`;
                 }
             }
