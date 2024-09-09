@@ -13,7 +13,7 @@ class BlogsModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'title', 'slug', 'description', 'content', 'blogimage', 'tags', 'publishstatus', 'dateadded', 'dateupdated'
+        'user_id', 'title', 'slug', 'description', 'content', 'blogimage', 'tags', 'publishstatus', 'dateadded', 'dateupdated'
     ];
 
     protected bool $allowEmptyInserts = false;

@@ -32,8 +32,9 @@ class AddBlogController extends SessionController
     
         // Prepare data for insertion
         $data = [
+            'user_id' => session()->get('user_id'),
             'title' => $this->request->getPost('title'),
-            'slug' => strtolower(str_replace(
+            'slug' => 'blog-details/' . strtolower(str_replace(
                 [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"], 
                 ["-", "and", "", "", "", "", "", "-", "", ""], 
                 htmlentities($this->request->getPost('title'), ENT_QUOTES, 'UTF-8')
@@ -94,13 +95,13 @@ class AddBlogController extends SessionController
     
         if (count($result)) {
             foreach ($result as $route) {
-                $data[$route['slug']] = 'BlogsController::index/' . $route['blog_id'];
+                $data[$route['slug']] = 'BlogDetailsController::index/' . $route['blog_id'];
             }
         }
     
         $output = '<?php' . PHP_EOL;
         foreach ($data as $slug => $controllerMethod) {
-            $output .= '$routes->get(\'' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
+            $output .= '$routes->get(\'/' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
         }
     
         $filePath = ROOTPATH . 'app/Config/BlogRoutes.php';

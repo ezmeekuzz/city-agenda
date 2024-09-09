@@ -36,6 +36,10 @@
                         <div class="card-body">
                             <form id="adduser">
                                 <div class="form-group">
+                                    <label for="image">Profile Image</label>
+                                    <input type="file" name="image" id="image" class="form-control">
+                                </div>
+                                <div class="form-group">
                                     <label for="firstname">First Name</label>
                                     <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Enter First Name">
                                 </div>

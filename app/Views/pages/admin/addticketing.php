@@ -88,7 +88,7 @@
                                         <span class="mb-0">No Need To Pay For A Ticket.</span>
                                     </div>
                                     <div class="text-end">
-                                        <a class="btn p-0 ms-3 text-primary open-modal-btn" style="font-size: 25px;" data-ticket-type="No Ticket">
+                                        <a class="btn p-0 ms-3 text-primary open-modal-btn" style="font-size: 25px;" data-event-id = "" data-ticket-type="No Ticket">
                                             <i class="fa fa-plus-circle fa-lg"></i>
                                         </a>
                                     </div>
@@ -115,7 +115,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="ticketForm">Save & Continue</button>
+                <button type="submit" class="btn btn-primary" form="ticketForm" id="save_continue">Save & Continue</button>
             </div>
         </div>
     </div>

@@ -3,6 +3,53 @@
     .slide {
         flex: 0 0 100%;
     }
+
+    .ticket-container {
+        display: flex !important;
+        flex-direction: row;
+    }
+    .ticket-dashboard{
+        padding: 0;
+        border: none;
+       
+    }
+    .event-card-item{
+        padding: 50px 10px !important;
+        margin-top: -2px;
+        width: 50% !important;
+    }
+
+    #hide-phone{
+        display: none !important;
+     }
+ 
+     #hide-phone2{
+         display: none !important;
+      }
+
+   
+
+    .ticket-card-items{
+        margin: 0 !important;
+        display: flex !important;
+        flex-wrap: wrap;
+        width: 100% !important;
+        gap: 0;
+    }
+
+    .desktop-show{
+        display: none;
+    }
+   
+
+    .phone-show{
+        display: block;
+        border-left: 1px gray solid;
+        height: 100% !important;
+        width: 50% !important;
+    }
+ 
+
 }
 
 /* Media Query for Tablet: 3 items visible */
@@ -18,6 +65,7 @@
         flex: 0 0 20%;
     }
 }
+
 
 
 
@@ -212,21 +260,18 @@
 
 
 @media screen and (max-width:500px){
-    .nav-control{
-        flex-direction: column;
-    }
 
+
+    .event-card-item{
+        width: 40%;
+        text-align: start;
+    }
     .banner-img{
         width: 200px;
     }
 
-    .category-section{
-        flex-wrap: wrap;
-    }
-
-    .category-section a{
-        width: calc(100%/2);
-
+    .reg-image-sec{
+        display: none;
     }
 
     .footer-Logo{
@@ -243,10 +288,54 @@
     }
 
     .search-toggle{
-        width: 100%!important;
-        padding:15px 25px;
-        justify-content: space-between;
-        flex-direction: row-reverse;
+        padding: 0;
+        margin-left: -100px;
+        z-index: 9;
+    }
+
+    .category-section {
+        overflow: hidden; /* Hide overflow for mobile view */
+        position: relative;
+    }
+
+    .category-slider {
+        display: flex;
+        transition: transform 0.3s ease-in-out; /* Smooth transition for sliding */
+    }
+
+    .category-section a {
+        flex: 0 0 calc(50% - 20px); /* Two items per slide in mobile view */
+        margin: 10px; /* Space around items */
+    }
+
+    .slider-controls {
+        padding: 30px 10px;
+
+    }
+    .slider-nav {
+        display: block; /* Show navigation buttons on mobile */
+        transform: translateY(-50%);
+        background-color: #741774;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 1;
+        border-radius: 50px;
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    
+
+    .slider-nav-left {
+        left: 0;
+        margin-right: 20px;
+    }
+
+    .slider-nav-right {
+        right: 0;
     }
 
     .subs-title{
@@ -374,12 +463,15 @@
     }
 
     .event-input-detials-section label, .event-date-section{
-        font-size: 25px;
+        font-size: 20px;
     }
 
-    .event-input-detials-section .event-date-section .group-toggle,
+    .event-input-detials-section p, .event-date-section{
+        font-size: 15px !important;
+    }
+
+    .event-input-detials-section .event-date-section,
     .date-inputs-fields,
-    .uploadButton,
     .toggelHeader,
     .ticket-card-sec{
         flex-direction: column;
@@ -439,7 +531,7 @@
     }
 
     .event-sec h2{
-        font-size: 30px;
+        font-size: 20px !important;
     }
 
     .event-sec h4{
@@ -452,6 +544,7 @@
 
     .refund-list li{
         align-items: flex-start;
+        font-size: 15px;
     }
 
     .agenda-content{
@@ -606,13 +699,7 @@
     }
 
 
-    .ticket-card-items{
-        flex-wrap: wrap;
-        row-gap: 10px;
-        justify-content: space-between;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
+    
 
     .card-item-detils{
         width: 100%;
@@ -662,5 +749,5 @@
         display: block;
     }
 
-    
+  
 }

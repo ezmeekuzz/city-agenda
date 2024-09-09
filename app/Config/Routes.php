@@ -66,6 +66,9 @@ $routes->post('/admin/addticketing/insert', 'Admin\AddTicketingController::inser
 $routes->get('/admin/ticket-masterlist', 'Admin\TicketMasterlistController::index');
 $routes->get('/admin/ticketmasterlist/getData', 'Admin\TicketMasterlistController::getData');
 $routes->delete('/admin/ticketmasterlist/delete/(:num)', 'Admin\TicketMasterlistController::delete/$1');
+$routes->post('/admin/ticketmasterlist/update', 'Admin\TicketMasterlistController::update');
+$routes->get('/admin/publish-event/(:num)', 'Admin\PublishEventController::index/$1');
+$routes->post('/admin/publishevent/update', 'Admin\PublishEventController::update');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');
 $routes->post('/subscribe', 'SubscribeController::index');
@@ -75,6 +78,7 @@ $routes->get('/faq', 'FaqController::index');
 $routes->get('/login', 'LoginController::index');
 $routes->get('/privacy-policy', 'PrivacyPolicyController::index');
 $routes->get('/terms-of-use', 'TermsOfUseController::index');
+$routes->get('/blogs', 'BlogsController::index');
 require APPPATH . 'Config/EventCategoriesRoutes.php';
 require APPPATH . 'Config/EventRoutes.php';
 require APPPATH . 'Config/BlogRoutes.php';

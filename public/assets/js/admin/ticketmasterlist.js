@@ -77,6 +77,7 @@ $(document).ready(function () {
         const ticketType = $(this).data('ticket-type');
         const row = table.row($(this).closest('tr')).data(); // Get the data for the clicked row
         const event_id = row.event_id;
+        const ticket_id = row.ticket_id;
 
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
@@ -84,16 +85,16 @@ $(document).ready(function () {
         // Populate form based on ticket type
         switch (ticketType) {
             case 'Paid':
-                createPaidFields(modalBody, event_id);
+                createPaidFields(modalBody, event_id, ticket_id);
                 break;
             case 'Free':
-                createFreeFields(modalBody, event_id);
+                createFreeFields(modalBody, event_id, ticket_id);
                 break;
             case 'Donations':
-                createDonationsFields(modalBody, event_id);
+                createDonationsFields(modalBody, event_id, ticket_id);
                 break;
             case 'No Ticket':
-                createNoTicketsMessage(modalBody);
+                createNoTicketsMessage(modalBody, event_id);
                 break;
         }
 
@@ -109,9 +110,13 @@ $(document).ready(function () {
         ticketModal.show();
     });
 
-    function createPaidFields(modalBody, event_id) {
+    function createPaidFields(modalBody, event_id, ticket_id) {
         const paidFields = `
             <form id="ticketForm">
+                <div class="mb-3" hidden>
+                    <label for="ticket_id" class="form-label">Ticket ID</label>
+                    <input type="text" class="form-control" id="ticket_id" name="ticket_id" value="${ticket_id}" placeholder="Enter Ticket ID">
+                </div>
                 <div class="mb-3" hidden>
                     <label for="event_id" class="form-label">Event ID</label>
                     <input type="text" class="form-control" id="event_id" name="event_id" value="${event_id}" placeholder="Enter Event ID">
@@ -149,9 +154,13 @@ $(document).ready(function () {
         modalBody.innerHTML = paidFields;
     }
 
-    function createFreeFields(modalBody, event_id) {
+    function createFreeFields(modalBody, event_id, ticket_id) {
         const freeFields = `
             <form id="ticketForm">
+                <div class="mb-3" hidden>
+                    <label for="ticket_id" class="form-label">Ticket ID</label>
+                    <input type="text" class="form-control" id="ticket_id" name="ticket_id" value="${ticket_id}" placeholder="Enter Ticket ID">
+                </div>
                 <div class="mb-3" hidden>
                     <label for="event_id" class="form-label">Event ID</label>
                     <input type="text" class="form-control" id="event_id" name="event_id" value="${event_id}" placeholder="Enter Event ID">
@@ -177,9 +186,13 @@ $(document).ready(function () {
         modalBody.innerHTML = freeFields;
     }
 
-    function createDonationsFields(modalBody, event_id) {
+    function createDonationsFields(modalBody, event_id, ticket_id) {
         const donationsFields = `
             <form id="ticketForm">
+                <div class="mb-3" hidden>
+                    <label for="ticket_id" class="form-label">Ticket ID</label>
+                    <input type="text" class="form-control" id="ticket_id" name="ticket_id" value="${ticket_id}" placeholder="Enter Ticket ID">
+                </div>
                 <div class="mb-3" hidden>
                     <label for="event_id" class="form-label">Event ID</label>
                     <input type="text" class="form-control" id="event_id" name="event_id" value="${event_id}" placeholder="Enter Event ID">
@@ -205,10 +218,134 @@ $(document).ready(function () {
         modalBody.innerHTML = donationsFields;
     }
 
-    function createNoTicketsMessage(modalBody) {
+    function createNoTicketsMessage(modalBody, event_id) {
         const noTicketsMessage = `
+            <div class="mb-3" hidden>
+                <label for="event_id" class="form-label">Event ID</label>
+                <input type="text" class="form-control" id="event_id" name="event_id" value="${event_id}" placeholder="Enter Event ID">
+            </div>
             <p class="text-danger">No tickets available for this event.</p>
         `;
         modalBody.innerHTML = noTicketsMessage;
+
+        // Add event listener for Save & Continue button
+        document.getElementById('submitTicketForm').addEventListener('click', function() {
+            const eventId = document.getElementById('event_id').value;
+            window.location.href = `/admin/publish-event/${eventId}`;
+        });
     }
+    $(document).on('click', '#submitTicketForm', function () {
+        var ticketType = $('#tickettype').val(); // Get the ticket type from the form
+        var isValid = true; // Variable to track form validity
+    
+        // Validate fields based on ticket type
+        if (ticketType === 'Paid') {
+            if (!$('#ticketname').val()) {
+                isValid = false;
+                $('#ticketname').addClass('is-invalid');
+            } else {
+                $('#ticketname').removeClass('is-invalid');
+            }
+    
+            if (!$('#ticketDescription').val()) {
+                isValid = false;
+                $('#ticketDescription').addClass('is-invalid');
+            } else {
+                $('#ticketDescription').removeClass('is-invalid');
+            }
+    
+            if (!$('#availablequantity').val()) {
+                isValid = false;
+                $('#availablequantity').addClass('is-invalid');
+            } else {
+                $('#availablequantity').removeClass('is-invalid');
+            }
+    
+            if (!$('#price').val() || $('#price').val() <= 0) {
+                isValid = false;
+                $('#price').addClass('is-invalid');
+            } else {
+                $('#price').removeClass('is-invalid');
+            }
+    
+            if (!$('#salesstart').val()) {
+                isValid = false;
+                $('#salesstart').addClass('is-invalid');
+            } else {
+                $('#salesstart').removeClass('is-invalid');
+            }
+    
+            if (!$('#salesend').val()) {
+                isValid = false;
+                $('#salesend').addClass('is-invalid');
+            } else {
+                $('#salesend').removeClass('is-invalid');
+            }
+    
+        } else if (ticketType === 'Free' || ticketType === 'Donations') {
+            if (!$('#ticketname').val()) {
+                isValid = false;
+                $('#ticketname').addClass('is-invalid');
+            } else {
+                $('#ticketname').removeClass('is-invalid');
+            }
+    
+            if (!$('#ticketDescription').val()) {
+                isValid = false;
+                $('#ticketDescription').addClass('is-invalid');
+            } else {
+                $('#ticketDescription').removeClass('is-invalid');
+            }
+    
+            if (!$('#availablequantity').val()) {
+                isValid = false;
+                $('#availablequantity').addClass('is-invalid');
+            } else {
+                $('#availablequantity').removeClass('is-invalid');
+            }
+        }
+    
+        // If form is valid, submit the data via AJAX
+        if (isValid) {
+            var formData = $('#ticketForm').serialize(); // Gather form data
+    
+            $.ajax({
+                url: '/admin/ticketmasterlist/update',  // Update the URL to the correct route for handling updates
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated!',
+                            text: 'Ticket details updated successfully.',
+                        }).then(() => {
+                            $('#ticketModal').modal('hide'); // Close modal
+                            $('#ticketmasterlist').DataTable().ajax.reload(); // Reload table data
+                            window.location.href = "/admin/publish-event/" + $('#event_id').val()
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message || 'Something went wrong while updating the ticket.',
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'An error occurred while processing the request.',
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Submission',
+                text: 'Please fill out all required fields.',
+            });
+        }
+    });
 });

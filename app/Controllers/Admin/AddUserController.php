@@ -19,12 +19,34 @@ class AddUserController extends SessionController
     public function insert()
     {
         $usersModel = new UsersModel();
+
+        // Get form data
         $firstname = $this->request->getPost('firstname');
         $lastname = $this->request->getPost('lastname');
         $username = $this->request->getPost('username');
         $emailaddress = $this->request->getPost('emailaddress');
-        $usertype = $this->request->getPost('usertype');
         $password = $this->request->getPost('password');
+        $usertype = $this->request->getPost('usertype');
+
+        // Check for existing email
+        $userList = $usersModel->where('emailaddress', $emailaddress)->first();
+        if ($userList) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Email is not available',
+            ]);
+        }
+
+        // Handle profile image upload
+        $profileImage = $this->request->getFile('image');
+        $imageName = null;
+
+        if ($profileImage && $profileImage->isValid() && !$profileImage->hasMoved()) {
+            $imageName = $profileImage->getRandomName(); // Generate a random file name
+            $profileImage->move('uploads/profile-image', $imageName); // Move the file to the uploads folder
+        }
+
+        // Prepare user data for insertion
         $data = [
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -32,31 +54,22 @@ class AddUserController extends SessionController
             'emailaddress' => $emailaddress,
             'password' => $password,
             'encryptedpass' => password_hash($password, PASSWORD_BCRYPT),
-            'usertype' => $usertype
+            'usertype' => $usertype,
+            'image' => 'uploads/profile-image/' . $imageName, // Save the image name in the database
         ];
-        $userList = $usersModel->where('emailaddress', $emailaddress)->first();
-        if($userList) {
-            $response = [
-                'success' => false,
-                'message' => 'Email is not available',
-            ];
-        }
-        else {
-            $userId = $usersModel->insert($data);
-    
-            if ($userId) {
-                $response = [
-                    'success' => 'success',
-                    'message' => 'User added successfully!',
-                ];
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Failed to add user.',
-                ];
-            }
-        }
 
-        return $this->response->setJSON($response);
+        // Insert the user
+        $userId = $usersModel->insert($data);
+        if ($userId) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'User added successfully!',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to add user.',
+            ]);
+        }
     }
 }

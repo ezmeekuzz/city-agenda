@@ -23,6 +23,7 @@ $(document).ready(function () {
             { "data": "locationname" },
             { "data": "state_name" },
             { "data": "cityname" },
+            { "data": "publishstatus" },
             {
                 "data": null,
                 "render": function (data, type, row) {

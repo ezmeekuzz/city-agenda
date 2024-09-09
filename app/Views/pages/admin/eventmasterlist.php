@@ -49,6 +49,7 @@
                                             <th>Location</th>
                                             <th>State</th>
                                             <th>City</th>
+                                            <th>Publish Status</th>
                                             <th></th>
                                         </tr>
                                     </thead>

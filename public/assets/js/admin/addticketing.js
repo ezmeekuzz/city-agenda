@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     createDonationsFields(modalBody);
                     break;
                 case 'No Ticket':
-                    createNoTicketsMessage(modalBody);
+                    createNoTicketsMessage(modalBody, event_id);
                     break;
             }
 
@@ -155,8 +155,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to create "No Tickets" message
-    function createNoTicketsMessage(modalBody) {
-        modalBody.innerHTML = '<h1>No Tickets</h1>';
+    function createNoTicketsMessage(modalBody, event_id) {
+        const noTicketsMessage = `
+            <div class="mb-3" hidden>
+                <label for="event_id" class="form-label">Event ID</label>
+                <input type="text" class="form-control" id="event_id" name="event_id" value="${event_id}" placeholder="Enter Event ID">
+            </div>
+            <p class="text-danger">No tickets available for this event.</p>
+        `;
+        modalBody.innerHTML = noTicketsMessage;
+
+        // Add event listener for Save & Continue button
+        document.getElementById('save_continue').addEventListener('click', function() {
+            window.location.href = `/admin/publish-event/${event_id}`;
+        });
     }
 
     // Handle form submission
@@ -216,6 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Clear any additional fields if needed
                     const additionalFields = ticketForm.querySelectorAll('.form-control');
                     additionalFields.forEach(field => field.value = '');
+                    window.location.href = "/admin/publish-event/" + event_id
                 });
             } else {
                 Swal.fire({

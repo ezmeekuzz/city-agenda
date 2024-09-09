@@ -1,35 +1,45 @@
 $(document).ready(function() {
     $('#adduser').submit(function(event) {
-        // Prevent default form submission
-        event.preventDefault();
+        event.preventDefault(); // Prevent default form submission
 
-        // Get form data
+        // Perform client-side validation
         let firstname = $('#firstname').val();
         let lastname = $('#lastname').val();
         let username = $('#username').val();
         let emailaddress = $('#emailaddress').val();
         let password = $('#password').val();
         let usertype = $('#usertype').val();
+        let profileImage = $('#image')[0].files[0]; // Get the file
 
-        // Perform client-side validation
-        if (firstname.trim() === '' || lastname.trim() === '' || username.trim() === '' || emailaddress.trim() === '' || password.trim() === '' || usertype.trim() === '') {
-            // Show error using SweetAlert2
+        if (firstname.trim() === '' || lastname.trim() === '' || username.trim() === '' || 
+            emailaddress.trim() === '' || password.trim() === '' || usertype.trim() === '' || 
+            !profileImage) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Please fill in the required fields!',
+                text: 'Please fill in the required fields, including the profile image!',
             });
             return;
         }
 
-        // Send AJAX request
+        // Create FormData object to handle file upload
+        let formData = new FormData();
+        formData.append('firstname', firstname);
+        formData.append('lastname', lastname);
+        formData.append('username', username);
+        formData.append('emailaddress', emailaddress);
+        formData.append('password', password);
+        formData.append('usertype', usertype);
+        formData.append('image', profileImage); // Append file to formData
+
         $.ajax({
             type: 'POST',
             url: '/admin/adduser/insert',
-            data: $('#adduser').serialize(), // Serialize form data
+            data: formData, // Send FormData object
+            contentType: false, // Important for sending files
+            processData: false, // Prevent jQuery from processing data
             dataType: 'json',
             beforeSend: function() {
-                // Show loading effect
                 Swal.fire({
                     title: 'Saving...',
                     allowOutsideClick: false,
@@ -40,16 +50,14 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
-                    // Redirect upon successful login
                     $('#adduser')[0].reset();
                     $('#usertype').trigger('chosen:updated');
                     Swal.fire({
                         icon: 'success',
-                        title: 'Data Save',
+                        title: 'Data Saved',
                         text: response.message,
                     });
                 } else {
-                    // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -58,11 +66,10 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                // Handle AJAX errors
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'An error occurred while logging in. Please try again later.',
+                    text: 'An error occurred while saving. Please try again later.',
                 });
                 console.error(xhr.responseText);
             }

@@ -61,13 +61,13 @@ class BlogMasterlistController extends SessionController
     
         if (count($result)) {
             foreach ($result as $route) {
-                $data[$route['slug']] = 'BlogsController::index/' . $route['blog_id'];
+                $data[$route['slug']] = 'BlogDetailsController::index/' . $route['blog_id'];
             }
         }
     
         $output = '<?php' . PHP_EOL;
         foreach ($data as $slug => $controllerMethod) {
-            $output .= '$routes->get(\'' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
+            $output .= '$routes->get(\'/' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
         }
     
         $filePath = ROOTPATH . 'app/Config/BlogRoutes.php';

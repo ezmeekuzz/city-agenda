@@ -1,0 +1,148 @@
+
+.main-nav{
+    background-color: #5C0077!important;
+}
+
+.navbar-brand img {
+    width: 50px;
+}
+
+.nav-form-search i{
+    color:#fff;
+}
+
+
+.nav-form-search{
+    background-color: #AB39CD;
+    border-radius: 50px;
+    padding:12px 40px !important;
+    padding-left: 20px!important;
+}
+
+
+
+.nav-form-search input[type="search"]{
+    background-color: transparent;
+    border: 0px;
+    color:#fff;
+    padding: 0px;
+}
+
+.nav-form-search input[type="search"]::placeholder{
+    color:#fff;
+}
+
+
+.navbar-content{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.new-event{
+    background-color: #AB39CD;
+    padding:12px 40px!important;
+    border-radius: 50px;
+    border:0px;
+    color:#fff;
+}
+
+
+.nav-action i{
+    height:45px;
+    width: 45px;
+    background-color: #AB39CD;
+    color:#fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    font-size: 25px;
+}
+
+
+.nav-action hr{
+    width: 0px;
+    height: 40px;
+    border-left: 2px solid #ffffff69;
+    margin: 0;
+}
+
+.navbar-toggler{
+    width:50px;
+}
+
+.navbar-toggler, .navbar-toggler:focus{
+    border:0px;
+    outline: none!important;
+}
+
+.navbar-toggler .navbar-toggler-icon{
+    color:#fff;
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    z-index: 9999; /* Ensures sidebar is on top */
+    padding-top: 60px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-content ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.sidebar-content ul a {
+   color: black;
+   text-decoration: none;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Hamburger button */
+.navbar-toggler {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+
+@media (max-width: 572px) {
+    .nav-form-search{
+        width: 60%;
+    }
+
+    .navbar-toggler {
+        margin-top: -50px;
+    }
+}

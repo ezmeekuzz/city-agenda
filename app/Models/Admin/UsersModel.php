@@ -13,7 +13,7 @@ class UsersModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'firstname', 'lastname', 'username', 'emailaddress', 'password', 'encryptedpass', 'usertype'
+        'image', 'firstname', 'lastname', 'username', 'emailaddress', 'password', 'encryptedpass', 'usertype'
     ];
 
     protected bool $allowEmptyInserts = false;

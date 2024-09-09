@@ -13,7 +13,7 @@ class EventsModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'user_id', 'publishstatus', 'eventbanner', 'category_id', 'eventname', 'slug', 'shortdescription', 'eventtype', 'eventdate', 'eventstartingtime', 'eventendingtime', 'recurrence', 'locationname', 'state_id', 'city_id', 'event_image', 'event_video', 'eventdescription', 'eventdescription'
+        'user_id', 'publishstatus', 'eventbanner', 'category_id', 'eventname', 'slug', 'shortdescription', 'eventtype', 'eventdate', 'eventstartingtime', 'eventendingtime', 'recurrence', 'locationname', 'state_id', 'city_id', 'event_image', 'event_video', 'eventdescription', 'eventdescription', 'publishsetting', 'refundpolicy'
     ];
 
     protected bool $allowEmptyInserts = false;

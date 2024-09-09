@@ -4,7 +4,7 @@
             <div class="col-lg-3 col-md-4 col-sm-12 mb-3">
                 <h4>Plan Events</h4>
                 <ul>
-                    <li><a href="/login">Publish Your Events</a></li>
+                    <li><a href="<?=base_url();?>login">Publish Your Events</a></li>
                     <li><a href="#">Promote Your Events</a></li>
                     <li><a href="#">Sell Tickets Online</a></li>
                     <li><a href="#">Host Recorded Events</a></li>
@@ -28,7 +28,7 @@
             <div class="col-lg-2 col-md-4 col-sm-12 mb-3">
                 <h4>Connect With Us</h4>
                 <ul>
-                    <li><a href="/contact-us">Contact Support</a></li>
+                    <li><a href="<?=base_url();?>contact-us">Contact Support</a></li>
                     <li><a href="#">Contact Sales</a></li>
                     <li><a href="#">X</a></li>
                     <li><a href="#">Facebook</a></li>
@@ -45,14 +45,14 @@
                     </button>
                 </form>
                 <ul class="mt-3">
-                    <li><a href="/privacy-policy">Privacy Policy</a></li>
-                    <li><a href="/terms-of-use">Terms of Service</a></li>
+                    <li><a href="<?=base_url();?>privacy-policy">Privacy Policy</a></li>
+                    <li><a href="<?=base_url();?>terms-of-use">Terms of Service</a></li>
                 </ul>
             </div>
         </div>
         <div class="row bottom-footer">
             <div class="col-lg-3 col-md-12 mb-3 footer-logo d-flex justify-content-center">
-                <img src="img/footerLogo.png" alt="Footer Logo">
+                <img src="<?=base_url();?>img/footerLogo.png" alt="Footer Logo">
             </div>
             <div class="col-lg-6 col-md-12 mb-3 d-flex justify-content-center align-items-center">
                 <p class="text-center creds">© 2024 City Agenda. All Rights Reserved.</p>
@@ -74,7 +74,7 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="js/js.js"></script>
+<script src="<?=base_url();?>js/js.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function() {
