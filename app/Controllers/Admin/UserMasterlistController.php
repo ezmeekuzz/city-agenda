@@ -23,12 +23,27 @@ class UserMasterlistController extends SessionController
     public function delete($id)
     {
         $UsersModel = new UsersModel();
-        $deleted = $UsersModel->delete($id);
-
-        if ($deleted) {
-            return $this->response->setJSON(['status' => 'success']);
+    
+        // Retrieve the user details to get the image path
+        $user = $UsersModel->find($id);
+    
+        if ($user) {
+            // Check if the user has an image and if the file exists
+            if (!empty($user['image']) && file_exists($user['image'])) {
+                // Attempt to delete the image file
+                unlink($user['image']);
+            }
+    
+            // Proceed to delete the user
+            $deleted = $UsersModel->delete($id);
+    
+            if ($deleted) {
+                return $this->response->setJSON(['status' => 'success']);
+            } else {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the user from the database']);
+            }
         } else {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the user from the database']);
+            return $this->response->setJSON(['status' => 'error', 'message' => 'User not found']);
         }
-    }    
+    }   
 }

@@ -9,13 +9,21 @@
     <title>City Agenda | Blog Inner</title>
 
     <link rel="stylesheet" href="<?=base_url();?>css/styles.css">
-    <link rel="stylesheet" href="<?=base_url();?>css/responsive.css">
     <link rel="stylesheet" href="<?=base_url();?>css/header.css">
+    <link rel="stylesheet" href="<?=base_url();?>css/responsive.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css">
+    <style>
+        .owl-carousel{
+            display: flex;
+        }
 
+        .owl-carousel .owl-item{
+            flex:1!important;
+        }
+    </style>
 </head>
 
 
@@ -28,7 +36,7 @@
         <div class="row w-100 align-items-center justify-content-end justify-content-sm-between">
             <div class="col-md-7 ps-4 col-sm-10 d-flex align-items-center  justify-content-sm-start">
                 <!-- Logo -->
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="<?=base_url();?>img/Logo.png" alt="Logo">
                 </a>
                 <!-- Search Form -->

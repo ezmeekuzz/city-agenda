@@ -36,6 +36,10 @@
                         <div class="card-body">
                             <form id="addcategory" enctype="multipart/form-data">
                                 <div class="form-group">
+                                    <label for="categoryimage">Category Image</label>
+                                    <input type="file" name="categoryimage" id="categoryimage" class="form-control">
+                                </div>
+                                <div class="form-group">
                                     <label for="categoryname">Category Name</label>
                                     <input type="text" name="categoryname" id="categoryname" class="form-control" placeholder="Enter Category Name">
                                 </div>

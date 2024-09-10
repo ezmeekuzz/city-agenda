@@ -21,19 +21,48 @@ class AddCategoryController extends SessionController
         $CategoriesModel = new CategoriesModel();
         $categoryname = $this->request->getPost('categoryname');
     
+        // Define the upload folder path
+        $uploadPath = 'uploads/category-image';
+    
+        // Ensure the directory exists, and if not, create it with correct permissions
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+    
+        // Handle image upload
+        $categoryImage = $this->request->getFile('categoryimage');
+        $imagePath = '';
+    
+        if ($categoryImage && $categoryImage->isValid()) {
+            if (!$categoryImage->hasMoved()) {
+                // Generate a unique name for the image
+                $newImageName = $categoryImage->getRandomName();
+                // Move the image to the uploads/category-image folder
+                $categoryImage->move($uploadPath, $newImageName);
+                // Store the image path for saving to the database
+                $imagePath = $uploadPath . '/' . $newImageName;
+            }
+        } else {
+            // Optional: Handle image upload errors or log them
+            if ($categoryImage) {
+                log_message('error', 'Image Upload Error: ' . $categoryImage->getErrorString());
+            }
+        }
+    
+        // Prepare data for insertion, including the slug and image path
         $data = [
             'categoryname' => $categoryname,
-            'slug' => strtolower(str_replace(
-                [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"], 
-                ["-", "and", "", "", "", "", "", "-", "", ""], 
-                htmlentities($categoryname, ENT_QUOTES, 'UTF-8')
-            )),
+            'slug' => '/events?category=' . $categoryname,
+            'categoryimage' => $imagePath, // Save the image path in the database
+            'is_top_category' => 'No'
         ];
-
+    
+        // Insert the category into the database
         $result = $CategoriesModel->insert($data);
     
+        // Return response
         if ($result) {
-            $this->dynamicRoutes();
+    
             $response = [
                 'success' => true,
                 'message' => 'Category added successfully!',
@@ -46,26 +75,5 @@ class AddCategoryController extends SessionController
         }
     
         return $this->response->setJSON($response);
-    }     
-    
-    private function dynamicRoutes() {
-        $model = new CategoriesModel();
-        $result = $model->findAll();
-        $data = [];
-
-        if (count($result)) {
-            foreach ($result as $route) {
-                $data[$route['slug']] = 'EventsController::index/' . $route['category_id'];
-            }
-        }
-
-        $output = '<?php' . PHP_EOL;
-        foreach ($data as $slug => $controllerMethod) {
-            $output .= '$routes->get(\'' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
-        }
-
-        $filePath = ROOTPATH . 'app/Config/EventCategoriesRoutes.php';
-
-        file_put_contents($filePath, $output);
-    } 
+    }
 }

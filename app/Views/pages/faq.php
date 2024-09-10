@@ -1,70 +1,67 @@
 <?=$this->include('templates/header');?>
-
 <section class="container-fluid inner-section faq-section">
-        <div class="container">
-            <img src="img/faq-banner-img.png">
-            <div class="row mt-5">
-                <div class="col-lg-10 col-md-12">
-                    <h2>Answers To City Agenda Faqs</h2>
-                    <p>
-                        Learning How To Use City Agenda Is The First Step In Successfully Planning Your Event. 
-                        Let These City Agenda Questions And Faqs For Events Be Your Guide To Everything That 
-                        This Platform Has To Offer. Discover How To Build Your Event Website And Sell And Scan 
-                        Tickets To Host A Successful Event.
-                    </p>
-                </div>
-                <div class="col-lg-2 col-md-12">
-                    <button class="main-btn">Explore</button>
-                </div>
+    <div class="container">
+        <img src="img/faq-banner-img.png">
+        <div class="row mt-5">
+            <div class="col-lg-10 col-md-12">
+                <h2>Answers To City Agenda Faqs</h2>
+                <p>
+                    Learning How To Use City Agenda Is The First Step In Successfully Planning Your Event. 
+                    Let These City Agenda Questions And Faqs For Events Be Your Guide To Everything That 
+                    This Platform Has To Offer. Discover How To Build Your Event Website And Sell And Scan 
+                    Tickets To Host A Successful Event.
+                </p>
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <button class="main-btn">Explore</button>
             </div>
         </div>
-    </section>
-
-
-
-
-    <section class="container-fluid inner-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-12">
-                    <h2>Getting 
-                        Started: 
-                        Frequently 
-                        Asked 
-                        Questions</h2>
-                </div>
-                <div class="col-lg-8 col-md-12">
-                    <div class="accordion accordion-flush" id="accordionFlushExample">
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
+    </div>
+</section>
+<section class="container-fluid inner-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <h2>Getting 
+                    Started: 
+                    Frequently 
+                    Asked 
+                    Questions</h2>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                 How Do I Get Started Selling Tickets Online For Free?
                             </button>
-                          </h2>
-                          <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-                          </div>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                            </div>
                         </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                                 Can I Offer Discounts Or Promo Codes On Event Tickets?
                             </button>
-                          </h2>
-                          <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                          </div>
                         </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
                                 How Do I Create Multiple Ticket Types  City Agenda?
                             </button>
-                          </h2>
-                          <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                        </div>
-                        </div>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                      </div>
+                    </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">

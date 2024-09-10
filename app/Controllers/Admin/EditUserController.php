@@ -29,6 +29,12 @@ class EditUserController extends SessionController
         $emailaddress = $this->request->getPost('emailaddress');
         $password = $this->request->getPost('password');
         $usertype = $this->request->getPost('usertype');
+
+        $existingUser = $usersModel->find($userId);
+
+        // Check if the image field exists before accessing it
+        $oldImagePath = isset($existingUser['image']) ? $existingUser['image'] : null;
+        
         $data = [
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -42,7 +48,20 @@ class EditUserController extends SessionController
             $data['password'] = $password;
             $data['encryptedpass'] = password_hash($password, PASSWORD_BCRYPT);
         }
+
+        $profileImage = $this->request->getFile('image');
+        if ($profileImage && $profileImage->isValid() && !$profileImage->hasMoved()) {
+            // Generate a random file name and move the file to the uploads folder
+            $newImageName = $profileImage->getRandomName();
+            $profileImage->move('uploads/profile-image', $newImageName);
+            $data['image'] = 'uploads/profile-image/' . $newImageName;
     
+            // Remove old image if a new one is uploaded
+            if ($oldImagePath && file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Delete the old image from the server
+            }
+        }    
+        
         // Check if the provided username is already in use
         $userList = $usersModel->where('emailaddress', $emailaddress)->where('user_id !=', $userId)->first();
         if ($userList) {

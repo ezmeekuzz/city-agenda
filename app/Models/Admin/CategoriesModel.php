@@ -13,7 +13,7 @@ class CategoriesModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'categoryname', 'slug'
+        'categoryname', 'slug', 'categoryimage', 'is_top_category'
     ];
 
     protected bool $allowEmptyInserts = false;

@@ -34,10 +34,14 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="edituser">
+                            <form id="edituser" enctype="multipart/form-data">
                                 <div class="form-group" hidden="">
                                     <label for="user_id">User Id</label>
                                     <input type="text" name="user_id" id="user_id" class="form-control" value="<?=$userDetails['user_id'];?>" placeholder="Enter User ID">
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Profile Image</label>
+                                    <input type="file" name="image" id="image" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="firstname">First Name</label>

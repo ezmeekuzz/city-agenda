@@ -3,10 +3,13 @@ $(document).ready(function() {
         // Prevent default form submission
         event.preventDefault();
 
-        // Get form data
-        var categoryname = $('#categoryname').val();
+        // Create a FormData object to hold the form data and file
+        var formData = new FormData(this);
 
         // Perform client-side validation
+        var categoryname = $('#categoryname').val();
+        let categoryimage = $('#categoryimage')[0].files[0]; // Get the file
+
         if (categoryname.trim() === '') {
             // Show error using SweetAlert2
             Swal.fire({
@@ -17,11 +20,13 @@ $(document).ready(function() {
             return;
         }
 
-        // Send AJAX request
+        // Send AJAX request with FormData (includes the file)
         $.ajax({
             type: 'POST',
             url: '/admin/editcategory/update',
-            data: $('#editcategory').serialize(), // Serialize form data
+            data: formData,
+            contentType: false,  // Prevent jQuery from processing the data
+            processData: false,  // Prevent jQuery from converting it to a string
             dataType: 'json',
             beforeSend: function() {
                 // Show loading effect

@@ -24,35 +24,56 @@ class CategoryMasterlistController extends SessionController
     public function delete($id)
     {
         $CategoriesModel = new CategoriesModel();
-        
+    
+        // Fetch the category details to get the image path
+        $category = $CategoriesModel->find($id);
+    
+        if (!$category) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Category not found.'
+            ]);
+        }
+    
+        // Get the category image path
+        $imagePath = $category['categoryimage'];
+    
+        // Delete the image file if it exists
+        if ($imagePath && file_exists($imagePath)) {
+            unlink($imagePath); // Remove the image from the server
+        }
+    
+        // Now delete the category from the database
         $deleted = $CategoriesModel->delete($id);
     
         if ($deleted) {
-            $this->dynamicRoutes();
-            return $this->response->setJSON(['status' => 'success']);
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Category deleted successfully']);
         } else {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the category from the database']);
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to delete the category from the database'
+            ]);
         }
-    }   
-    
-    private function dynamicRoutes() {
-        $model = new CategoriesModel();
-        $result = $model->findAll();
-        $data = [];
+    }  
+      
+    public function updateTopCategory($id)
+    {
+        $CategoriesModel = new CategoriesModel();
 
-        if (count($result)) {
-            foreach ($result as $route) {
-                $data[$route['slug']] = 'EventsController::index/' . $route['category_id'];
-            }
+        $category = $CategoriesModel->find($id);
+        if (!$category) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Category not found.'
+            ]);
         }
 
-        $output = '<?php' . PHP_EOL;
-        foreach ($data as $slug => $controllerMethod) {
-            $output .= '$routes->get(\'' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
-        }
+        $isTopCategory = $this->request->getPost('is_top_category');
+        $CategoriesModel->update($id, ['is_top_category' => $isTopCategory]);
 
-        $filePath = ROOTPATH . 'app/Config/EventCategoriesRoutes.php';
-
-        file_put_contents($filePath, $output);
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Top category status updated successfully.'
+        ]);
     }  
 }

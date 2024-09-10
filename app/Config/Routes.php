@@ -43,6 +43,7 @@ $routes->post('/admin/addcategory/insert', 'Admin\AddCategoryController::insert'
 $routes->get('/admin/category-masterlist', 'Admin\CategoryMasterlistController::index');
 $routes->get('/admin/categorymasterlist/getData', 'Admin\CategoryMasterlistController::getData');
 $routes->delete('/admin/categorymasterlist/delete/(:num)', 'Admin\CategoryMasterlistController::delete/$1');
+$routes->post('/admin/categorymasterlist/updateTopCategory/(:num)', 'Admin\CategoryMasterlistController::updateTopCategory/$1');
 $routes->get('/admin/edit-category/(:num)', 'Admin\EditCategoryController::index/$1');
 $routes->post('/admin/editcategory/update', 'Admin\EditCategoryController::update');
 $routes->get('/admin/add-blog', 'Admin\AddBlogController::index');
@@ -71,6 +72,7 @@ $routes->get('/admin/publish-event/(:num)', 'Admin\PublishEventController::index
 $routes->post('/admin/publishevent/update', 'Admin\PublishEventController::update');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');
+$routes->get('/getEvents', 'HomeController::getEvents');
 $routes->post('/subscribe', 'SubscribeController::index');
 $routes->get('/contact-us', 'ContactUsController::index');
 $routes->get('/about-us', 'AboutUsController::index');

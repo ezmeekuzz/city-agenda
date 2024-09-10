@@ -40,6 +40,10 @@
                                     <input type="text" value="<?=$details['category_id'];?>" name="category_id" id="category_id" class="form-control" placeholder="Enter Category ID">
                                 </div>
                                 <div class="form-group">
+                                    <label for="categoryimage">Category Image</label>
+                                    <input type="file" name="categoryimage" id="categoryimage" class="form-control">
+                                </div>
+                                <div class="form-group">
                                     <label for="categoryname">Category Name</label>
                                     <input type="text" value="<?=$details['categoryname'];?>" name="categoryname" id="categoryname" class="form-control" placeholder="Enter Category Name">
                                 </div>

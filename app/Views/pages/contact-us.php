@@ -1,5 +1,4 @@
 <?=$this->include('templates/header');?>
-
 <section class="container-fluid inner-page contact-banner">
     <div class="container">
         <div class="contact-content">
@@ -27,7 +26,6 @@
         </div>
     </div>
 </section>
-
 <section class="container-fluid contact-section">
     <div class="container">
         <div class="row flex-lg-row flex-column-reverse">
@@ -43,7 +41,6 @@
         </div>
     </div>
 </section>
-
 <section class="container-fluid inner-section">
     <div class="container">
         <div class="row">
@@ -107,9 +104,7 @@
         </div>
     </div>
 </section>
-
 <?=$this->include('templates/footer');?>
-
 <script>
     $(document).ready(function() {
         $('#sendMessage').on('submit', function(e) {

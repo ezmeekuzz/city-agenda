@@ -4,12 +4,14 @@ $(document).ready(function() {
         event.preventDefault();
 
         // Get form data
+        let user_id = $('#user_id').val();
         let firstname = $('#firstname').val();
         let lastname = $('#lastname').val();
         let username = $('#username').val();
         let emailaddress = $('#emailaddress').val();
         let password = $('#password').val();
         let usertype = $('#usertype').val();
+        let profileImage = $('#image')[0].files[0]; // Get the file
 
         // Perform client-side validation
         if (firstname.trim() === '' || lastname.trim() === '' || username.trim() === '' || emailaddress.trim() === '' || password.trim() === '' || usertype.trim() === '') {
@@ -22,11 +24,23 @@ $(document).ready(function() {
             return;
         }
 
+        let formData = new FormData();
+        formData.append('user_id', user_id);
+        formData.append('firstname', firstname);
+        formData.append('lastname', lastname);
+        formData.append('username', username);
+        formData.append('emailaddress', emailaddress);
+        formData.append('password', password);
+        formData.append('usertype', usertype);
+        formData.append('image', profileImage); // Append file to formData
+
         // Send AJAX request
         $.ajax({
             type: 'POST',
             url: '/admin/edituser/update',
-            data: $('#edituser').serialize(), // Serialize form data
+            data: formData, // Serialize form data
+            contentType: false, // Important for sending files
+            processData: false, // Prevent jQuery from processing data
             dataType: 'json',
             beforeSend: function() {
                 // Show loading effect

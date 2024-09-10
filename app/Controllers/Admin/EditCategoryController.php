@@ -25,19 +25,52 @@ class EditCategoryController extends SessionController
         $CategoriesModel = new CategoriesModel();
         $categoryId = $this->request->getPost('category_id');
         $categoryname = $this->request->getPost('categoryname');
+        
+        // Fetch the existing category details to get the current image path
+        $category = $CategoriesModel->find($categoryId);
+        $currentImagePath = $category['categoryimage'];
+        
+        // Define the upload folder path
+        $uploadPath = 'uploads/category-image';
+        
+        // Ensure the directory exists, and if not, create it with correct permissions
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+        
+        // Handle image upload
+        $categoryImage = $this->request->getFile('categoryimage');
+        $newImagePath = $currentImagePath; // Initialize with the current image path
+    
+        if ($categoryImage && $categoryImage->isValid()) {
+            if (!$categoryImage->hasMoved()) {
+                // Optionally delete the previous image if a new image is uploaded
+                if ($currentImagePath && file_exists($currentImagePath)) {
+                    unlink($currentImagePath); // Delete the previous image
+                }
+    
+                // Generate a unique name for the new image
+                $newImageName = $categoryImage->getRandomName();
+                // Move the image to the uploads/category-image folder
+                $categoryImage->move($uploadPath, $newImageName);
+                // Store the new image path for saving to the database
+                $newImagePath = $uploadPath . '/' . $newImageName;
+            }
+        }
+    
+        // Prepare the data for updating, including the slug and image path
         $data = [
             'categoryname' => $categoryname,
-            'slug' => strtolower(str_replace(
-                [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"], 
-                ["-", "and", "", "", "", "", "", "-", "", ""], 
-                htmlentities($categoryname, ENT_QUOTES, 'UTF-8')
-            )),
+            'slug' => '/events?category=' . $categoryname,
+            'categoryimage' => $newImagePath, // Update with the new image path
         ];
-
+    
+        // Update the category in the database
         $result = $CategoriesModel->update($categoryId, $data);
     
+        // Return response
         if ($result) {
-            $this->dynamicRoutes();
+    
             $response = [
                 'success' => true,
                 'message' => 'Category updated successfully!',
@@ -45,31 +78,10 @@ class EditCategoryController extends SessionController
         } else {
             $response = [
                 'success' => false,
-                'message' => 'Failed to updated category.',
+                'message' => 'Failed to update category.',
             ];
         }
     
         return $this->response->setJSON($response);
-    }  
-    
-    private function dynamicRoutes() {
-        $model = new CategoriesModel();
-        $result = $model->findAll();
-        $data = [];
-
-        if (count($result)) {
-            foreach ($result as $route) {
-                $data[$route['slug']] = 'EventsController::index/' . $route['category_id'];
-            }
-        }
-
-        $output = '<?php' . PHP_EOL;
-        foreach ($data as $slug => $controllerMethod) {
-            $output .= '$routes->get(\'' . $slug . '\', \'' . $controllerMethod . '\');' . PHP_EOL;
-        }
-
-        $filePath = ROOTPATH . 'app/Config/EventCategoriesRoutes.php';
-
-        file_put_contents($filePath, $output);
-    }  
+    }
 }
