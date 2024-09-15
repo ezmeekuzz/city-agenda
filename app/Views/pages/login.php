@@ -134,10 +134,10 @@
         <div class="row flex-lg-row flex-column-reverse">
             <div class="col-lg-6 col-md-12 d-flex flex-column gap-2 justify-content-center align-items-center login-sec">
                 <img class="regLogo" src="img/reg-Img-Logo.png">
-                <h2>Welcome To City Agenda</h2>
-                <form class="login-form">
-                    <input type="name" name="log-name" placeholder="Email Address">
-                    <input type="password" name="log-pass" placeholder="Password">
+                <h2>Welcome To City Agenda <?=session()->get('organizer_usertype');?></h2>
+                <form class="login-form" id="signIn">
+                    <input type="name" name="emailaddress" id="emailaddress" placeholder="Email Address">
+                    <input type="password" name="password" id="password" placeholder="Password">
                     <div class="formCheckItem">
                         <div class="forgot-checkbox">
                             <input type="checkbox">
@@ -147,7 +147,7 @@
                     </div>
                     <input type="submit" value="Login">
                 </form>
-                <p>Don’t Have An Account? <a href="#">Create An Account</a> Or Sign Up With. </p>
+                <p>Don’t Have An Account? <a href="/register?account=event_organizer">Create An Account</a> Or Sign Up With. </p>
                 <div class="sign-up-with">
                     <div></div> <!-- Added this div for Google Sign-In button -->
                     <button id="buttonDiv"></button>
@@ -159,5 +159,80 @@
     </section>
 
     <?=$this->include('templates/footer');?>
+    <script>
+        $(document).ready(function() {
+            $('#signIn').submit(function(event) {
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Get form data
+                var emailaddress = $('#emailaddress').val();
+                var password = $('#password').val();
+
+                // Perform client-side validation
+                if (emailaddress.trim() === '' || password.trim() === '') {
+                    // Show error using SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please fill in the required fields!',
+                    });
+                    return;
+                }
+
+                // Send AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/login/standardLogin',
+                    data: $('#signIn').serialize(), // Serialize form data
+                    dataType: 'json',
+                    beforeSend: function() {
+                        // Show loading effect
+                        Swal.fire({
+                            title: 'Logging In...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Redirect upon successful login
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Logged In',
+                                text: response.message,
+                                timer: 1000, // Display message for 3 seconds
+                                timerProgressBar: true,
+                                showConfirmButton: false // Hide the "OK" button
+                            }).then((result) => {
+                                // Redirect after Swal alert is closed
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "/organizer/dashboard";
+                                }
+                            });
+                        } else {
+                            // Show error message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX errors
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'An error occurred while logging in. Please try again later.',
+                        });
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

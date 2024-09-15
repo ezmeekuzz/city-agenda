@@ -15,6 +15,9 @@ class LoginController extends BaseController
     }
     public function index()
     {
+        if (session()->has('organizer_user_id') && session()->get('organizer_usertype') === 'Event Organizer') {
+            return redirect()->to('/organizer/dashboard');
+        }
         $data = [
             'title' => 'City Agenda'
         ];
@@ -78,5 +81,47 @@ class LoginController extends BaseController
     {
         $response = $this->request->getJSON();
         return $this->response->setJSON(['success' => true]);
+    }
+    public function standardLogin()
+    {
+        $userModel = new UsersModel();
+    
+        $emailaddress = $this->request->getPost('emailaddress');
+        $password = $this->request->getPost('password');
+    
+        $result = $userModel
+        ->where('emailaddress', $emailaddress)
+        ->where('usertype', 'Event Organizer')
+        ->first();
+    
+        if ($result && password_verify($password, $result['encryptedpass'])) {
+            // Set session data
+            session()->set([
+                'organizer_user_id' => $result['user_id'],
+                'organizer_firstname' => $result['firstname'],
+                'organizer_lastname' => $result['lastname'],
+                'organizer_emailaddress' => $result['emailaddress'],
+                'organizer_username' => $result['username'],
+                'organizer_usertype' => $result['usertype'],
+                'OrganizerLoggedIn' => true // Ensure this is set when login is successful
+            ]);
+            
+    
+            // Prepare response
+            $response = [
+                'success' => true,
+                'redirect' => '/organizer/dashboard', // Redirect URL upon successful login
+                'message' => 'Login successful'
+            ];
+        } else {
+            // Prepare response for invalid login
+            $response = [
+                'success' => false,
+                'message' => 'Invalid login credentials'
+            ];
+        }
+    
+        // Return JSON response
+        return $this->response->setJSON($response);
     }
 }

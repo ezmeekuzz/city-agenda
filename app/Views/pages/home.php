@@ -65,7 +65,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="drop-cards d-flex flex-column justify-content-center">
+                <!--<div class="drop-cards d-flex flex-column justify-content-center">
                     <h4>Select Date</h4>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -78,7 +78,7 @@
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </div>
-                </div>
+                </div>-->
                 <div class="drop-cards d-flex flex-column justify-content-center">
                     <h4>Select Category</h4>
                     <div class="dropdown">

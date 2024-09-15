@@ -1,0 +1,151 @@
+body {
+    color: #000 !important;
+    background: #fff !important;
+}
+.btn {
+    background: #5C0077 !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+input, select, textarea, label, span {
+    color: #000 !important;
+}
+.sidebar-nav label, .sidebar-nav span, .sidebar-nav i {
+    color: #e1c4e9 !important;
+}
+.nav-static-title {
+    color: #fff !important;
+}
+.sidebar-nav, .navbar-header {
+    background: #5C0077 !important;
+}
+.top-bar .navigation {
+    background: #5C0077;
+    color: #fff !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active {
+    background: #5C0077 !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active a span {
+    color: #fff !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li a:hover {
+    background: #5C0077 !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active ul li.active a.has-arrow {
+    color: #fff !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li a:hover span {
+    color: #fff !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li a:focus, .app-navbar .sidebar-nav ul.metismenu li a:hover {
+    background: #5C0077 !important;
+    color: #e1c4e9;
+    transition: all .3s ease-out;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active ul.custom-style li a {
+    background: #fff !important;
+    color: #a2a5bd;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active ul.custom-style li a:hover {
+    color: #000 !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li a, ul li a {
+    color: #000 !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active ul li.active a {
+    color: #5C0077 !important;
+}
+.text-primary {
+    color: #fff !important;
+}
+.mCS-minimal.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background-color: #E2E2E2 !important;
+    width: 6px;
+}
+.breadcrumb-item.active {
+    color: #000 !important;
+}
+ol li, ul li {
+    color: #000;
+}
+/*.swal2-actions .swal2-confirm {
+    background-color: #fff6ed !important;
+    border-color: #A8713E !important;
+    color: #000 !important;
+}*/
+.swal2-popup {
+    border-radius: 0px !important;
+}
+.input-group-addon {
+    padding: 8px 14px;
+    background: #5C0077 !important;
+    border: none !important;
+    color: #fff;
+}
+.selects-contant-boots .bootstrap-tagsinput .label-info {
+    background: #5C0077 !important;
+    color: #fff !important;
+}
+.selects-contant .Multi-sel .select2-container--default .select2-selection--multiple .select2-selection__choice, .selects-contant .Multi-sel .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    background: #5C0077 !important;
+    border: none !important;
+    color: #fff;
+    padding: 1px 10px 1px 4px;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: #5C0077 !important;
+}
+.notification-media {
+    cursor: pointer !important;
+}
+.tab .nav.nav-tabs li a.active {
+    background: #5C0077 !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+.dropdown-toggle::after {
+    display: hidden !important;
+    width: 0;
+    height: 0;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+.mf-card {
+    border: 1px solid transparent !important;
+}
+.mf-card a {
+    color: #0084ff !important;
+}
+.mf-card a:hover {
+    color: #0084ff !important;
+}
+a.text-muted {
+    color: #0084ff!important;
+}
+.accordion .acd-group .mf-card .mf {
+    color: #0084ff !important;
+}
+.page-item.active .page-link {
+    background-color: #0084ff !important;
+    border-color: #0084ff !important;
+}
+.chat-dropdown {
+  width: 300px !important;
+  height: 300px !important;
+}
+.custom-bg-header {
+    background: #5C0077 !important;
+}
+.app-navbar .sidebar-nav ul.metismenu li.active ul li.active ul li.active a {
+    color: #5C0077 !important;
+}
+
+
+
+

@@ -25,9 +25,9 @@ function toggleSidebar() {
 
 
 //categories section
-
 const slider = document.querySelector('.category-slider');
-let currentIndex = 0; // Start index for the slide
+let currentIndex = 0;
+let autoplayInterval;
 
 // Function to check if we are in mobile view
 function isMobileView() {
@@ -36,10 +36,9 @@ function isMobileView() {
 
 function slideLeft() {
     if (isMobileView()) {
-        const itemsPerSlide = 2; // Two items per slide in mobile view
+        const itemsPerSlide = 2;
         const totalItems = slider.children.length;
 
-        // Loop to end if at the beginning
         if (currentIndex <= 0) {
             currentIndex = totalItems - itemsPerSlide;
         } else {
@@ -51,10 +50,9 @@ function slideLeft() {
 
 function slideRight() {
     if (isMobileView()) {
-        const itemsPerSlide = 2; // Two items per slide in mobile view
+        const itemsPerSlide = 2;
         const totalItems = slider.children.length;
 
-        // Loop to start if at the end
         if (currentIndex >= totalItems - itemsPerSlide) {
             currentIndex = 0;
         } else {
@@ -66,21 +64,63 @@ function slideRight() {
 
 function updateSliderPosition() {
     if (isMobileView()) {
-        const itemWidth = slider.children[0].offsetWidth; // Width of each item
-        const slideDistance = currentIndex * (itemWidth + 20); // Calculate slide distance including margin
+        const itemWidth = slider.children[0].offsetWidth;
+        const slideDistance = currentIndex * (itemWidth + 20);
         slider.style.transform = `translateX(-${slideDistance}px)`;
     } else {
-        // Reset to default position when not in mobile view
         slider.style.transform = 'translateX(0)';
         currentIndex = 0;
     }
 }
 
-// Add event listener for window resize to handle dynamically
-window.addEventListener('resize', updateSliderPosition);
+// Swipe functionality for mobile view
+let touchStartX = 0;
+let touchEndX = 0;
 
-// Add event listener for window resize to handle dynamically
-window.addEventListener('resize', updateSliderPosition);
+slider.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+slider.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+});
+
+function handleSwipeGesture() {
+    if (isMobileView()) {
+        if (touchEndX < touchStartX) {
+            slideRight();
+        }
+        if (touchEndX > touchStartX) {
+            slideLeft();
+        }
+    }
+}
+
+// Autoplay functionality (every 5 seconds)
+function startAutoplay() {
+    autoplayInterval = setInterval(slideRight, 5000);
+}
+
+// Stop autoplay when resizing or switching between views
+function stopAutoplay() {
+    clearInterval(autoplayInterval);
+}
+
+// Handle resizing and autoplay restart
+window.addEventListener('resize', () => {
+    updateSliderPosition();
+    stopAutoplay();
+    if (isMobileView()) {
+        startAutoplay();
+    }
+});
+
+// Initial load
+updateSliderPosition();
+if (isMobileView()) {
+    startAutoplay();
+}
 
 
 
@@ -173,3 +213,14 @@ $(document).ready(function(){
     // });
 
 });
+
+
+
+    //date picker script
+        $(document).ready(function(){
+                $('#datepicker').datepicker({
+                    format: 'mm/dd/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            });

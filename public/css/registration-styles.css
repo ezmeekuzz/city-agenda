@@ -1,0 +1,29 @@
+
+
+
+.registration-button {
+    background-color: #741774 !important; /* Custom background color */
+    color: #fff !important; /* White text color */
+    padding: 10px 30px !important;
+    border-radius: 50px !important;
+}
+.registration-button:hover {
+    background-color: #5a125e !important; /* Darker shade on hover */
+}
+
+.registration-container{
+    margin: 20px 0;
+    padding: 30px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.registration-title {
+    font-weight: 900;
+}
+
+.terms-text {
+    font-size: 0.9rem !important; /* Smaller font size for terms description */
+    color: gray !important;
+    margin: 10px 0;
+}

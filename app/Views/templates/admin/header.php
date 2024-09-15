@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nanum+Gothic&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ruda:wght@400..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/vendors.css" />
     <link href="<?=base_url();?>assets/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="<?=base_url();?>assets/css/customstyle.css" rel="stylesheet" type="text/css" />
+    <link href="<?=base_url();?>assets/css/style2.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
@@ -182,8 +182,8 @@
                     <div class="navbar-header d-flex align-items-center">
                         <a href="javascript:void:(0)" class="mobile-toggle"><i class="ti ti-align-right"></i></a>
                         <a class="navbar-brand" href="/">
-                            <img src="<?=base_url();?>img/Logo.png" class="img-fluid logo-desktop" alt="logo" />
-                            <img src="<?=base_url();?>img/Logo.png" class="img-fluid logo-mobile" alt="logo" />
+                            <img src="<?=base_url();?>img/Logo.png" class="img-fluid logo-desktop" style="width: 60%;" alt="logo" />
+                            <img src="<?=base_url();?>img/Logo.png" class="img-fluid logo-mobile" style="width: 60%;" alt="logo" />
                         </a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,5 +1,5 @@
 <?=$this->include('templates/admin/header');?>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_H6wQhY-ksDyboh_b-Sa17kkUbeKPdmk&libraries=places"></script>
 <div class="app-container">
     <?=$this->include('templates/admin/sidebar');?>
     <div class="app-main" id="main">

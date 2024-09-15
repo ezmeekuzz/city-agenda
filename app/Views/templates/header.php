@@ -54,7 +54,7 @@
             <!-- Navbar Links -->
             <div class="col-md-5 col-sm-12 collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="d-flex gap-3 align-items-center nav-control justify-content-lg-end justify-content-between pt-lg-0 pb-lg-0 pt-sm-3 pb-sm-3 p-0">
-                    <a href="create-new-event-page.html"><button class="new-event">Create New Event</button></a>
+                    <a href="/login"><button class="new-event">Create New Event</button></a>
                     <div class="nav-action d-flex gap-3 align-items-center">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
                         <hr class="d-none d-sm-block">
