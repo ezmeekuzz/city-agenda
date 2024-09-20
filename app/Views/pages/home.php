@@ -3,11 +3,11 @@
 <section class="container-fluid banner">
     <div class="container d-flex flex-column align-items-center gap-5">
         <img class="banner-img" src="img/bannerImg.png">
-        <form class="container banner-form">
+        <form class="container banner-form" method="GET" action="/events">
             <div class="d-flex gap-3  flex-md-row">
                 <div class="search-input">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <input type="text" placeholder="Enter city name">
+                    <input type="text" placeholder="Enter city name" name="city">
                 </div>
                 <button class="search-toggle">
                     <i class="bi bi-search"></i>
@@ -45,7 +45,7 @@
             <div class="col-lg-4 col-md-12 event-title col-sm-12">
                 <h2>Popular Events In </h2>
                 <div class="d-flex gap-4 subs-title align-items-center">
-                    <h3> New York </h3><img src="img/note-Icon.png">
+                    <h3></h3><img src="img/note-Icon.png">
                 </div>
             </div>
             <div class="col-lg-8 col-md-12 mt-4 mt-lg-0 d-flex gap-4 flex-column flex-md-row">
@@ -65,20 +65,17 @@
                         </ul>
                     </div>
                 </div>
-                <!--<div class="drop-cards d-flex flex-column justify-content-center">
+                <div class="drop-cards d-flex flex-column justify-content-center">
                     <h4>Select Date</h4>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-justify-left"></i>
-                            Any Date
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                    <div class="input-group date" id="datepicker">
+                        <input style="box-shadow: 0px 0px 5px #00000056 !important" type="text" class="form-control" placeholder="Select Date">
+                        <span class="input-group-append">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="bi bi-calendar-event"></i>
+                            </button>
+                        </span>
                     </div>
-                </div>-->
+                </div>
                 <div class="drop-cards d-flex flex-column justify-content-center">
                     <h4>Select Category</h4>
                     <div class="dropdown">
@@ -104,11 +101,11 @@
 <section class="container-fluid big-event-section">
     <div class="container bot-slider-sec">
         <h2>Find Big Events In Any City</h2>
-        <form class="container banner-form big-event-search">
+        <form class="container banner-form big-event-search" method="GET" action="/events">
             <div class="d-flex gap-3  flex-md-row">
                 <div class="search-input">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <input type="text" placeholder="Enter city name">
+                    <input type="text" placeholder="Enter city name" name="city">
                 </div>
                 <button class="search-toggle">
                     <i class="bi bi-search"></i>
@@ -169,19 +166,36 @@
     $(document).ready(function() {
         var selectedCategory = '';
         var selectedLocation = '';
+        var selectedDate = '';
 
+        // Initialize datepicker with the correct format and attach the change event
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm-dd',  // Ensure the format matches the backend's expected format
+            autoclose: true
+        }).on('changeDate', function(e) {
+            // Get the selected date value when date changes
+            selectedDate = $('#datepicker').datepicker('getFormattedDate');
+            loadEvents();  // Load events based on the selected date
+        });
         // Handle category selection
         $('#category-dropdown a').on('click', function() {
-            selectedCategory = $(this).data('category');
-            $(this).closest('.dropdown').find('.dropdown-toggle').text(selectedCategory);
-            loadEvents();
+            selectedCategory = $(this).data('category');  // Update the selected category
+            $(this).closest('.dropdown').find('.dropdown-toggle').text($(this).text());  // Set the dropdown button text
+            loadEvents();  // Reload events based on the new category
         });
 
         // Handle location selection
         $('#location-dropdown a').on('click', function() {
-            selectedLocation = $(this).data('location');
-            $('#selected-location').text(selectedLocation);
-            loadEvents();
+            selectedLocation = $(this).data('location');  // Update the selected location
+            $('#selected-location').text($(this).text());  // Update location text
+
+            if (selectedLocation) {
+                $('.event-title h3').text(selectedLocation);  // Update the event title with city name
+                $('.event-title').show();  // Show the Popular Events section
+            } else {
+                $('.event-title').hide();  // Hide if no location is selected
+            }
+            loadEvents();  // Reload events based on the new location
         });
 
         var slider = $('.slider');
@@ -269,35 +283,49 @@
         updateSliderPosition(true);  // Start with an instant transition to avoid animation on page load
 
         function loadEvents() {
+            // Get the selected date from datepicker, if not already set
+            let selectedDate = $('#datepicker').datepicker('getFormattedDate') || '';
+            if (selectedDate) {
+                selectedDate = formatDateToYMD(selectedDate);  // Convert to yyyy-mm-dd
+            }
             $.ajax({
-                url: '/getEvents',
+                url: '/getEvents',  // Endpoint to get events
                 method: 'GET',
                 data: {
-                    category: selectedCategory,
-                    location: selectedLocation
+                    category: selectedCategory,  // Pass selected category
+                    location: selectedLocation,  // Pass selected location
+                    date: selectedDate           // Pass selected date
                 },
                 success: function(response) {
                     let eventsContainer = $('#events-container');
-                    eventsContainer.empty();
+                    eventsContainer.empty();  // Clear the previous events
 
                     if (response.length === 0) {
-                        eventsContainer.html('<p>No events found</p>');
+                        eventsContainer.html('<center> <img src="img/page-not-found.png" alt=""></center><center><h1 style="color: #741774;">No Events Found</h1></center>');
                         return;
                     }
 
+                    // Loop through the response and create HTML for each event
                     response.forEach(function(event) {
+                        // Determine if the event is favorited
+                        const isFavoritedClass = event.is_favorited ? 'active' : '';
+                        
                         let eventHTML = `
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                             <div class="card" style="width: 100%;">
                                 <img class="user-id" src="${event.image}" alt="User">
-                                <i class="bi bi-suit-heart-fill heartIcon"></i>
-                                <img src="${event.eventbanner}" alt="${event.eventname}">
+                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
+                                <img src="${event.eventbanner}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
                                 <div class="card-body">
-                                    <h3>${event.eventname}</h3>
+                                    <a href="${event.slug}" style="text-decoration: none; color: black;">
+                                        <h3>${event.eventname}</h3>
+                                    </a>
                                 </div>
                                 <div class="card-bottom">
                                     <div class="d-flex align-items-center">
-                                        <i class="bi bi-geo-alt-fill"></i>
+                                        <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
+                                            <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
+                                        </button>
                                         <p>
                                             ${event.cityname} <br>
                                             <span>${event.locationname}</span>
@@ -313,16 +341,19 @@
                                     </div>
                                 </div>
                             </div>
-                    `;
-                        eventsContainer.append(eventHTML);
+                        </div>`;
+                        eventsContainer.append(eventHTML);  // Append the event HTML to the container
                     });
                 },
                 error: function() {
-                    $('#events-container').html('<p>Error loading events</p>');
+                    $('#events-container').html('<p>Error loading events</p>');  // Show error message
                 }
             });
         }
-
+        function formatDateToYMD(dateStr) {
+            const [month, day, year] = dateStr.split('/');
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
         // Initial load of events
         loadEvents();
 
@@ -346,4 +377,67 @@
             return `${hours}:${minutes} ${period}`;
         }
     });
+    function toggleFavorite(button, eventId) {
+        const heartIcon = button.querySelector('.heartIcon');
+        const isActive = heartIcon.classList.contains('active'); // Check the current state
+
+        // Toggle the active class
+        heartIcon.classList.toggle('active');
+
+        // Send an AJAX request to update the wishlist in the database
+        $.ajax({
+            url: '/wishlist/toggle',  // Change this to your actual API route
+            type: 'POST',
+            data: {
+                event_id: eventId,  // The ID of the event being favorited/unfavorited
+                is_favorited: !isActive  // True if adding to favorites, False if removing
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Show success notification
+                    Swal.fire({
+                        icon: 'success',
+                        title: !isActive ? 'Added to Wishlist' : 'Removed from Wishlist',
+                        text: !isActive ? 'The item has been added to your wishlist.' : 'The item has been removed from your wishlist.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else if (response.status === 'error' && response.message === 'You need to log in first to add this event to your wishlist.') {
+                    // Show login required error message
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Login Required',
+                        text: response.message, // The error message from the server
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    // Reverse the toggle state since the user is not logged in
+                    heartIcon.classList.toggle('active');
+                } else {
+                    // Show error notification
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error updating the wishlist. Please try again.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    // If there's an error, reverse the toggle state
+                    heartIcon.classList.toggle('active');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Show error notification for AJAX failure
+                Swal.fire({
+                    icon: 'error',
+                    title: 'AJAX Error',
+                    text: 'There was a problem with your request. Please try again.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                // In case of error, reverse the toggle state
+                heartIcon.classList.toggle('active');
+            }
+        });
+    }
 </script>

@@ -38,8 +38,7 @@
                                 <table id="eventmasterlist" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Organizer</th>
-                                            <th>Email Address</th>
+                                            <th>Event ID</th>
                                             <th>Event Name</th>
                                             <th>Event Type</th>
                                             <th>Date</th>

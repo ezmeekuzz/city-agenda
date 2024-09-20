@@ -125,6 +125,10 @@ class EditEventController extends SessionController
             'city_id' => $this->request->getPost('city_id'),
             'eventdescription' => $this->request->getPost('eventdescription'),
         ];
+
+        if($this->request->getPost('publishstatus') == 'Yes') {
+            $eventData['dateadded'] = date('Y-m-d');
+        }
     
         // Handle eventbanner file upload
         $eventBannerFile = $this->request->getFile('eventbanner');

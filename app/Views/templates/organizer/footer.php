@@ -20,5 +20,101 @@
             maxHeight: "400px" 
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#deactivateAccountBtn').on('click', function(e) {
+                e.preventDefault();
+
+                // Show SweetAlert2 confirmation
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action will deactivate your account and you won't be able to access it.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, deactivate it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform AJAX request to update the account status
+                        $.ajax({
+                            url: '/organizer/deactivate-account',  // The URL where the backend logic for deactivation is handled
+                            type: 'POST',
+                            data: { 
+                                user_id: <?=session()->get('organizer_user_id');?>  // Passing the user ID
+                            },
+                            success: function(response) {
+                                // Check the response from the server
+                                if(response.success) {
+                                    Swal.fire(
+                                        'Deactivated!',
+                                        'Your account has been deactivated.',
+                                        'success'
+                                    ).then(() => {
+                                        // Optional: redirect to the login page or another page
+                                        window.location.href = "<?=base_url()?>organizer/logout";
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'There was an error deactivating your account. Please try again.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to send the request. Please try again.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+            $('#2faToggle').on('change', function() {
+                // Get the current state of the checkbox
+                let twoFactorEnabled = $(this).is(':checked') ? 1 : 0;
+
+                // Send the AJAX request to update the 2FA status
+                $.ajax({
+                    url: '/organizer/update-2fa',  // Adjust the URL to match your controller method
+                    method: 'POST',
+                    data: {
+                        two_factor_enabled: twoFactorEnabled
+                    },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest' // To make sure it's an AJAX request
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                timer: 2000
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                timer: 2000
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while updating 2FA status.',
+                            timer: 2000
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

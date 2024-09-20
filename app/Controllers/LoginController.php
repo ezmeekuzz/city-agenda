@@ -92,17 +92,21 @@ class LoginController extends BaseController
         $result = $userModel
         ->where('emailaddress', $emailaddress)
         ->where('usertype', 'Event Organizer')
+        ->where('account_status !=', 'deactivated')
         ->first();
     
         if ($result && password_verify($password, $result['encryptedpass'])) {
             // Set session data
             session()->set([
                 'organizer_user_id' => $result['user_id'],
+                'organizer_image' => $result['image'],
                 'organizer_firstname' => $result['firstname'],
                 'organizer_lastname' => $result['lastname'],
                 'organizer_emailaddress' => $result['emailaddress'],
                 'organizer_username' => $result['username'],
                 'organizer_usertype' => $result['usertype'],
+                'organizer_account_status' => $result['account_status'],
+                'organizer_two_factor_enabled' => $result['two_factor_enabled'],
                 'OrganizerLoggedIn' => true // Ensure this is set when login is successful
             ]);
             

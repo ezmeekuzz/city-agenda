@@ -102,15 +102,15 @@
 
                                     <h4 class="mb-3">Refund Policy</h4>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" id="no_refund" name="refund_policy" value="No Refund" checked>
+                                        <input class="form-check-input" type="radio" id="no_refund" name="refund_policy" value="Do Not Allow Refund." checked>
                                         <label class="form-check-label" for="no_refund">Do Not Allow Refund.</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" id="refund_24_hours" name="refund_policy" value="Refund 24 Hours">
+                                        <input class="form-check-input" type="radio" id="refund_24_hours" name="refund_policy" value="Allow Refund If Attendee Cancels 24 Hours Before The Event Starts.">
                                         <label class="form-check-label" for="refund_24_hours">Allow Refund If Attendee Cancels 24 Hours Before The Event Starts.</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" id="refund_7_days" name="refund_policy" value="Refund 7 Days">
+                                        <input class="form-check-input" type="radio" id="refund_7_days" name="refund_policy" value="Allow Refund If Attendee Cancels 7 Days Before The Event Starts.">
                                         <label class="form-check-label" for="refund_7_days">Allow Refund If Attendee Cancels 7 Days Before The Event Starts.</label>
                                     </div>
 
@@ -146,11 +146,11 @@
         }
 
         // Set refund policy radio button based on refundPolicy
-        if (refundPolicy === 'No Refund') {
+        if (refundPolicy === 'Do Not Allow Refund.') {
             $('#no_refund').prop('checked', true);
-        } else if (refundPolicy === 'Refund 24 Hours') {
+        } else if (refundPolicy === 'Allow Refund If Attendee Cancels 24 Hours Before The Event Starts.') {
             $('#refund_24_hours').prop('checked', true);
-        } else if (refundPolicy === 'Refund 7 Days') {
+        } else if (refundPolicy === 'Allow Refund If Attendee Cancels 7 Days Before The Event Starts.') {
             $('#refund_7_days').prop('checked', true);
         } else {
             // Default to No Refund if no valid value is found

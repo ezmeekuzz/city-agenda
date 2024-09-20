@@ -90,6 +90,7 @@ class AddEventController extends SessionController
             'state_id' => $this->request->getPost('state_id'),
             'city_id' => $this->request->getPost('city_id'),
             'eventdescription' => $this->request->getPost('eventdescription'),
+            'dateadded' => date('Y-m-d'),
         ];
     
         // Handle eventbanner file upload

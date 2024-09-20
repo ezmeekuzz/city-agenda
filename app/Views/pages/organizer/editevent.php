@@ -37,7 +37,7 @@
                                         <div class="form-group">
                                             <div class="checkbox checbox-switch switch-success">
                                                 <label>
-                                                    <input type="checkbox" value = "Yes" name="publishstatus" />
+                                                    <input type="checkbox" value = "Yes" name="publishstatus" <?php if ($property['publishstatus'] == 'Published') echo 'checked'; ?> />
                                                     <span></span>
                                                     Publish
                                                 </label>

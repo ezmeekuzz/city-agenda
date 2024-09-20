@@ -55,7 +55,8 @@ class AddUserController extends SessionController
             'password' => $password,
             'encryptedpass' => password_hash($password, PASSWORD_BCRYPT),
             'usertype' => $usertype,
-            'image' => 'uploads/profile-image/' . $imageName, // Save the image name in the database
+            'image' => 'uploads/profile-image/' . $imageName,
+            'created_at' => date('Y-m-d')
         ];
 
         // Insert the user

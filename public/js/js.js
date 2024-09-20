@@ -124,28 +124,6 @@ if (isMobileView()) {
 
 
 
-// Event with payment Counter
-
-let counters = [0, 0, 0, 0, 0, 0, 0];
-
-function updateCounter(index) {
-    document.getElementById('counter' + (index + 1)).innerText = counters[index];
-}
-
-function incrementCounter(index) {
-    counters[index]++;
-    updateCounter(index);
-}
-
-function decrementCounter(index) {
-    if (counters[index] > 0) {  // Check if the counter is greater than 0
-        counters[index]--;
-        updateCounter(index);
-    }
-}
-
-
-
 // Carousel Slider
 
 
@@ -224,3 +202,10 @@ $(document).ready(function(){
                     todayHighlight: true
                 });
             });
+
+
+            function toggleFavorite(button) {
+                // Find the icon within the button and toggle the "active" class
+                const heartIcon = button.querySelector('.heartIcon');
+                heartIcon.classList.toggle('active');
+            }

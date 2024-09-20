@@ -49,6 +49,9 @@ class RegisterController extends BaseController
                 'password' => $password,
                 'encryptedpass' => password_hash($password, PASSWORD_BCRYPT),
                 'usertype' => 'Event Organizer',
+                'account_status' => 'Active',
+                'two_factor_enabled' => 0,
+                'created_at' => date('Y-m-d')
             ];
     
             $inserted = $usersModel->insert($data);

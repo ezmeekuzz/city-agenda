@@ -50,6 +50,8 @@ input, select, textarea, ul, li, button,
 }
 
 
+
+
 h1, h2 {
     font-size: clamp(28px, 5vw, 40px) !important;
 }
@@ -72,6 +74,95 @@ p {
 
 
 
+
+
+
+
+/* calendar dropdown */
+
+.drop-cards .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Add shadow to the input field when focused */
+.drop-cards .form-control:focus {
+    box-shadow: 0 0 10px #741774;
+    border-color: #741774;
+}
+
+/* Style for the calendar button */
+.drop-cards .btn {
+    background-color: #741774;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.drop-cards .btn:hover {
+    background-color: #741774;
+}
+
+/* Calendar icon */
+.drop-cards .bi-calendar-event {
+    font-size: 20px;
+}
+
+/* Customize the datepicker calendar itself */
+.datepicker-dropdown {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Style for the datepicker calendar cells */
+.datepicker table tr td,
+.datepicker table tr th {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    border-radius: 4px;
+}
+
+/* Highlight the current day and selected day */
+.datepicker table tr td.today {
+    background-color: #741774;
+    color: white;
+    border-radius: 50%;
+}
+td.active.day{
+    background-color: #741774 !important;
+
+}
+.datepicker table tr td.active {
+    background-color: #741774;
+    color: white;
+    border-radius: 50%;
+}
+
+/* Style for the navigation arrows in the datepicker */
+.datepicker .prev, .datepicker .next {
+    font-size: 18px;
+    color: #741774;
+}
+
+/* Style for the month and year in the datepicker */
+.datepicker-switch {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
 
 .banner{
     padding:50px 20px;
@@ -302,7 +393,7 @@ p {
 .heartIcon{
     width: 30px!important;
     height: 30px!important;
-    background-color: #00000036!important;
+    background-color: #8a8a8a36!important;
     border-radius: 50px!important;
     display: flex!important;
     align-items: center!important;
@@ -310,9 +401,14 @@ p {
     font-size: 15px!important;
     color:#fff!important;
     position: absolute!important;
-    top:270px!important;
+    bottom: 90px;
     right: 20px!important;
 }
+
+.heartIcon.active {
+    color: red !important; /* Red color when clicked */
+}
+
 
 .card-body{
     padding:20px;
@@ -1099,7 +1195,6 @@ button.next {
 
 
 .event-banner {
-    background-image: url('../img/event-Img-bg.png');
     background-size: cover;
     background-position: center center;
     border-radius: 20px;

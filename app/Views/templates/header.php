@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>City Agenda | Blog Inner</title>
+    <title><?=$title;?></title>
 
     <link rel="stylesheet" href="<?=base_url();?>css/styles.css">
     <link rel="stylesheet" href="<?=base_url();?>css/header.css">
@@ -25,12 +25,7 @@
         }
     </style>
 </head>
-
-
-
 <body>
-  <!--==========Navbar==========-->
-
 <nav class="navbar navbar-expand-lg main-nav container-fluid">
     <div class="w-100 justify-content-center">
         <div class="row w-100 align-items-center justify-content-end justify-content-sm-between">
@@ -40,9 +35,9 @@
                     <img src="<?=base_url();?>img/Logo.png" alt="Logo">
                 </a>
                 <!-- Search Form -->
-                <form class="d-flex align-items-center gap-1 nav-form-search" role="search">
+                <form class="d-flex align-items-center gap-1 nav-form-search" role="search" method="GET" action="/events">
                     <i class="bi bi-search"></i>
-                    <input class="form-control me-2" type="search" placeholder="Search City Agenda" aria-label="Search City Agenda">
+                    <input class="form-control me-2" type="search" placeholder="Search City Agenda" name="city" aria-label="Search City Agenda">
                 </form>
             </div>
             <!-- Toggler Button for Mobile -->
@@ -65,9 +60,6 @@
         </div>
     </div>
 </nav>
-
-<!--==========Sidebar==========-->
-
 <div id="sidebar" class="sidebar">
     <div class="sidebar-header">
         <h2>Menu</h2>

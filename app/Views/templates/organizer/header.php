@@ -194,8 +194,10 @@
                             <ul class="navbar-nav nav-right ml-auto">
                                 <li class="nav-item dropdown user-profile">
                                     <a href="javascript:void(0)" class="nav-link dropdown-toggle link-header" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        
-                                        <img src="<?=base_url();?>assets/img/avatar.png" alt="avtar-img" id = "imageDisplaysideBar" class = "profilepic">
+                                        <?php
+                                            $image = (session()->get('organizer_image') != "") ? '/' . session()->get('organizer_image') : base_url() . "assets/img/avatar.png";
+                                        ?>
+                                        <img src="<?=$image;?>" alt="avtar-img" id = "imageDisplaysideBar" class = "profilepic">
                                         <span class="bg-success user-status"></span>
                                     </a>
                                     <div class="dropdown-menu animated fadeIn" aria-labelledby="navbarDropdown">
@@ -209,12 +211,8 @@
                                             </div>
                                         </div>
                                         <div class="p-4">
-                                            <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/messages">
-                                                <i class="fa fa-comments pr-2 text-success"></i> Messages
-                                                <!--<span class="badge badge-primary ml-auto">6</span>-->
-                                            </a>
-                                            <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/settings">
-                                                <i class=" ti ti-settings pr-2 text-info"></i> Settings
+                                            <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/payment-method">
+                                                <i class=" ti ti-money pr-2 text-info"></i> Payment Method
                                             </a>
                                             <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/edit-account/<?=session()->get('organizer_user_id');?>">
                                                 <i class=" ti ti-user pr-2 text-warning"></i> Edit Account
@@ -222,11 +220,14 @@
                                             <a class="dropdown-item d-flex nav-link" href="javscript">
                                                 <div class="checkbox checbox-switch switch-success">
                                                     <label>
-                                                        <input type="checkbox" value = "enabled" id="2faToggle" />
+                                                        <input type="checkbox" value = "enabled" id="2faToggle" <?= (session()->get('organizer_two_factor_enabled ') == 1) ? 'checked' : ''; ?> />
                                                         <span></span>
                                                         2 Factor Authentication
                                                     </label>
                                                 </div>
+                                            </a>
+                                            <a class="dropdown-item d-flex nav-link" href="javascript:void(0);" id="deactivateAccountBtn">
+                                                <i class=" ti ti-trash pr-2 text-danger"></i> <span class="text-danger">Deactivate Account</span>
                                             </a>
                                             <div class="row mt-2">
                                                 <div class="col">

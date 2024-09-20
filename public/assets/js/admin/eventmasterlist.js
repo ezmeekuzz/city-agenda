@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function formatEventId(eventId) {
+        // Ensure eventId is a number or a string that can be converted to a number
+        eventId = parseInt(eventId, 10);
+        
+        // Format the ID with a "CA" prefix and zero-padded to 5 digits
+        return `CA${eventId.toString().padStart(5, '0')}`;
+    }
     var table = $('#eventmasterlist').DataTable({
         "processing": true,
         "serverSide": true,
@@ -14,6 +21,13 @@ $(document).ready(function () {
                 }
             },
             { "data": "emailaddress" },
+            {
+                "data": "event_id",
+                "render": function (data, type, row) {
+                    // Format event_id using formatEventId function
+                    return formatEventId(data);
+                }
+            },
             { "data": "eventname" },
             { "data": "eventtype" },
             { "data": "eventdate" },

@@ -70,6 +70,12 @@ $routes->delete('/admin/ticketmasterlist/delete/(:num)', 'Admin\TicketMasterlist
 $routes->post('/admin/ticketmasterlist/update', 'Admin\TicketMasterlistController::update');
 $routes->get('/admin/publish-event/(:num)', 'Admin\PublishEventController::index/$1');
 $routes->post('/admin/publishevent/update', 'Admin\PublishEventController::update');
+$routes->get('/admin/events-added-today', 'Admin\EventsAddedTodayController::index');
+$routes->get('/admin/eventsaddedtoday/getData', 'Admin\EventsAddedTodayController::getData');
+$routes->get('/admin/events-happening-today', 'Admin\EventsHappeningTodayController::index');
+$routes->get('/admin/eventshappeningtoday/getData', 'Admin\EventsHappeningTodayController::getData');
+$routes->get('/admin/archived-events', 'Admin\ArchivedEventsController::index');
+$routes->get('/admin/archivedevents/getData', 'Admin\ArchivedEventsController::getData');
 /*Administrator*/
 /*Event Organizer*/
 $routes->get('/organizer/dashboard', 'Organizer\DashboardController::index');
@@ -92,6 +98,18 @@ $routes->post('/organizer/ticketmasterlist/update', 'Organizer\TicketMasterlistC
 $routes->get('/organizer/publish-event/(:num)', 'Organizer\PublishEventController::index/$1');
 $routes->post('/organizer/publishevent/update', 'Organizer\PublishEventController::update');
 $routes->get('/organizer/edit-account/(:num)', 'Organizer\EditAccountController::index/$1');
+$routes->post('/organizer/editaccount/update', 'Organizer\EditAccountController::update');
+$routes->post('/organizer/deactivate-account', 'Organizer\DeactivateAccountController::index');
+$routes->post('/organizer/update-2fa', 'Organizer\TwoFAController::index');
+$routes->get('/organizer/payment-method', 'Organizer\PaymentMethodController::index');
+$routes->post('/organizer/paymentmethod/insert', 'Organizer\PaymentMethodController::insert');
+$routes->get('/organizer/paymentmethod/creditCardTable', 'Organizer\PaymentMethodController::creditCardTable');
+$routes->get('/organizer/paymentmethod/bankAccountTable', 'Organizer\PaymentMethodController::bankAccountTable');
+$routes->post('/organizer/paymentmethod/toggleActive/(:num)', 'Organizer\PaymentMethodController::toggleActive/$1');
+$routes->delete('/organizer/paymentmethod/delete/(:num)', 'Organizer\PaymentMethodController::delete/$1');
+$routes->get('/organizer/my-wishlist', 'Organizer\MyWishListController::index');
+$routes->delete('/organizer/mywishlist/delete/(:num)', 'Organizer\MyWishListController::delete/$1');
+$routes->get('/organizer/mywishlist/getData', 'Organizer\MyWishListController::getData');
 /*Event Organizer*/
 $routes->get('/', 'HomeController::index');
 $routes->get('/getEvents', 'HomeController::getEvents');
@@ -106,6 +124,9 @@ $routes->post('/register/insert', 'RegisterController::insert');
 $routes->get('/privacy-policy', 'PrivacyPolicyController::index');
 $routes->get('/terms-of-use', 'TermsOfUseController::index');
 $routes->get('/blogs', 'BlogsController::index');
-require APPPATH . 'Config/EventCategoriesRoutes.php';
-require APPPATH . 'Config/EventRoutes.php';
+$routes->get('/events', 'EventsController::index');
+$routes->get('/events/getEvents', 'EventsController::getEvents');
+$routes->post('/wishlist/toggle', 'WishListController::index');
+$routes->post('/eventdetails/stripePayment', 'EventDetailController::stripePayment');
+require APPPATH . 'Config/EventsRoutes.php';
 require APPPATH . 'Config/BlogRoutes.php';

@@ -360,9 +360,6 @@
         text-align: center;
     }
 
-    .heartIcon{
-        top:170px!important;
-    }
 
     .banner.inner-page h3{
         font-size: 35px;
@@ -751,3 +748,20 @@
 
   
 }
+
+
+/* Hide controls in desktop view (min-width: 992px for large screens) */
+@media (min-width: 992px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+      display: none !important;
+    }
+  }
+  
+  /* Show controls in mobile view (max-width: 991px for tablets and smaller screens) */
+  @media (max-width: 991px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+      display: block;
+    }
+  }

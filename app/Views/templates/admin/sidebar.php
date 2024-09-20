@@ -6,6 +6,9 @@
                         <ul class="metismenu " id="sidebarNav">
                             <li class="nav-static-title">Dashboard Panel</li>
                             <li class="<?php if($currentpage === 'dashboard') { echo 'active'; } ?>"><a href="/admin/dashboard" aria-expanded="false"><i class="nav-icon ti ti-dashboard"></i><span class="nav-title">Dashboard</span></a> </li>
+                            <li class="<?php if($currentpage === 'eventsaddedtoday') { echo 'active'; } ?>"><a href="/admin/events-added-today"><i class="nav-icon ti ti-calendar"></i><span class="nav-title">Events Added Today</span></a> </li>
+                            <li class="<?php if($currentpage === 'eventshappeningtoday') { echo 'active'; } ?>"><a href="/admin/events-happening-today"><i class="nav-icon ti ti-calendar"></i><span class="nav-title">Events Happening Today</span></a> </li>
+                            <li class="<?php if($currentpage === 'archivedevents') { echo 'active'; } ?>"><a href="/admin/archived-events"><i class="nav-icon ti ti-archive"></i><span class="nav-title">Archived Events</span></a> </li>
                             <li class="<?php if($currentpage === 'adduser' || $currentpage === 'usermasterlist') { echo 'active'; } ?>">
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <i class="nav-icon fa fa-users"></i>

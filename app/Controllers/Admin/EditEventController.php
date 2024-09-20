@@ -125,6 +125,10 @@ class EditEventController extends SessionController
             'city_id' => $this->request->getPost('city_id'),
             'eventdescription' => $this->request->getPost('eventdescription'),
         ];
+
+        if($this->request->getPost('publishstatus') == 'Yes') {
+            $eventData['dateadded'] = date('Y-m-d');
+        }
     
         // Handle eventbanner file upload
         $eventBannerFile = $this->request->getFile('eventbanner');
@@ -184,22 +188,16 @@ class EditEventController extends SessionController
             $agendasModel->where('event_id', $event_id)->delete();
             foreach ($slotTitles as $index => $title) {
                 // Check if any of the fields are empty
-                if (empty($title) || empty($slotDescriptions[$index]) || empty($slotStartTimes[$index]) || empty($slotEndTimes[$index])) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'All fields (Title, Description, Start Time, End Time) are required for each agenda slot.',
-                        'errorCode' => 'MISSING_FIELD',
+                if (!empty($title) && !empty($slotDescriptions[$index]) && !empty($slotStartTimes[$index]) && !empty($slotEndTimes[$index])) {
+                    // If all fields are filled, proceed with the insertion
+                    $agendasModel->insert([
+                        'event_id' => $event_id,
+                        'agenda_title' => $title,
+                        'agenda_description' => $slotDescriptions[$index] ?? '',
+                        'agenda_start_time' => $slotStartTimes[$index] ?? '',
+                        'agenda_end_time' => $slotEndTimes[$index] ?? ''
                     ]);
                 }
-        
-                // If all fields are filled, proceed with the insertion
-                $agendasModel->insert([
-                    'event_id' => $event_id,
-                    'agenda_title' => $title,
-                    'agenda_description' => $slotDescriptions[$index] ?? '',
-                    'agenda_start_time' => $slotStartTimes[$index] ?? '',
-                    'agenda_end_time' => $slotEndTimes[$index] ?? ''
-                ]);
             }
         }
 
@@ -217,52 +215,47 @@ class EditEventController extends SessionController
             $speakersModel->where('event_id', $event_id)->delete();
             foreach ($speakerNames as $index => $name) {
                 // Ensure that the index exists in both arrays before accessing them
-                if (empty($name) || empty($speakerJobs[$index])) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Speaker name and job are required.',
-                        'errorCode' => 'MISSING_FIELD',
-                    ]);
-                }
+                if (!empty($name) && !empty($speakerJobs[$index])) {
         
-                // Validate and handle speaker image upload
-                $newSpeakerImageName = '';
-                if (isset($speakerImages[$index]) && $speakerImages[$index]->isValid()) {
-                    $newSpeakerImageName = $speakerImages[$index]->getRandomName();
-                    if (!$speakerImages[$index]->move(FCPATH . 'uploads/speaker_images', $newSpeakerImageName)) {
+                    // Validate and handle speaker image upload
+                    $newSpeakerImageName = '';
+                    if (isset($speakerImages[$index]) && $speakerImages[$index]->isValid()) {
+                        $newSpeakerImageName = $speakerImages[$index]->getRandomName();
+                        if (!$speakerImages[$index]->move(FCPATH . 'uploads/speaker_images', $newSpeakerImageName)) {
+                            return $this->response->setJSON([
+                                'success' => false,
+                                'message' => 'Failed to move speaker image: ' . $speakerImages[$index]->getErrorString(),
+                                'errorCode' => 'FILE_MOVE_ERROR',
+                            ]);
+                        }
+                    } elseif (empty($newSpeakerImageName) && !empty($name)) {
                         return $this->response->setJSON([
                             'success' => false,
-                            'message' => 'Failed to move speaker image: ' . $speakerImages[$index]->getErrorString(),
-                            'errorCode' => 'FILE_MOVE_ERROR',
+                            'message' => 'Speaker image is required for ' . $name,
+                            'errorCode' => 'MISSING_IMAGE',
                         ]);
                     }
-                } elseif (empty($newSpeakerImageName) && !empty($name)) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Speaker image is required for ' . $name,
-                        'errorCode' => 'MISSING_IMAGE',
-                    ]);
-                }
-        
-                // Prepare data for insertion
-                $speakerData = [
-                    'event_id' => $event_id,
-                    'name' => $name,
-                    'job' => $speakerJobs[$index],
-                    'image' => $newSpeakerImageName ? 'uploads/speaker_images/' . $newSpeakerImageName : '',
-                    'facebook_link' => $facebookLinks[$index] ?? '',
-                    'instagram_link' => $instagramLinks[$index] ?? '',
-                    'youtube_link' => $youtubeLinks[$index] ?? '',
-                    'twitter_link' => $twitterLinks[$index] ?? ''
-                ];
-        
-                // Insert speaker data
-                if (!$speakersModel->insert($speakerData)) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Failed to insert speaker: ' . implode(', ', $speakersModel->errors()),
-                        'errorCode' => 'INSERT_ERROR',
-                    ]);
+            
+                    // Prepare data for insertion
+                    $speakerData = [
+                        'event_id' => $event_id,
+                        'name' => $name,
+                        'job' => $speakerJobs[$index],
+                        'image' => $newSpeakerImageName ? 'uploads/speaker_images/' . $newSpeakerImageName : '',
+                        'facebook_link' => $facebookLinks[$index] ?? '',
+                        'instagram_link' => $instagramLinks[$index] ?? '',
+                        'youtube_link' => $youtubeLinks[$index] ?? '',
+                        'twitter_link' => $twitterLinks[$index] ?? ''
+                    ];
+            
+                    // Insert speaker data
+                    if (!$speakersModel->insert($speakerData)) {
+                        return $this->response->setJSON([
+                            'success' => false,
+                            'message' => 'Failed to insert speaker: ' . implode(', ', $speakersModel->errors()),
+                            'errorCode' => 'INSERT_ERROR',
+                        ]);
+                    }
                 }
             }
         } else {
@@ -280,46 +273,41 @@ class EditEventController extends SessionController
             $sponsorsModel->where('event_id', $event_id)->delete();
             foreach ($sponsorDescriptions as $index => $description) {
                 // Check if description is provided and not empty
-                if (empty($description)) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Sponsor description is required.',
-                        'errorCode' => 'MISSING_DESCRIPTION',
-                    ]);
-                }
+                if (!empty($description)) {
         
-                $newSponsorLogoName = '';
-                if (isset($sponsorLogos[$index]) && $sponsorLogos[$index]->isValid()) {
-                    $newSponsorLogoName = $sponsorLogos[$index]->getRandomName();
-                    if (!$sponsorLogos[$index]->move(FCPATH . 'uploads/sponsor_logos', $newSponsorLogoName)) {
-                        // Handle file move error
+                    $newSponsorLogoName = '';
+                    if (isset($sponsorLogos[$index]) && $sponsorLogos[$index]->isValid()) {
+                        $newSponsorLogoName = $sponsorLogos[$index]->getRandomName();
+                        if (!$sponsorLogos[$index]->move(FCPATH . 'uploads/sponsor_logos', $newSponsorLogoName)) {
+                            // Handle file move error
+                            return $this->response->setJSON([
+                                'success' => false,
+                                'message' => 'Failed to move sponsor logo: ' . $sponsorLogos[$index]->getErrorString(),
+                                'errorCode' => 'FILE_MOVE_ERROR',
+                            ]);
+                        }
+                    } elseif (empty($newSponsorLogoName)) {
+                        // If a logo is required but not uploaded, return an error
                         return $this->response->setJSON([
                             'success' => false,
-                            'message' => 'Failed to move sponsor logo: ' . $sponsorLogos[$index]->getErrorString(),
-                            'errorCode' => 'FILE_MOVE_ERROR',
+                            'message' => 'Sponsor logo is required.',
+                            'errorCode' => 'MISSING_LOGO',
                         ]);
                     }
-                } elseif (empty($newSponsorLogoName)) {
-                    // If a logo is required but not uploaded, return an error
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Sponsor logo is required.',
-                        'errorCode' => 'MISSING_LOGO',
-                    ]);
-                }
-        
-                // Proceed with insertion if all required fields are valid
-                if (!$sponsorsModel->insert([
-                    'event_id' => $event_id,
-                    'sponsor_description' => $description,
-                    'sponsor_logo' => $newSponsorLogoName ? 'uploads/sponsor_logos/' . $newSponsorLogoName : ''
-                ])) {
-                    // Handle insert error
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Failed to insert sponsor: ' . implode(', ', $sponsorsModel->errors()),
-                        'errorCode' => 'INSERT_ERROR',
-                    ]);
+            
+                    // Proceed with insertion if all required fields are valid
+                    if (!$sponsorsModel->insert([
+                        'event_id' => $event_id,
+                        'sponsor_description' => $description,
+                        'sponsor_logo' => $newSponsorLogoName ? 'uploads/sponsor_logos/' . $newSponsorLogoName : ''
+                    ])) {
+                        // Handle insert error
+                        return $this->response->setJSON([
+                            'success' => false,
+                            'message' => 'Failed to insert sponsor: ' . implode(', ', $sponsorsModel->errors()),
+                            'errorCode' => 'INSERT_ERROR',
+                        ]);
+                    }
                 }
             }
         }
@@ -332,35 +320,30 @@ class EditEventController extends SessionController
             $faqsModel->where('event_id', $event_id)->delete();
             foreach ($questions as $index => $question) {
                 // Check if the question is provided and not empty
-                if (empty($question)) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Question is required.',
-                        'errorCode' => 'MISSING_QUESTION',
-                    ]);
-                }
+                if (!empty($question)) {
         
-                // Check if the answer is provided and not empty
-                if (empty($answers[$index])) {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Answer is required.',
-                        'errorCode' => 'MISSING_ANSWER',
-                    ]);
-                }
-        
-                // Proceed with insertion if all required fields are valid
-                if (!$faqsModel->insert([
-                    'event_id' => $event_id,
-                    'question' => $question,
-                    'answer' => $answers[$index],
-                ])) {
-                    // Handle insert error
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Failed to insert FAQ: ' . implode(', ', $faqsModel->errors()),
-                        'errorCode' => 'INSERT_ERROR',
-                    ]);
+                    // Check if the answer is provided and not empty
+                    if (empty($answers[$index])) {
+                        return $this->response->setJSON([
+                            'success' => false,
+                            'message' => 'Answer is required.',
+                            'errorCode' => 'MISSING_ANSWER',
+                        ]);
+                    }
+            
+                    // Proceed with insertion if all required fields are valid
+                    if (!$faqsModel->insert([
+                        'event_id' => $event_id,
+                        'question' => $question,
+                        'answer' => $answers[$index],
+                    ])) {
+                        // Handle insert error
+                        return $this->response->setJSON([
+                            'success' => false,
+                            'message' => 'Failed to insert FAQ: ' . implode(', ', $faqsModel->errors()),
+                            'errorCode' => 'INSERT_ERROR',
+                        ]);
+                    }
                 }
             }
         }
