@@ -8,6 +8,8 @@ use App\Models\Admin\EventsModel;
 use App\Models\Admin\AgendasModel;
 use App\Models\Admin\SponsorsModel;
 use App\Models\Admin\TicketsModel;
+use App\Models\Admin\SpeakersModel;
+use App\Models\Admin\FaqsModel;
 use App\Models\PaymentsModel;
 use Stripe\Stripe;
 use Stripe\Charge;
@@ -20,6 +22,8 @@ class EventDetailController extends BaseController
         $eventsModel = new EventsModel();
         $agendasModel = new AgendasModel();
         $sponsorsModel = new SponsorsModel();
+        $speakersModel = new SpeakersModel();
+        $faqsModel = new FaqsModel();
 
         $eventDetails = $eventsModel
         ->join('tickets', 'events.event_id=tickets.event_id')
@@ -32,6 +36,10 @@ class EventDetailController extends BaseController
         $agendasDetails = $agendasModel->where('event_id', $id)->findAll();
 
         $sponsorsDetails = $sponsorsModel->where('event_id', $id)->findAll();
+
+        $speakersDetails = $speakersModel->where('event_id', $id)->findAll();
+
+        $faqsDetails = $faqsModel->where('event_id', $id)->findAll();
 
         $eventDateTime = $eventDetails['eventdate'] . ' ' . $eventDetails['eventstartingtime'];
         $date = strtotime($eventDetails['eventdate']); // Convert date to timestamp
@@ -55,16 +63,36 @@ class EventDetailController extends BaseController
             'sponsorsDetails' => $sponsorsDetails,
         ];
         if($eventDetails['tickettype'] == "Paid") {
-            return view('pages/paid-event-details', $data);
+            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                return view('pages/conference-details', $data);
+            }
+            else {
+                return view('pages/paid-event-details', $data);
+            }
         }
         else if($eventDetails['tickettype'] == "Free") {
-            return view('pages/free-event-details', $data);
+            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                return view('pages/conference-details', $data);
+            }
+            else {
+                return view('pages/free-event-details', $data);
+            }
         }
         else if($eventDetails['tickettype'] == "Donations") {
-            return view('pages/donations-event-details', $data);
+            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                return view('pages/conference-details', $data);
+            }
+            else {
+                return view('pages/donations-event-details', $data);
+            }
         }
         else {
-            return view('pages/no-tickets-event-details', $data);
+            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                return view('pages/conference-details', $data);
+            }
+            else {
+                return view('pages/no-tickets-event-details', $data);
+            }
         }
     }
     public function stripePayment()

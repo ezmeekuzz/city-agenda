@@ -56,7 +56,7 @@
                 <div class="col-xs-6 col-xxl-3 m-b-30">
                     <div class="card card-statistics h-100 m-b-0 bg-info">
                         <div class="card-body">
-                            <h2 class="text-white mb-0">$<?=number_format($totalEarningsToday, 2);?></h2>
+                            <h2 class="text-white mb-0">€<?=number_format($totalEarningsToday, 2);?></h2>
                             <p class="text-white">Total Earnings Today</p>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                 <div class="col-xs-6 col-xxl-3 m-b-30">
                     <div class="card card-statistics h-100 m-b-0 bg-pink">
                         <div class="card-body">
-                            <h2 class="text-white mb-0">$<?=number_format($overAllSales, 2);?></h2>
+                            <h2 class="text-white mb-0">€<?=number_format($overAllSales, 2);?></h2>
                             <p class="text-white">Overall Sales</p>
                         </div>
                     </div>
@@ -85,24 +85,13 @@
                                         </div>
                                         <div class="report-details">
                                             <p>Annual Sales</p>
-                                            <h3>15,236</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xxs-6 col-md-4 col-xxl-4 mb-2 mb-xxl-0">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-container img-icon m-r-20 bg-light-gray rounded">
-                                            <i class="fa fa-dollar text-primary"></i>
-                                        </div>
-                                        <div class="report-details">
-                                            <p>Annual Revenue</p>
-                                            <h3>$40,516</h3>
+                                            <h3>€<?=number_format($annualSales, 2);?></h3>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="apexchart-wrapper">
-                                <div id="ecommerce5" class="chart-fit"></div>
+                                <div id="monthlySales" class="chart-fit"></div>
                             </div>
                         </div>
                     </div>
@@ -111,10 +100,10 @@
                     <div class="card card-statistics h-100 mb-0">
                         <div class="card-header d-sm-flex justify-content-between align-items-center py-3">
                             <div class="card-heading mb-3 mb-sm-0">
-                                <h4 class="card-title">Invoices Status</h4>
+                                <h4 class="card-title">Payout Request</h4>
                             </div>
                             <div class="dropdown">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search Invoice" />
+                                <input type="text" class="form-control form-control-sm" placeholder="Search Event Organizer" />
                             </div>
                         </div>
                         <div class="card-body scrollbar scroll_dark" style="max-height: 420px;">
@@ -276,3 +265,4 @@
     </div>
 </div>
 <?=$this->include('templates/admin/footer');?>
+<script type="text/javascript" src="<?=base_url();?>assets/js/admin/dashboard.js"></script>

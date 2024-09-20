@@ -13,6 +13,7 @@ use App\Models\Admin\SpeakersModel;
 use App\Models\Admin\SponsorsModel;
 use App\Models\Admin\FaqsModel;
 use App\Models\Admin\TicketsModel;
+use App\Models\PaymentsModel;
 
 class EventMasterlistController extends SessionController
 {
@@ -27,6 +28,7 @@ class EventMasterlistController extends SessionController
     public function getData()
     {
         return datatables('events')
+            ->select('events.*, states.*, cities.*, users.*, categories.*, events.slug as sl')
             ->join('states', 'states.state_id=events.state_id', 'left')
             ->join('cities', 'cities.city_id=events.city_id', 'left')
             ->join('users', 'users.user_id=events.user_id', 'left')
@@ -103,7 +105,121 @@ class EventMasterlistController extends SessionController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the event from the database']);
         }
     }  
-    
+
+    public function getAttendees($id)
+    {
+        $paymentsModel = new PaymentsModel();
+
+        $paymentDetails = $paymentsModel
+        ->join('users', 'users.user_id=payments.user_id', 'left')
+        ->where('event_id', $id)
+        ->findAll();
+
+        $response = [
+            'status' => 'success',
+            'data' => $paymentDetails
+        ];
+        
+        return $this->response->setJSON($response);
+    }
+
+    public function downloadAttendees($id)
+    {
+        $paymentsModel = new PaymentsModel();
+
+        // Fetch payment details for the specified event
+        $paymentDetails = $paymentsModel
+            ->join('users', 'users.user_id=payments.user_id', 'left')
+            ->where('event_id', $id)
+            ->findAll();
+
+        // Prepare the CSV content
+        $csvData = [];
+        $csvData[] = ['Name', 'Email', 'Phone Number', 'Quantity', 'Amount Paid', 'Ticket ID']; // CSV Header
+
+        foreach ($paymentDetails as $payment) {
+            $formattedTicketId = 'TD' . str_pad($payment['payment_id'], 6, '0', STR_PAD_LEFT);
+            $csvData[] = [
+                $payment['firstname'] . ' ' . $payment['lastname'],
+                $payment['emailaddress'],
+                $payment['phonenumber'],
+                $payment['quantity'],
+                $payment['total_amount'],
+                $formattedTicketId
+            ];
+        }
+
+        // Convert the data to CSV format
+        $filename = 'attendees_event_' . $id . '.csv';
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        $output = fopen('php://output', 'w');
+        foreach ($csvData as $row) {
+            fputcsv($output, $row);
+        }
+        fclose($output);
+        exit();
+    }
+
+    public function shareAttendees($id)
+    {
+        $paymentsModel = new PaymentsModel();
+        
+        // Ensure the $id is an integer
+        $id = (int) $id;
+        log_message('debug', 'Event ID before padding: ' . $id);
+        
+        // Fetch payment details for the specified event
+        $paymentDetails = $paymentsModel
+            ->join('users', 'users.user_id=payments.user_id', 'left')
+            ->where('event_id', $id)
+            ->findAll();
+        
+        // Prepare the email content
+        $formattedId = str_pad($id, 5, '0', STR_PAD_LEFT);
+        log_message('debug', 'Formatted Event ID: CA' . $formattedId); // Log formatted ID
+        
+        $emailContent = "<h2>Attendees List for Event ID: CA" . $formattedId . "</h2>";
+        if (empty($paymentDetails)) {
+            $emailContent .= "<p>No attendees found for this event.</p>";
+        } else {
+            // Build table structure for attendees
+            $emailContent .= "<table border='1' cellpadding='5'>";
+            $emailContent .= "<tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Quantity</th><th>Amount Paid</th><th>Ticket ID</th></tr>";
+            
+            foreach ($paymentDetails as $payment) {
+                $formattedTicketId = 'TD' . str_pad($payment['payment_id'], 6, '0', STR_PAD_LEFT);
+                $emailContent .= "<tr>
+                    <td>{$payment['firstname']} {$payment['lastname']}</td>
+                    <td>{$payment['emailaddress']}</td>
+                    <td>{$payment['phonenumber']}</td>
+                    <td>{$payment['quantity']}</td>
+                    <td>{$payment['total_amount']}</td>
+                    <td>{$formattedTicketId}</td>
+                </tr>";
+            }
+            
+            $emailContent .= "</table>";
+        }
+        
+        // Set up email
+        $email = \Config\Services::email();
+        $email->setFrom('testing@braveegg.com', 'City Agenda');
+        $email->setTo($this->request->getPost('email')); // Set the recipient email
+        $email->setSubject('Attendees List');
+        $email->setMessage($emailContent);
+        $email->setMailType('html');
+        
+        // Send the email
+        if (!$email->send()) {
+            log_message('error', $email->printDebugger(['headers', 'subject', 'body']));
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to send email.']);
+        }
+        
+        return $this->response->setJSON(['status' => 'success', 'message' => 'Email sent successfully!']);
+    }
+        
     private function dynamicRoutes() {
         $model = new EventsModel();
         $result = $model->findAll();
