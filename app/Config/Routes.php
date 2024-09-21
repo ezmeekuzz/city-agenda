@@ -114,6 +114,8 @@ $routes->delete('/organizer/paymentmethod/delete/(:num)', 'Organizer\PaymentMeth
 $routes->get('/organizer/my-wishlist', 'Organizer\MyWishListController::index');
 $routes->delete('/organizer/mywishlist/delete/(:num)', 'Organizer\MyWishListController::delete/$1');
 $routes->get('/organizer/mywishlist/getData', 'Organizer\MyWishListController::getData');
+$routes->get('/organizer/my-bookings', 'Organizer\MyBookingsController::index');
+$routes->get('/organizer/mybookings/getData', 'Organizer\MyBookingsController::getData');
 /*Event Organizer*/
 $routes->get('/', 'HomeController::index');
 $routes->get('/getEvents', 'HomeController::getEvents');

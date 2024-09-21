@@ -248,5 +248,4 @@ $(document).ready(function () {
             return re.test(String(email).toLowerCase());
         }
     });
-      
 });

@@ -4,7 +4,7 @@ $(document).ready(function () {
         eventId = parseInt(eventId, 10);
         
         // Format the ID with a "CA" prefix and zero-padded to 5 digits
-        return `CA${eventId.toString().padStart(5, '0')}`;
+        return `<a href="#" class="event-id-link" data-id="${eventId}">CA${eventId.toString().padStart(5, '0')}</a>`;
     }
     var table = $('#eventmasterlist').DataTable({
         "processing": true,
@@ -21,7 +21,13 @@ $(document).ready(function () {
                     return formatEventId(data);
                 }
             },
-            { "data": "eventname" },
+            {
+                "data": "eventname",
+                "render": function (data, type, row) {
+                    // Format event_id using formatEventId function
+                    return `<a href="/${row.sl}" target="_blank">${row.eventname}</a>`;
+                }
+            },
             { "data": "eventtype" },
             { "data": "eventdate" },
             { "data": "eventstartingtime" },
