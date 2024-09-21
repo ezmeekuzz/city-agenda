@@ -39,6 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th>Event ID</th>
+                                            <th>Event Name</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
                                             <th>Total Paid</th>

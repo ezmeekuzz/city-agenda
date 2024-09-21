@@ -23,6 +23,7 @@ $(document).ready(function () {
                     return formatEventId(data, row.slug);
                 }
             },
+            { "data": "eventname" },  // Assuming 'price' is part of 'payments' table
             { "data": "price" },  // Assuming 'price' is part of 'payments' table
             { "data": "quantity" },  // Assuming 'quantity' is part of 'payments'
             { "data": "total_amount" },  // Assuming 'total_amount' is part of 'payments'

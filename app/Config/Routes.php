@@ -83,6 +83,7 @@ $routes->get('/admin/archivedevents/getData', 'Admin\ArchivedEventsController::g
 /*Administrator*/
 /*Event Organizer*/
 $routes->get('/organizer/dashboard', 'Organizer\DashboardController::index');
+$routes->get('/organizer/dashboard/getData', 'Organizer\DashboardController::getData');
 $routes->get('/organizer/logout', 'Organizer\LogoutController::index');
 $routes->get('/organizer/add-event', 'Organizer\AddEventController::index');
 $routes->post('/organizer/addevent/getCities', 'Organizer\AddEventController::getCities');

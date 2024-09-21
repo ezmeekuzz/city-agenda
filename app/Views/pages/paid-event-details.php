@@ -80,19 +80,6 @@
                 <ul class="refund-list">
                     <li><img src="img/birdImg.png"><?=$eventDetails['refundpolicy'];?></li> 
                 </ul>
-                <h2>Tags</h2>
-                <div class="tag-section">
-                    <button class="main-btn tag-items">Online Events</button>
-                    <button class="main-btn tag-items">Things To Do Online</button>
-                    <button class="main-btn tag-items">Online Conferences</button>
-                    <button class="main-btn tag-items">Online Science & Tech Conferences</button>
-                    <button class="main-btn tag-items">#Conference</button>
-                    <button class="main-btn tag-items">#Upskill</button>
-                    <button class="main-btn tag-items">#Product_Manager</button>
-                    <button class="main-btn tag-items">#Product_Management</button>
-                    <button class="main-btn tag-items">#Break_Into_Product</button>
-                    <button class="main-btn tag-items">#Breakintoproduct</button>
-                </div>
             </div>
             <div class="col-lg-4 col-md-12 d-flex flex-column gap-2 gap-lg-5 ps-0 ps-lg-5">
                 <div class="icon-controls">
