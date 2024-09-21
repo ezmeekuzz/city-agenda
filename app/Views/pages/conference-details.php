@@ -1,37 +1,33 @@
 <?=$this->include('templates/header');?>
-<section class="container-fluid confernce-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 md-12 confernce-content">
-                    <h2>12 <span>Days</span></h2>
-                    <h2>24 <span>Workshops</span></h2>
-                    <h2>05 <span>Speakers</span></h2>
-                    <hr>
-                    <p>October 08 - 20, Amsterdam, Annual Business Conference</p>
-                    <div class="banner-btn-section">
-                        <button class="main-btn getTick">Get Tickets</button>
-                        <button class="main-btn viewSched">View Schedule</button>
-                    </div>
-                    <div class="confernce-counter"></div>
+<section class="container-fluid confernce-section" style="background-image: url(<?=$eventDetails['eventbanner'];?>);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 md-12 confernce-content">
+                <!--<h2>12 <span>Days</span></h2>-->
+                <h2><?=COUNT($agendasDetails);?> <span>Workshops</span></h2>
+                <h2><?=COUNT($speakersDetails);?> <span>Speakers</span></h2>
+                <hr>
+                <p><?=date('F d, Y', strtotime($eventDetails['eventdate']));?>, <?=$eventDetails['cityname']?>, <?=$eventDetails['eventname']?></p>
+                <div class="banner-btn-section">
+                    <button class="main-btn getTick">Get Tickets</button>
+                    <button class="main-btn viewSched">View Schedule</button>
                 </div>
+                <div class="confernce-counter"></div>
             </div>
         </div>
-    </section>
-
-
-
-
-    <section class="container-fluid inner-page confernce-inner-sec">
+    </div>
+</section>
+<section class="container-fluid inner-page confernce-inner-sec">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-12 pe-0 pe-lg-5">
-                    <h3>ANNUAL BUSINESS CONFERENCE EVENT 2024</h3>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                    <h3><?=$eventDetails['eventname'];?></h3>
+                    <?=$eventDetails['eventdescription'];?>
                     <br>
                     <a href="#">SEE FAQ</a>
                     <br>
                     <br>
-                    <h4>Venue: <span>Amsterdam City Center</span></h4>
+                    <h4>Venue: <span><?=$eventDetails['locationname'];?></span></h4>
                     <div class="con-inner-img">
                         <img src="img/venue-img.png">
                         <img src="img/venue-img1.png">
@@ -39,7 +35,7 @@
                         <img src="img/venue-img3.png">
                         <img src="img/venue-img4.png">
                     </div>
-                    <h4><span>Korte Leidsedwarsstraat 49, 1017 PW Amsterdam, NL</span></h4>
+                    <h4><span><?=$eventDetails['locationname'] . ', ' . $eventDetails['cityname'] . ', ' . $eventDetails['state_name'];?></span></h4>
                 </div>
                 <div class="col-lg-4 col-md-12">
                     <div class="user-sched-sec">
@@ -51,7 +47,7 @@
                                     <p>Host</p>
                                 </div>
                             </div>
-                            <button class="prof-btn">€120</button>
+                            <button class="prof-btn">€<?=number_format($eventDetails['price'], 2);?></button>
                         </div>
                         <div class="user-sched-input row">
                             <input type="date" class="col-lg-12">
@@ -60,7 +56,7 @@
                             <input type="time" class="col-lg-5">
                             <hr>
                             <input type="submit" class="col-lg-12 main-btn" value="Get Tickets">
-                            <p>FREE cancellation No Prepayment needed</p>
+                            <p><?=$eventDetails['refundpolicy'];?></p>
                         </div>
                     </div>
                 </div>
@@ -74,74 +70,35 @@
         <div class="container">
             <h3>Meet The Speaker</h3>
             <div class="row">
+                <?php if($speakersDetails) : ?>
+                <?php foreach($speakersDetails as $list) : ?>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="speaker-card">
-                        <div class="speaker-details" style="background-image: url('img/speakerImg.png');">
-                            <h5>Willow Tanner</h5>
-                            <p>Motivation Speaker</p>
+                        <div class="speaker-details" style="background-image: url(<?=$list['image'];?>);">
+                            <h5><?=$list['name'];?></h5>
+                            <p><?=$list['job'];?></p>
                         </div>
                         <div class="speaker-icons">
-                            <i class="bi bi-facebook"></i>
-                            <i class="bi bi-twitter"></i>
+                            <a href="<?=$list['facebook_link'];?>"><i class="bi bi-facebook"></i></a>
+                            <a href="<?=$list['twitter_link'];?>"><i class="bi bi-twitter"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <div class="speaker-card">
-                        <div class="speaker-details" style="background-image: url('img/speakerImg1.png');">
-                            <h5>Willow Tanner</h5>
-                            <p>Motivation Speaker</p>
-                        </div>
-                        <div class="speaker-icons">
-                            <i class="bi bi-facebook"></i>
-                            <i class="bi bi-instagram"></i>
-                            <i class="bi bi-twitter"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <div class="speaker-card">
-                        <div class="speaker-details" style="background-image: url('img/speakerImg2.png');">
-                            <h5>Willow Tanner</h5>
-                            <p>Motivation Speaker</p>
-                        </div>
-                        <div class="speaker-icons">
-                            <i class="bi bi-facebook"></i>
-                            <i class="bi bi-instagram"></i>
-                            <i class="bi bi-twitter"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <div class="speaker-card">
-                        <div class="speaker-details" style="background-image: url('img/speakerImg3.png');">
-                            <h5>Willow Tanner</h5>
-                            <p>Motivation Speaker</p>
-                        </div>
-                        <div class="speaker-icons">
-                            <i class="bi bi-facebook"></i>
-                            <i class="bi bi-instagram"></i>
-                            <i class="bi bi-twitter"></i>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
-
-
-
-
     <section class="container-fluid banner sponsors-section">
         <div class="container">
             <h2>Sponsors And Partners</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed ullamcorper morbi tincidunt ornare. Nunc eget lorem dolor sed viverra ipsum nunc aliquet. </p>
             <div class="sponsors-logos">
-                <img src="img/logo1.png">
-                <img src="img/logo2.png">
-                <img src="img/logo3.png">
-                <img src="img/logo4.png">
-                <img src="img/logo5.png">
+                <?php if($sponsorsDetails) : ?>
+                <?php foreach($sponsorsDetails as $list) : ?>
+                <img src="<?=$list['sponsor_logo'];?>" alt="">
+                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>

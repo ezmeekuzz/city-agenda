@@ -114,7 +114,7 @@
                                             <th>No.</th>
                                             <th>Name</th>
                                             <th>Date</th>
-                                            <th>Total</th>
+                                            <th>Amount Requested</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -125,133 +125,16 @@
                                             <td>27/3/2014</td>
                                             <td>$1,00,000</td>
                                             <td>
-                                                <label class="badge mb-0 badge-primary-inverse"> Overdue</label>
+                                                <label class="badge mb-0 badge-primary-inverse"> Paid</label>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>2</td>
-                                            <td>Martha Doe</td>
-                                            <td>28/3/2015</td>
-                                            <td>$70,000</td>
+                                            <td>1</td>
+                                            <td>Smith Drake</td>
+                                            <td>27/3/2014</td>
+                                            <td>$1,00,000</td>
                                             <td>
-                                                <label class="badge mb-0 badge-warning-inverse">Outstanding</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Albom Mitch</td>
-                                            <td>29/3/2016</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-success-inverse"> Paid</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Bacon Francis</td>
-                                            <td>21/3/2016</td>
-                                            <td>$50,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-primary-inverse"> Overdue</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Vanessa Angel</td>
-                                            <td>18/3/2016</td>
-                                            <td>$42,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-warning-inverse"> Outstanding</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Fenish Paul</td>
-                                            <td>24/3/2015</td>
-                                            <td>$60,000</td>
-                                            <td>
-                                                <label class="badge mb-0 badge-info-inverse"> Open</label>
+                                                <label class="badge mb-0 badge-warning-inverse"> Pending</label>
                                             </td>
                                         </tr>
                                     </tbody>

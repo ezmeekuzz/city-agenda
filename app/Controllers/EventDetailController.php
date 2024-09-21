@@ -64,6 +64,8 @@ class EventDetailController extends BaseController
         ];
         if($eventDetails['tickettype'] == "Paid") {
             if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                $data['speakersDetails'] = $speakersDetails;
+                $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
             }
             else {
@@ -72,6 +74,8 @@ class EventDetailController extends BaseController
         }
         else if($eventDetails['tickettype'] == "Free") {
             if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                $data['speakersDetails'] = $speakersDetails;
+                $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
             }
             else {
@@ -80,6 +84,8 @@ class EventDetailController extends BaseController
         }
         else if($eventDetails['tickettype'] == "Donations") {
             if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                $data['speakersDetails'] = $speakersDetails;
+                $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
             }
             else {
@@ -88,6 +94,8 @@ class EventDetailController extends BaseController
         }
         else {
             if(!empty($speakersDetails) && !empty($faqsDetails)) {
+                $data['speakersDetails'] = $speakersDetails;
+                $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
             }
             else {
