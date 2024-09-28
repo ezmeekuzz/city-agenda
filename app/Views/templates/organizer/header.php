@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title><?=$title;?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta content="Empowering clients through integrity and personalized service, Dhurv is dedicated to exceeding expectations in real estate transactions. With a commitment to trust and transparency, we aim to build lasting relationships based on exceptional results and client satisfaction." name="description" />
+    <meta content="Find Big Events In Any City" name="description" />
     <meta content="Rustom Codilan" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="<?=base_url();?>img/Logo.png">

@@ -13,6 +13,7 @@ use App\Models\Admin\SpeakersModel;
 use App\Models\Admin\SponsorsModel;
 use App\Models\Admin\FaqsModel;
 use App\Models\Admin\TicketsModel;
+use App\Models\Admin\WishListModel;
 use App\Models\PaymentsModel;
 
 class EventMasterlistController extends SessionController
@@ -43,6 +44,8 @@ class EventMasterlistController extends SessionController
         $sponsorsModel = new SponsorsModel();
         $faqsModel = new FaqsModel();
         $ticketsModel = new TicketsModel();
+        $paymentsModel = new PaymentsModel();
+        $wishListModel = new WishListModel();
     
         // Delete related images and files for each table
     
@@ -71,7 +74,11 @@ class EventMasterlistController extends SessionController
         
         $faqsModel->where('event_id', $id)->delete();
 
+        $paymentsModel->where('event_id', $id)->delete();
+
         $ticketsModel->where('event_id', $id)->delete();
+
+        $wishListModel->where('event_id', $id)->delete();
     
         // Events table (eventbanner, event_image, event_video)
         $event = $eventsModel->find($id);
