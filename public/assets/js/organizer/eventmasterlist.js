@@ -15,7 +15,7 @@ $(document).ready(function () {
         },
         "columns": [
             {
-                "data": "event_id",
+                "data": "eid",
                 "render": function (data, type, row) {
                     // Format event_id using formatEventId function
                     return formatEventId(data);
@@ -28,21 +28,36 @@ $(document).ready(function () {
                     return `<a href="/${row.sl}" target="_blank">${row.eventname}</a>`;
                 }
             },
-            { "data": "eventtype" },
-            { "data": "eventdate" },
-            { "data": "eventstartingtime" },
-            { "data": "eventendingtime" },
-            { "data": "recurrence" },
             { "data": "locationname" },
-            { "data": "state_name" },
-            { "data": "cityname" },
-            { "data": "publishstatus" },
+            {
+                "data": null, // Use null since you're combining two fields (eventdate and eventstartingtime)
+                "render": function (data, type, row) {
+                    // Format the date
+                    var eventDate = new Date(row.eventdate);
+                    var options = { month: 'short', day: 'numeric', year: 'numeric' };
+                    var formattedDate = eventDate.toLocaleDateString('en-US', options); // Jul 19, 2024
+                    var weekday = eventDate.toLocaleDateString('en-US', { weekday: 'long' }); // Saturday
+                    
+                    // Format the time (eventstartingtime is already in time format "HH:MM:SS")
+                    var timeString = row.eventstartingtime;
+                    var [hours, minutes] = timeString.split(':');
+                    
+                    // Convert to 12-hour format with AM/PM
+                    var period = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+                    var formattedTime = `${hours}:${minutes} ${period}`; // 05:05 AM
+    
+                    return `${formattedDate} · ${formattedTime} ${weekday}`;
+                }
+            },
+            { "data": "soldticket" },
+            { "data": "price" },
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return `<a href="/organizer/edit-event/${row.event_id}" title="Edit" class="edit-btn" data-id="${row.event_id}" style="color: blue;"><i class="fa fa-edit" style="font-size: 18px;"></i></a>
-                            <a href="/organizer/add-ticketing/${row.event_id}" title="Add Ticketing" class="ticketing-btn" data-id="${row.event_id}" style="color: green;"><i class="fa fa-ticket" style="font-size: 18px;"></i></a>
-                            <a href="#" title="Delete" class="delete-btn" data-id="${row.event_id}" style="color: red;"><i class="fa fa-trash" style="font-size: 18px;"></i></a>`;
+                    return `<a href="/organizer/edit-event/${row.eid}" title="Edit" class="edit-btn" data-id="${row.eid}" style="color: blue;"><i class="fa fa-edit" style="font-size: 18px;"></i></a>
+                            <a href="/organizer/add-ticketing/${row.eid}" title="Add Ticketing" class="ticketing-btn" data-id="${row.eid}" style="color: green;"><i class="fa fa-ticket" style="font-size: 18px;"></i></a>
+                            <a href="#" title="Delete" class="delete-btn" data-id="${row.eid}" style="color: red;"><i class="fa fa-trash" style="font-size: 18px;"></i></a>`;
                 }
             }
         ],

@@ -77,9 +77,9 @@
                                         <?= date('gA', strtotime($eventDetails['eventstartingtime'])); ?> - 
                                         <?= date('gA', strtotime($eventDetails['eventendingtime'])); ?> EDT
                                     </h3>
-                                    <p class="mt-3"><?=$eventDetails['locationname'];?>, <?=$eventDetails['cityname'];?>, <?=$eventDetails['state_name'];?></p>
+                                    <p class="mt-3"><?=$eventDetails['locationname'];?>, <?=$eventDetails['city'];?>, <?=$eventDetails['state'];?></p>
                                     <p class="mt-3">
-                                        <span><i class="fa fa-ticket"></i> $<?=$eventDetails['price'];?></span>
+                                        <span><i class="fa fa-ticket"></i> €<?=$eventDetails['price'];?></span>
                                         <span><i class="fa fa-user"></i> <?=$eventDetails['availablequantity'];?></span>
                                     </p>
                                 </div>

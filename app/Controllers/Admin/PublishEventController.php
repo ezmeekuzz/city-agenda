@@ -13,8 +13,6 @@ class PublishEventController extends SessionController
         $eventsModel = new EventsModel();
 
         $eventDetails = $eventsModel
-        ->join('states', 'states.state_id=events.state_id', 'left')
-        ->join('cities', 'cities.city_id=events.city_id', 'left')
         ->join('tickets', 'tickets.event_id=events.event_id', 'left')
         ->find($id);
 

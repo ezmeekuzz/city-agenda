@@ -1,9 +1,50 @@
 <?=$this->include('templates/organizer/header');?>
 <style>
-.profile-picture-container {
-    display: inline-block;
+/* Container for cover photo */
+.cover-photo-container {
     position: relative;
+    width: 100%;
+    height: 300px; /* Adjust height as needed */
+    background-color: #f0f0f0; /* Fallback color */
     text-align: center;
+    overflow: hidden;
+    margin-bottom: 150px; /* Increase margin to make space for profile picture */
+}
+
+.cover-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#coverPhotoInput {
+    display: none;
+}
+
+/* Cover photo change button */
+.cover-photo-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-picture-container {
+    position: absolute;
+    bottom: -75px; /* Adjust to overlap profile picture */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 9999;
 }
 
 .profile-picture {
@@ -11,14 +52,20 @@
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #ddd;
+    border: 3px solid #fff;
 }
 
 #profilePicture {
     display: none;
 }
 
+/* Add margin to push the form content down */
+form#editaccount {
+    margin-top: 80px; /* Adjust this value if necessary to avoid overlap */
+}
+
 </style>
+
 <div class="app-container">
     <?=$this->include('templates/organizer/sidebar');?>
     <div class="app-main" id="main">
@@ -44,16 +91,29 @@
                 </div>
             </div>
 
-            <!-- Profile Picture Section -->
+            <!-- Cover Photo Section -->
             <div class="col-lg-12 text-center">
-                <div class="profile-picture-container position-relative d-inline-block">
-                    <!-- Profile picture -->
-                    <img id="profilePicturePreview" class="profile-picture rounded-circle" src="<?=$image;?>" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                <div class="cover-photo-container">
+                    <!-- Cover Photo -->
+                    <img id="coverPhotoPreview" class="cover-photo" src="<?=$coverphoto;?>" alt="Cover Photo">
+                    
+                    <!-- Hidden file input for cover photo -->
+                    <input type="file" id="coverPhotoInput" name="coverPhoto" accept="image/*">
 
-                    <!-- Hidden file input -->
+                    <!-- Button to change cover photo -->
+                    <button type="button" id="changeCoverPhotoButton" class="cover-photo-btn">
+                        <i class="fa fa-camera"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Picture Section -->
+                <div class="profile-picture-container">
+                    <img id="profilePicturePreview" class="profile-picture rounded-circle" src="<?=$image;?>" alt="Profile Picture">
+                    
+                    <!-- Hidden file input for profile picture -->
                     <input type="file" id="profilePicture" name="profilePicture" class="d-none" accept="image/*">
 
-                    <!-- Camera icon button (Font Awesome) -->
+                    <!-- Button to change profile picture -->
                     <button type="button" id="changePictureButton" class="btn btn-secondary position-absolute d-flex justify-content-center align-items-center" style="bottom: 0; right: 0; background-color: rgba(0, 0, 0, 0.5); border: none; border-radius: 50%; width: 40px; height: 40px;">
                         <i class="fa fa-camera text-white"></i>
                     </button>
@@ -125,6 +185,5 @@
         </div>
     </div>
 </div>
-
 <?=$this->include('templates/organizer/footer');?>
 <script type="text/javascript" src="<?=base_url();?>assets/js/organizer/editaccount.js"></script>

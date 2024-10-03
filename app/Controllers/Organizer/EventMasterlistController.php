@@ -5,8 +5,6 @@ namespace App\Controllers\Organizer;
 use App\Controllers\Organizer\SessionController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Admin\CategoriesModel;
-use App\Models\Admin\StatesModel;
-use App\Models\Admin\CitiesModel;
 use App\Models\Admin\EventsModel;
 use App\Models\Admin\AgendasModel;
 use App\Models\Admin\SpeakersModel;
@@ -27,10 +25,9 @@ class EventMasterlistController extends SessionController
     public function getData()
     {
         return datatables('events')
-            ->join('states', 'states.state_id=events.state_id', 'left')
-            ->join('cities', 'cities.city_id=events.city_id', 'left')
+            ->select('events.*, events.event_id as eid, users.*, events.slug as sl, tickets.*')
             ->join('users', 'users.user_id=events.user_id', 'left')
-            ->join('categories', 'categories.category_id=events.category_id', 'left')
+            ->join('tickets', 'tickets.event_id=events.event_id', 'left')
             ->where('events.user_id', session()->get('organizer_user_id'))
             ->make();
     }

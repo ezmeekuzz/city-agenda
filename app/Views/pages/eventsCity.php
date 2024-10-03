@@ -120,75 +120,90 @@
 <?=$this->include('templates/footer');?>
 <script>
     $(document).ready(function(){
+        // Initialize datepicker
         $('#datepicker').datepicker({
             format: 'yyyy-mm-dd',  // Ensure the format matches the backend's expected format
             autoclose: true
         }).on('changeDate', function(e) {
-            // Get the selected date value when date changes
+            // Get the selected date value when the date changes
             selectedDate = $('#datepicker').datepicker('getFormattedDate');
             loadEvents();  // Load events based on the selected date
         });
     });
+
+    // Function to load events
     function loadEvents() {
         // Get the selected date from datepicker, if set
         let selectedDate = $('#datepicker').datepicker('getFormattedDate') || '';
-        let location = "<?=$city;?>";
+
+        // Capture the city from PHP dynamically
+        let location = "<?= isset($city) ? $city : ''; ?>";  // Pass PHP city variable if available
         
+        // Ensure that selectedDate is in the correct format
         if (selectedDate) {
             selectedDate = formatDateToYMD(selectedDate);  // Convert to yyyy-mm-dd
         }
 
         // Show loading spinner or message
         let eventsContainer = $('#events-container');
-        eventsContainer.html('<center> <img src="img/page-not-found.png" alt=""></center><center><h1 style="color: #741774;">Loading Events...</h1></center>');
+        eventsContainer.html('<center><img src="img/page-not-found.png" alt=""></center><center><h1 style="color: #741774;">Loading Events...</h1></center>');
 
+        // Make AJAX request to load events
         $.ajax({
-            url: '/getEvents',  // Endpoint to get events
+            url: '/events/getEvents',  // Endpoint to get events
             method: 'GET',
             data: {
-                location: location,  // Pass selected location
+                location: location,  // Pass selected location (city)
                 date: selectedDate   // Pass selected date
             },
             success: function(response) {
                 eventsContainer.empty();  // Clear previous events
 
-                if (response.length > 0) {
+                if (response.status === 'success' && response.data.length > 0) {
                     // Loop through the events and create HTML for each one
-                    response.forEach(function(event) {
+                    response.data.forEach(function(event) {
                         const isFavoritedClass = event.is_favorited ? 'active' : '';
 
                         let eventHTML = `
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card" style="width: 100%;">
-                                <img class="user-id" src="${event.image || 'img/user-img.png'}" alt="User">
-                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
-                                <img src="${event.eventbanner || 'img/bird-thumbnail.jpg'}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
-                                <div class="card-body">
-                                    <a href="${event.slug}" style="text-decoration: none; color: black;">
-                                        <h3>${event.eventname}</h3>
-                                    </a>
-                                </div>
-                                <div class="card-bottom">
-                                    <div class="d-flex align-items-center">
-                                        <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
-                                            <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
-                                        </button>
-                                        <p>
-                                            ${event.cityname} <br>
-                                            <span>${event.locationname}</span>
-                                        </p>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card">
+                                    <!-- User image (circular) -->
+                                    <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
+                                    
+                                    <!-- Event banner -->
+                                    <img src="${event.eventbanner}" class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="${event.eventname}">
+                                    
+                                    <div class="card-body">
+                                        <!-- Event name and heart icon on the right -->
+                                        <div class="d-flex align-items-center">
+                                            <a href="${event.slug}" style="text-decoration: none; color: black; flex-grow: 1;">
+                                                <h4 style="font-size: 1.2rem;">${event.eventname}</h4>
+                                            </a>
+                                            <!-- Heart icon positioned on the right -->
+                                            <button class="heart-button ml-auto" onclick="toggleFavorite(this, ${event.event_id})" style="border: none; background: transparent;">
+                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}" style="font-size: 1.5rem; color: red;"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <hr>
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-clock-fill"></i>
-                                        <p>
-                                            ${formatDate(event.eventdate)}<br>
-                                            <span>${formatTime(event.eventstartingtime)}</span>
-                                        </p>
+                                    
+                                    <div class="card-bottom p-2">
+                                        <div class="d-flex align-items-center">
+                                            <p class="ml-2">
+                                                ${event.city} <br>
+                                                <span>${event.locationname}</span>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-clock-fill"></i>
+                                            <p class="ml-2">
+                                                ${formatDate(event.eventdate)}<br>
+                                                <span>${formatTime(event.eventstartingtime)}</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>`;
+                            </div>`;
                         eventsContainer.append(eventHTML);  // Append event HTML
                     });
                 } else {
@@ -207,6 +222,7 @@
 
     // Call the function to load events on page load or based on user input
     loadEvents();
+
     function formatDate(dateString) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         const date = new Date(dateString);

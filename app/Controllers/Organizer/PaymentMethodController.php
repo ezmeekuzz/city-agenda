@@ -12,7 +12,7 @@ class PaymentMethodController extends SessionController
     {
         $data = [
             'title' => 'City Agenda | Payment Method',
-            'currentpage' => 'dashboard'
+            'currentpage' => 'paymentmethod'
         ];
         return view('pages/organizer/paymentmethod', $data);
     }

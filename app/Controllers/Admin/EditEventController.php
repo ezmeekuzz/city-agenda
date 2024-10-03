@@ -5,8 +5,6 @@ namespace App\Controllers\Admin;
 use App\Controllers\Admin\SessionController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Admin\CategoriesModel;
-use App\Models\Admin\StatesModel;
-use App\Models\Admin\CitiesModel;
 use App\Models\Admin\EventsModel;
 use App\Models\Admin\AgendasModel;
 use App\Models\Admin\SpeakersModel;
@@ -18,21 +16,17 @@ class EditEventController extends SessionController
     public function index($id)
     {
         $categoriesModel = new CategoriesModel();
-        $stateModel = new StatesModel();
         $eventsModel = new EventsModel();
         $agendasModel = new AgendasModel();
         $speakersModel = new SpeakersModel();
         $sponsorsModel = new SponsorsModel();
         $faqsModel = new FaqsModel();
         $categoryList = $categoriesModel->findAll();
-        $stateList = $stateModel->findAll();
         $agendasList = $agendasModel->where('event_id', $id)->findAll();
         $speakersList = $speakersModel->where('event_id', $id)->findAll();
         $sponsorsList = $sponsorsModel->where('event_id', $id)->findAll();
         $faqsList = $faqsModel->where('event_id', $id)->findAll();
         $eventDetails = $eventsModel
-        ->join('states', 'states.state_id=events.state_id', 'left')
-        ->join('cities', 'cities.city_id=events.city_id', 'left')
         ->join('users', 'users.user_id=events.user_id', 'left')
         ->join('categories', 'categories.category_id=events.category_id', 'left')
         ->where('events.event_id', $id)
@@ -41,7 +35,6 @@ class EditEventController extends SessionController
             'title' => 'City Agenda | Edit Event',
             'currentpage' => 'eventmasterlist',
             'categoryList' => $categoryList,
-            'stateList' => $stateList,
             'eventDetails' => $eventDetails,
             'agendasList' => $agendasList,
             'speakersList' => $speakersList,
@@ -49,34 +42,6 @@ class EditEventController extends SessionController
             'faqsList' => $faqsList,
         ];
         return view('pages/admin/editevent', $data);
-    }
-    public function getCities()
-    {
-        if ($this->request->isAJAX()) {
-            // Get the state_id from the AJAX request
-            $stateId = $this->request->getPost('state_id');
-
-            // Load the City model
-            $cityModel = new CitiesModel();
-
-            // Retrieve cities based on the state_id
-            $cities = $cityModel->where('state_id', $stateId)->findAll();
-
-            // Prepare the response array
-            $data = [];
-            foreach ($cities as $city) {
-                $data[] = [
-                    'city_id' => $city['city_id'], // Adjust the column names to match your database schema
-                    'cityname' => $city['cityname'], // Adjust the column names to match your database schema
-                ];
-            }
-
-            // Return the response in JSON format
-            return $this->response->setJSON($data);
-        }
-
-        // If not an AJAX request, you can return a 404 or redirect
-        return redirect()->to('/');
     }
     public function update()
     {
@@ -90,7 +55,7 @@ class EditEventController extends SessionController
         $requiredFields = [
             'category_id', 'eventname', 'shortdescription', 'eventtype',
             'eventdate', 'eventstartingtime', 'eventendingtime', 
-            'locationname', 'state_id', 'city_id', 'eventdescription'
+            'locationname', 'state', 'city', 'eventdescription'
         ];
     
         // Check for missing required fields
@@ -121,8 +86,8 @@ class EditEventController extends SessionController
             'eventendingtime' => $this->request->getPost('eventendingtime'),
             'recurrence' => $this->request->getPost('recurrence'),
             'locationname' => $this->request->getPost('locationname'),
-            'state_id' => $this->request->getPost('state_id'),
-            'city_id' => $this->request->getPost('city_id'),
+            'state' => $this->request->getPost('state'),
+            'city' => $this->request->getPost('city'),
             'eventdescription' => $this->request->getPost('eventdescription'),
         ];
 

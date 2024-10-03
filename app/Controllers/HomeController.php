@@ -6,7 +6,6 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Admin\CategoriesModel;
 use App\Models\Admin\EventsModel;
-use App\Models\Admin\CitiesModel;
 use App\Models\Admin\WishListModel;
 
 class HomeController extends BaseController
@@ -14,16 +13,13 @@ class HomeController extends BaseController
     public function index()
     {
         $categoriesModel = new CategoriesModel();
-        $citiesModel = new CitiesModel();
 
         $topCategories = $categoriesModel->where('is_top_category', 'Yes')->findAll();
         $categoryList = $categoriesModel->findAll();
-        $cityList = $citiesModel->findAll();
         $data = [
             'title' => 'City Agenda',
             'topCategories' => $topCategories,
             'categoryList' => $categoryList,
-            'cityList' => $cityList,
         ];
         return view('pages/home', $data);
     }
@@ -42,10 +38,8 @@ class HomeController extends BaseController
         
         // Start query with joins
         $eventListQuery = $eventsModel
-            ->select('events.*, users.*, states.*, cities.*, events.slug as sl')
+            ->select('events.*, users.*, events.slug as sl')
             ->join('users', 'events.user_id=users.user_id')
-            ->join('cities', 'events.city_id=cities.city_id')
-            ->join('states', 'events.state_id=states.state_id')
             ->join('categories', 'events.category_id=categories.category_id')
             ->where('events.publishsetting', 'Public')
             ->where('events.publishstatus', 'Yes');
@@ -53,11 +47,6 @@ class HomeController extends BaseController
         // Apply category filter if provided
         if (!empty($category)) {
             $eventListQuery->where('categories.categoryname', $category);
-        }
-        
-        // Apply location filter if provided (assuming it's based on city name)
-        if (!empty($location)) {
-            $eventListQuery->where('cities.cityname', $location);
         }
         
         // Apply date filter if provided (assuming 'eventdate' is the date column in the events table)

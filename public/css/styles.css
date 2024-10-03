@@ -400,9 +400,6 @@ td.active.day{
     justify-content: center!important;
     font-size: 15px!important;
     color:#fff!important;
-    position: absolute!important;
-    bottom: 90px;
-    right: 20px!important;
 }
 
 .heartIcon.active {

@@ -22,13 +22,14 @@ class BlogsController extends BaseController
     
         // Start building the query for blogs
         $blogsQuery = $blogsModel
-        ->select('blogs.*, categories.*, blogs.slug as sl, users.*')
+            ->select('blogs.*, blogs.slug as sl, users.*')
             ->join('users', 'blogs.user_id = users.user_id', 'left')
             ->where('blogs.publishstatus', 'Yes');
     
         // If a category is provided, add the necessary joins and filter by the category name
         if (!empty($category)) {
             $blogsQuery = $blogsQuery
+                ->select('categories.*')
                 ->join('blogcategories', 'blogs.blog_id = blogcategories.blog_id', 'left')
                 ->join('categories', 'blogcategories.category_id = categories.category_id', 'left')
                 ->where('categories.categoryname', $category);

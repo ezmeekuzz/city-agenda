@@ -22,7 +22,7 @@ $(document).ready(function () {
             },
             { "data": "emailaddress" },
             {
-                "data": "event_id",
+                "data": "eid",
                 "render": function (data, type, row) {
                     // Format event_id using formatEventId function
                     return formatEventId(data);
@@ -35,18 +35,13 @@ $(document).ready(function () {
                     return `<a href="/${row.sl}" target="_blank">${row.eventname}</a>`;
                 }
             },
-            { "data": "eventtype" },
-            { "data": "eventdate" },
-            { "data": "eventstartingtime" },
-            { "data": "eventendingtime" },
-            { "data": "recurrence" },
             { "data": "locationname" },
-            { "data": "state_name" },
-            { "data": "cityname" },
-            { "data": "publishstatus" },
+            { "data": "state" },
+            { "data": "soldticket" },
+            { "data": "price" }
         ],
         "createdRow": function (row, data, dataIndex) {
-            $(row).attr('data-id', data.event_id);
+            $(row).attr('data-id', data.eid);
         },
         "initComplete": function (settings, json) {
             $(this).trigger('dt-init-complete');

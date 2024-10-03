@@ -22,7 +22,7 @@ $(document).ready(function () {
             },
             { "data": "emailaddress" },
             {
-                "data": "event_id",
+                "data": "eid",
                 "render": function (data, type, row) {
                     // Format event_id using formatEventId function
                     return formatEventId(data);
@@ -35,23 +35,32 @@ $(document).ready(function () {
                     return `<a href="/${row.sl}" target="_blank">${row.eventname}</a>`;
                 }
             },
-            { "data": "eventtype" },
-            { "data": "eventdate" },
-            { "data": "eventstartingtime" },
-            { "data": "eventendingtime" },
-            { "data": "recurrence" },
             { "data": "locationname" },
-            { "data": "state_name" },
-            { "data": "cityname" },
-            { "data": "publishstatus" },
+            {
+                "data": null, // Use null since you're combining two fields (eventdate and eventstartingtime)
+                "render": function (data, type, row) {
+                    // Format the date and time
+                    var eventDate = new Date(row.eventdate);
+                    var eventStartingTime = new Date(row.eventstartingtime);
+    
+                    var options = { month: 'short', day: 'numeric', year: 'numeric' };
+                    var formattedDate = eventDate.toLocaleDateString('en-US', options); // Jul 19, 2024
+                    var formattedTime = eventStartingTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // 01:00 AM
+                    var weekday = eventDate.toLocaleDateString('en-US', { weekday: 'long' }); // Saturday
+    
+                    return `${formattedDate} · ${formattedTime} ${weekday}`;
+                }
+            },
+            { "data": "soldticket" },
+            { "data": "price" }
         ],
         "createdRow": function (row, data, dataIndex) {
-            $(row).attr('data-id', data.event_id);
+            $(row).attr('data-id', data.eid);
         },
         "initComplete": function (settings, json) {
             $(this).trigger('dt-init-complete');
         }
-    });
+    });    
 
     $(document).on('click', '.event-id-link', function (e) {
         e.preventDefault();

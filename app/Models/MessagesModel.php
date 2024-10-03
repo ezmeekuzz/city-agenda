@@ -13,7 +13,7 @@ class MessagesModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'fullname', 'email', 'reason', 'message', 'message_date'
+        'fullname', 'email', 'message', 'message_date'
     ];
 
     protected bool $allowEmptyInserts = false;

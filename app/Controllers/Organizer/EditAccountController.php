@@ -13,11 +13,13 @@ class EditAccountController extends SessionController
         $usersModel = new UsersModel();
         $userDetails = $usersModel->find($id);
         $image = ($userDetails['image'] != "") ? '/' . $userDetails['image'] : base_url() . "assets/img/avatar.png";
+        $coverphoto = ($userDetails['coverphoto'] != "") ? '/' . $userDetails['coverphoto'] : "https://via.placeholder.com/500";
         $data = [
             'title' => 'City Agenda | Edit Account',
-            'currentpage' => 'dashboard',
+            'currentpage' => 'editaccount',
             'userDetails' => $userDetails,
-            'image' => $image
+            'image' => $image,
+            'coverphoto' => $coverphoto,
         ];
         return view('pages/organizer/editaccount', $data);
     }
@@ -60,6 +62,7 @@ class EditAccountController extends SessionController
     
         // Handle image upload (optional)
         $file = $this->request->getFile('profilePicture');
+        $coverPhoto = $this->request->getFile('coverPhoto');
         if ($file && $file->isValid() && !$file->hasMoved()) {
             // Delete the old profile image if it exists
             if (!empty($user['image']) && file_exists(FCPATH . 'uploads/profile-image/' . $user['image'])) {
@@ -70,6 +73,18 @@ class EditAccountController extends SessionController
             $newFileName = $file->getRandomName();
             $file->move(FCPATH . 'uploads/profile-image', $newFileName);
             $data['image'] = 'uploads/profile-image/' . $newFileName;
+        }
+        
+        if ($coverPhoto && $coverPhoto->isValid() && !$coverPhoto->hasMoved()) {
+            // Delete the old profile image if it exists
+            if (!empty($user['coverphoto']) && file_exists(FCPATH . 'uploads/cover-photo/' . $user['coverphoto'])) {
+                unlink(FCPATH . 'uploads/profile-image/' . $user['image']);
+            }
+    
+            // Save the new profile image
+            $newFileName2 = $coverPhoto->getRandomName();
+            $coverPhoto->move(FCPATH . 'uploads/cover-photo', $newFileName2);
+            $data['coverphoto'] = 'uploads/cover-photo/' . $newFileName2;
         }
     
         // Update user in the database

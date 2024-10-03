@@ -7,7 +7,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Admin\EventsModel;
 use App\Models\Admin\WishListModel;
 use App\Models\Admin\CategoriesModel;
-use App\Models\Admin\CitiesModel;
 
 class EventsController extends BaseController
 {
@@ -24,11 +23,8 @@ class EventsController extends BaseController
         if($this->request->getGet('category') && $this->request->getGet('category') != "") {
             $data['category'] = $this->request->getGet('category');
             $categoriesModel = new CategoriesModel();
-            $citiesModel = new CitiesModel();
             $categoryDetails = $categoriesModel->where('categoryname', $this->request->getGet('category'))->first();
-            $cityList = $citiesModel->findAll();
             $data['categoryDetails'] = $categoryDetails;
-            $data['cityList'] = $cityList;
             return view('pages/eventsCategory', $data);
         }
         else if($this->request->getGet('city') && $this->request->getGet('city') != "") {
@@ -55,18 +51,16 @@ class EventsController extends BaseController
     
         // Query for events
         $eventListQuery = $eventsModel
-        ->select('events.*, users.*, states.*, cities.*, tickets.*, events.slug as sl')
+        ->select('events.*, users.*, tickets.*, events.slug as sl')
         ->join('tickets', 'events.event_id=tickets.event_id')
         ->join('users', 'events.user_id=users.user_id')
-        ->join('cities', 'events.city_id=cities.city_id')
-        ->join('states', 'events.state_id=states.state_id')
         ->join('categories', 'events.category_id=categories.category_id')
         ->where('events.publishsetting', 'Public')
         ->where('events.publishstatus', 'Yes');
     
         // Add filters
         if (!empty($location)) {
-            $eventListQuery->where('cities.cityname', $location);
+            $eventListQuery->where('events.city', $location);
         }
     
         if (!empty($date)) {
@@ -98,7 +92,7 @@ class EventsController extends BaseController
     
         // Return the event list as JSON response
         if (!empty($eventList)) {
-            return $this->response->setJSON(['status' => 'success', 'data' => $eventList]);
+            return $this->response->setJSON(['status' => 'success', 'data' => $eventList, 'query', $eventListQuery->getLastQuery()->getQuery()]);
         } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'No events found']);
         }

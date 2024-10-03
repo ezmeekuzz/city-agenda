@@ -27,10 +27,9 @@ class ArchivedEventsController extends SessionController
     public function getData()
     {
         return datatables('events')
-            ->join('states', 'states.state_id = events.state_id', 'left')
-            ->join('cities', 'cities.city_id = events.city_id', 'left')
-            ->join('users', 'users.user_id = events.user_id', 'left')
-            ->join('categories', 'categories.category_id = events.category_id', 'left')
+            ->select('events.*, events.event_id as eid, users.*, events.slug as sl, tickets.*')
+            ->join('users', 'users.user_id=events.user_id', 'left')
+            ->join('tickets', 'tickets.event_id=events.event_id', 'left')
             ->where('DATE(events.eventdate) <', date('Y-m-d')) // Filter for events with past dates
             ->make();
     }

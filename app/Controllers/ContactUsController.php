@@ -28,12 +28,10 @@ class ContactUsController extends BaseController
         if ($this->validate([
             'fullname' => 'required',
             'email' => 'required|valid_email',
-            'reason' => 'required',
             'message' => 'required',
         ])) {
             $name = $this->request->getPost('fullname');
             $email = $this->request->getPost('email');
-            $reason = $this->request->getPost('reason');
             $message = $this->request->getPost('message');
 
             $emailContent = "
@@ -59,7 +57,6 @@ class ContactUsController extends BaseController
                     <div class='content'>
                         <p><strong>Name:</strong> $name</p>
                         <p><strong>Email:</strong> $email</p>
-                        <p><strong>Reason for Contacting:</strong> $reason</p>
                         <div class='message-box'>
                             <p><strong>Message:</strong></p>
                             <p>$message</p>
@@ -77,7 +74,6 @@ class ContactUsController extends BaseController
             $this->messagesModel->insert([
                 'fullname' => $name,
                 'email' => $email,
-                'reason' => $reason,
                 'message' => $message,
                 'message_date' => date('Y-m-d')
             ]);
@@ -85,7 +81,7 @@ class ContactUsController extends BaseController
             // Send the email
             $emailService = \Config\Services::email();
             $emailService->setTo('rustomcodilan@gmail.com');
-            $emailService->setSubject('Contact Form Submission: ' . $reason);
+            $emailService->setSubject('Contact Form Submission');
             $emailService->setMessage($emailContent);
             $emailService->setMailType('html'); // Ensure email is sent as HTML
 

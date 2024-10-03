@@ -11,6 +11,7 @@ use App\Models\Admin\TicketsModel;
 use App\Models\Admin\SpeakersModel;
 use App\Models\Admin\FaqsModel;
 use App\Models\PaymentsModel;
+use App\Models\Admin\WishListModel;
 use Stripe\Stripe;
 use Stripe\Charge;
 use Stripe\Customer;
@@ -24,36 +25,49 @@ class EventDetailController extends BaseController
         $sponsorsModel = new SponsorsModel();
         $speakersModel = new SpeakersModel();
         $faqsModel = new FaqsModel();
-
+        $WishListModel = new WishListModel();
+    
+        // Fetch all event listings
+        $eventLists = $eventsModel
+            ->join('tickets', 'events.event_id=tickets.event_id')
+            ->join('users', 'events.user_id=users.user_id')
+            ->join('categories', 'events.category_id=categories.category_id')
+            ->findAll();
+    
+        foreach ($eventLists as &$event) {
+            // Check if the event is in the wishlist
+            $isFavorited = $WishListModel
+                ->where('user_id', session()->get('organizer_user_id'))
+                ->where('event_id', $event['event_id'])
+                ->countAllResults() > 0;
+    
+            // Add the wishlist status to the event data
+            $event['is_favorited'] = $isFavorited;
+        }
+    
+        // Get details for a specific event
         $eventDetails = $eventsModel
-        ->join('tickets', 'events.event_id=tickets.event_id')
-        ->join('users', 'events.user_id=users.user_id')
-        ->join('cities', 'events.city_id=cities.city_id')
-        ->join('states', 'events.state_id=states.state_id')
-        ->join('categories', 'events.category_id=categories.category_id')
-        ->find($id);
-
+            ->join('tickets', 'events.event_id=tickets.event_id')
+            ->join('users', 'events.user_id=users.user_id')
+            ->join('categories', 'events.category_id=categories.category_id')
+            ->find($id);
+    
         $agendasDetails = $agendasModel->where('event_id', $id)->findAll();
-
         $sponsorsDetails = $sponsorsModel->where('event_id', $id)->findAll();
-
         $speakersDetails = $speakersModel->where('event_id', $id)->findAll();
-
         $faqsDetails = $faqsModel->where('event_id', $id)->findAll();
-
+    
         $eventDateTime = $eventDetails['eventdate'] . ' ' . $eventDetails['eventstartingtime'];
-        $date = strtotime($eventDetails['eventdate']); // Convert date to timestamp
-        $startingtime = strtotime($eventDetails['eventstartingtime']); // Convert time to timestamp
-        $endingtime = strtotime($eventDetails['eventendingtime']); // Convert time to timestamp
-
-        // Format the date as: Friday, August 9
+        $date = strtotime($eventDetails['eventdate']);
+        $startingtime = strtotime($eventDetails['eventstartingtime']);
+        $endingtime = strtotime($eventDetails['eventendingtime']);
+    
+        // Format the date and time
         $formattedDate = date('l, F j', $date);
-
-        // Format the time as: 12 - 5 AM PST (Assuming your event starts at 12 AM and ends at 5 AM)
         $formattedTime = date('g A', $startingtime) . ' - ' . date('g A', $endingtime);
-
-        // Combine the formatted date and time
         $eventSchedule =  $formattedDate . ' · ' . $formattedTime;
+    
+        // Prepare data to be passed to the view
         $data = [
             'title' => $eventDetails['eventname'],
             'eventDetails' => $eventDetails,
@@ -61,48 +75,45 @@ class EventDetailController extends BaseController
             'eventSchedule' => $eventSchedule,
             'agendasDetails' => $agendasDetails,
             'sponsorsDetails' => $sponsorsDetails,
+            'eventLists' => $eventLists, // Pass the event list with the wishlist status
         ];
-        if($eventDetails['tickettype'] == "Paid") {
-            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+    
+        // Select the view based on the ticket type
+        if ($eventDetails['tickettype'] == "Paid") {
+            if (!empty($speakersDetails) && !empty($faqsDetails)) {
                 $data['speakersDetails'] = $speakersDetails;
                 $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
-            }
-            else {
+            } else {
                 return view('pages/paid-event-details', $data);
             }
-        }
-        else if($eventDetails['tickettype'] == "Free") {
-            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+        } else if ($eventDetails['tickettype'] == "Free") {
+            if (!empty($speakersDetails) && !empty($faqsDetails)) {
                 $data['speakersDetails'] = $speakersDetails;
                 $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
-            }
-            else {
+            } else {
                 return view('pages/free-event-details', $data);
             }
-        }
-        else if($eventDetails['tickettype'] == "Donations") {
-            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+        } else if ($eventDetails['tickettype'] == "Donations") {
+            if (!empty($speakersDetails) && !empty($faqsDetails)) {
                 $data['speakersDetails'] = $speakersDetails;
                 $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
-            }
-            else {
+            } else {
                 return view('pages/donations-event-details', $data);
             }
-        }
-        else {
-            if(!empty($speakersDetails) && !empty($faqsDetails)) {
+        } else {
+            if (!empty($speakersDetails) && !empty($faqsDetails)) {
                 $data['speakersDetails'] = $speakersDetails;
                 $data['faqsDetails'] = $faqsDetails;
                 return view('pages/conference-details', $data);
-            }
-            else {
+            } else {
                 return view('pages/no-tickets-event-details', $data);
             }
         }
     }
+    
     public function stripePayment()
     {
         $paymentsModel = new PaymentsModel();

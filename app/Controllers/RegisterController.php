@@ -14,12 +14,7 @@ class RegisterController extends BaseController
         $data = [
             'title' => 'City Agenda'
         ];
-        if($logInAs == 'event_organizer') {
-            return view('pages/register-event-organizer', $data);
-        }
-        else {
-            return view('pages/register-member', $data);
-        }
+        return view('pages/register-event-organizer', $data);
     }
     public function insert()
     {

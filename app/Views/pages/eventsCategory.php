@@ -62,19 +62,11 @@
                     <h2>Popular <?=$category;?> Events <span class="locationFilter"></span>  </h2>
                     <div class="col-lg-7 col-md-12 row">
                         <div class="col-md-6 drop-cards d-flex flex-column justify-content-center gap-2 mb-4 mb-lg-0">
-                            <h4>Select Location</h4>
+                            <h4>Search City</h4>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                    <span id="selected-location">My Location</span>
-                                </button>
-                                <ul class="dropdown-menu" id="location-dropdown">
-                                <?php if($cityList) : ?>
-                                <?php foreach($cityList as $list) : ?>
-                                    <li><a class="dropdown-item" data-location="<?=$list['cityname'];?>"><?=$list['cityname'];?></a></li>
-                                <?php endforeach; ?>
-                                <?php endif; ?>
-                                </ul>
+                                <div class="input-group">
+                                    <input style="box-shadow: 0px 0px 5px #00000056 !important; height: 60px;" type="text" class="form-control" placeholder="Search City" id="city">
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 drop-cards d-flex flex-column justify-content-center gap-2 mb-4 mb-lg-0">
@@ -242,257 +234,152 @@
         });
 
         // Handle location selection
-        $('#location-dropdown a').on('click', function() {
-            selectedLocation = $(this).data('location');  // Update the selected location
-            $('#selected-location').text($(this).text());  // Update location text
-            $('.locationFilter').text('In ' + $(this).text());  // Update location text
-            loadEvents();  // Reload events based on the new location
-            loadFreeEvents();  // Reload events based on the new location
-            loadPopularEvents();
+        $('#city').on('input', function() {
+            selectedLocation = $(this).val();  // Get the city name from the input field
+            updateCityAndEvents(selectedLocation);
         });
 
-        function loadEvents() {
-            // Pass the selected date, category, and location directly via AJAX
+        // Initialize Google Places Autocomplete and trigger events when a city is selected
+        function initAutocomplete() {
+            // Initialize Google Places Autocomplete with restrictions to cities
+            const autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('city'),  // Ensure the input field ID matches
+                { types: ['(cities)'] } // Restrict to cities only
+            );
+
+            // Add event listener when a place is selected
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+
+                // Loop through address components to extract only the city (locality)
+                const addressComponents = place.address_components;
+                let city = '';
+
+                for (let i = 0; i < addressComponents.length; i++) {
+                    const component = addressComponents[i];
+                    if (component.types.includes('locality')) {
+                        city = component.long_name; // Extract the city name
+                        break; // Stop once we get the city
+                    }
+                }
+
+                // Set the city in the input field
+                if (city) {
+                    document.getElementById('city').value = city;
+                    // Trigger the search function manually after selecting a city from autocomplete
+                    updateCityAndEvents(city);  
+                } else {
+                    document.getElementById('city').value = ''; // Clear if no city found
+                    alert("Please select a valid city.");
+                }
+            });
+        }
+
+        // Function to update the city and load events
+        function updateCityAndEvents(city) {
+            $('#selected-location').text(city);  // Update the selected location text
+            $('.locationFilter').text('In ' + city);  // Update the filter label with the city name
+
+            // Reload the events based on the new city
+            loadEvents();          // Regular events
+            loadEvents('free');    // Free events
+            loadEvents('popular'); // Popular events
+        }
+
+        // Initialize autocomplete when the page loads
+        window.onload = initAutocomplete;
+        function loadEvents(type = '') {
+            let url = '/events/getEvents'; // Endpoint to get events
+            let data = {
+                category: selectedCategory,
+                location: selectedLocation,
+                date: selectedDate
+            };
+
+            // Add a ticket filter for free or popular events if necessary
+            if (type === 'free') {
+                data.ticket = "Free";
+            }
+
+            let containerId = '#events-container'; // Default container
+
+            // Adjust container based on event type
+            if (type === 'free') {
+                containerId = '#free-events-container';
+            } else if (type === 'popular') {
+                containerId = '#popular-events-container';
+            }
+
             $.ajax({
-                url: '/events/getEvents',  // Endpoint to get events
+                url: url,
                 method: 'GET',
-                data: {
-                    category: selectedCategory,  // Pass selected category
-                    location: selectedLocation,  // Pass selected location
-                    date: selectedDate,          // Pass selected date
-                },
+                data: data,
                 success: function(response) {
-                    let eventsContainer = $('#events-container');
-                    eventsContainer.empty();  // Clear the previous events
+                    let container = $(containerId);
+                    container.empty();  // Clear previous events
 
-                    // Check if the response was successful
                     if (response.status === 'success') {
-                        // Get event data
                         let events = response.data;
-
-                        // If no events found, show a message
+                        
+                        // Show message if no events are found
                         if (events.length === 0) {
-                            eventsContainer.html(`
-                                <center><img src="img/page-not-found.png" alt=""></center>
-                                <center><h1 style="color: #741774;">No Events Found</h1></center>
+                            container.html(`
+                                <center><img src="img/page-not-found.png" alt="No Events Found"></center>
+                                <center><h1 style="color: #741774;">No ${type ? type.charAt(0).toUpperCase() + type.slice(1) : ''} Events Found</h1></center>
                             `);
                             return;
                         }
 
-                        // Loop through the events and create HTML for each one
+                        // Loop through events and generate HTML
                         events.forEach(function(event) {
                             const isFavoritedClass = event.is_favorited ? 'active' : '';
                             let eventHTML = `
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                <div class="card" style="width: 100%;">
-                                    <img class="user-id" src="${event.image}" alt="User">
-                                    <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
-                                    <img src="${event.eventbanner}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
+                                <div class="card">
+                                    <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
+                                    <img src="${event.eventbanner}" class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="${event.eventname}">
                                     <div class="card-body">
-                                        <a href="${event.sl}" style="text-decoration: none; color: black;">
-                                            <h3>${event.eventname}</h3>
-                                        </a>
-                                    </div>
-                                    <div class="card-bottom">
                                         <div class="d-flex align-items-center">
-                                            <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
-                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
+                                            <a href="${event.slug}" style="text-decoration: none; color: black; flex-grow: 1;">
+                                                <h4 style="font-size: 1.2rem;">${event.eventname}</h4>
+                                            </a>
+                                            <button class="heart-button ml-auto" onclick="toggleFavorite(this, ${event.event_id})" style="border: none; background: transparent;">
+                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}" style="font-size: 1.5rem; color: red;"></i>
                                             </button>
-                                            <p>
-                                                ${event.cityname} <br>
-                                                <span>${event.locationname}</span>
-                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom p-2">
+                                        <div class="d-flex align-items-center">
+                                            <p class="ml-2">${event.city} <br><span>${event.locationname}</span></p>
                                         </div>
                                         <hr>
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-clock-fill"></i>
-                                            <p>
-                                                ${formatDate(event.eventdate)}<br>
-                                                <span>${formatTime(event.eventstartingtime)}</span>
-                                            </p>
+                                            <p class="ml-2">${formatDate(event.eventdate)}<br><span>${formatTime(event.eventstartingtime)}</span></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>`;
-                            eventsContainer.append(eventHTML);
+                            container.append(eventHTML);
                         });
                     } else {
-                        // If no events found or error status, display an error message
-                        eventsContainer.html(`
-                            <center><img src="img/page-not-found.png" alt=""></center>
+                        // Show error message if needed
+                        container.html(`
+                            <center><img src="img/page-not-found.png" alt="No Events Found"></center>
                             <center><h1 style="color: #741774;">No Events Found</h1></center>
                         `);
                     }
                 },
                 error: function() {
-                    $('#events-container').html('<p>Error loading events</p>');
+                    $(containerId).html('<p>Error loading events</p>');
                 }
             });
         }
 
-        // Initial load of events
-        loadEvents();
-    
-        function loadFreeEvents() {
-            $.ajax({
-                url: '/events/getEvents',  // Endpoint to get events
-                method: 'GET',
-                data: {
-                    category: selectedCategory,  // Pass selected category
-                    location: selectedLocation,  // Pass selected location
-                    date: selectedDate,          // Pass selected date
-                    ticket: "Free"               // Only load free events
-                },
-                success: function(response) {
-                    let eventsFreeContainer = $('#free-events-container');
-                    eventsFreeContainer.empty();  // Clear previous events
-
-                    // Check if the response was successful
-                    if (response.status === 'success') {
-                        let events = response.data;
-
-                        // If no events are found, display a message
-                        if (events.length === 0) {
-                            eventsFreeContainer.html(`
-                                <center><img src="img/page-not-found.png" alt="No Events Found"></center>
-                                <center><h1 style="color: #741774;">No Free Events Found</h1></center>
-                            `);
-                            return;
-                        }
-
-                        // Loop through the events and create HTML for each one
-                        events.forEach(function(event) {
-                            const isFavoritedClassFree = event.is_favorited ? 'active' : '';
-                            let eventFreeHTML = `
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                <div class="card" style="width: 100%;">
-                                    <img class="user-id" src="${event.image}" alt="User">
-                                    <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClassFree}"></i>
-                                    <img src="${event.eventbanner}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
-                                    <div class="card-body">
-                                        <a href="${event.slug}" style="text-decoration: none; color: black;">
-                                            <h3>${event.eventname}</h3>
-                                        </a>
-                                    </div>
-                                    <div class="card-bottom">
-                                        <div class="d-flex align-items-center">
-                                            <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
-                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClassFree}"></i>
-                                            </button>
-                                            <p>
-                                                ${event.cityname} <br>
-                                                <span>${event.locationname}</span>
-                                            </p>
-                                        </div>
-                                        <hr>
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-clock-fill"></i>
-                                            <p>
-                                                ${formatDate(event.eventdate)}<br>
-                                                <span>${formatTime(event.eventstartingtime)}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-                            eventsFreeContainer.append(eventFreeHTML);
-                        });
-                    } else {
-                        // If no free events found, show a default message
-                        eventsFreeContainer.html(`
-                            <center><img src="img/page-not-found.png" alt="No Free Events Found"></center>
-                            <center><h1 style="color: #741774;">No Free Events Found</h1></center>
-                        `);
-                    }
-                },
-                error: function() {
-                    $('#free-events-container').html('<p>Error loading free events</p>');
-                }
-            });
-        }
-
-        // Initial load of free events
-        loadFreeEvents();
-        
-        function loadPopularEvents() {
-            $.ajax({
-                url: '/events/getEvents',  // Endpoint to get events
-                method: 'GET',
-                data: {
-                    category: selectedCategory,  // Pass selected category
-                    location: selectedLocation,  // Pass selected location
-                    date: selectedDate
-                },
-                success: function(response) {
-                    let eventsPopularContainer = $('#popular-events-container');
-                    eventsPopularContainer.empty();  // Clear previous events
-
-                    // Check if the response was successful
-                    if (response.status === 'success') {
-                        let events = response.data;
-
-                        // If no events are found, display a message
-                        if (events.length === 0) {
-                            eventsPopularContainer.html(`
-                                <center><img src="img/page-not-found.png" alt="No Events Found"></center>
-                                <center><h1 style="color: #741774;">No Popular Events Found</h1></center>
-                            `);
-                            return;
-                        }
-
-                        // Loop through the events and create HTML for each one
-                        events.forEach(function(event) {
-                            const isFavoritedClassPopular = event.is_favorited ? 'active' : '';
-                            let eventPopularHTML = `
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                <div class="card" style="width: 100%;">
-                                    <img class="user-id" src="${event.image}" alt="User">
-                                    <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClassPopular}"></i>
-                                    <img src="${event.eventbanner}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
-                                    <div class="card-body">
-                                        <a href="${event.slug}" style="text-decoration: none; color: black;">
-                                            <h3>${event.eventname}</h3>
-                                        </a>
-                                    </div>
-                                    <div class="card-bottom">
-                                        <div class="d-flex align-items-center">
-                                            <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
-                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClassPopular}"></i>
-                                            </button>
-                                            <p>
-                                                ${event.cityname} <br>
-                                                <span>${event.locationname}</span>
-                                            </p>
-                                        </div>
-                                        <hr>
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-clock-fill"></i>
-                                            <p>
-                                                ${formatDate(event.eventdate)}<br>
-                                                <span>${formatTime(event.eventstartingtime)}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-                            eventsPopularContainer.append(eventPopularHTML);
-                        });
-                    } else {
-                        // If no free events found, show a default message
-                        eventsPopularContainer.html(`
-                            <center><img src="img/page-not-found.png" alt="No Popular Events Found"></center>
-                            <center><h1 style="color: #741774;">No Popular Events Found</h1></center>
-                        `);
-                    }
-                },
-                error: function() {
-                    $('#popular-events-container').html('<p>Error loading popular events</p>');
-                }
-            });
-        }
-
-        // Initial load of free events
-        loadPopularEvents();
+        // Initial load calls for different event types
+        loadEvents(); // Regular events
+        loadEvents('free'); // Free events
+        loadEvents('popular'); // Popular events
 
         // Formatting helper functions
         function formatDate(dateString) {

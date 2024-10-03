@@ -42,15 +42,10 @@
                                             <th>Email Address</th>
                                             <th>Event ID</th>
                                             <th>Event Name</th>
-                                            <th>Event Type</th>
-                                            <th>Date</th>
-                                            <th>Starting Time</th>
-                                            <th>Ending Time</th>
-                                            <th>Recurrence</th>
                                             <th>Location</th>
-                                            <th>State</th>
-                                            <th>City</th>
-                                            <th>Publish Status</th>
+                                            <th>Date & Time</th>
+                                            <th>Sold</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
                                 </table>

@@ -9,11 +9,6 @@
                 <form id="sendMessage">
                     <input type="text" name="fullname" id="fullname" placeholder="Your Name" required>
                     <input type="email" name="email" id="email" placeholder="Your Email" required>
-                    <select name="reason" id="reason" required>
-                        <option hidden></option>
-                        <option disabled selected>Choose Your Reason for Contacting Us</option>
-                        <option value="Test">Test</option>
-                    </select>
                     <textarea name="message" id="message" placeholder="Write Your Message" rows="6" required></textarea>
                     <div class="submitBottom">
                         <input type="submit" class="main-btn contact-submit" value="Send Message">

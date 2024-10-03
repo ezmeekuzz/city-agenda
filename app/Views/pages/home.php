@@ -7,7 +7,7 @@
             <div class="d-flex gap-3  flex-md-row">
                 <div class="search-input">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <input type="text" placeholder="Enter city name" name="city">
+                    <input type="text" placeholder="Enter city name" name="city" id="city">
                 </div>
                 <button class="search-toggle">
                     <i class="bi bi-search"></i>
@@ -49,22 +49,6 @@
                 </div>
             </div>
             <div class="col-lg-8 col-md-12 mt-4 mt-lg-0 d-flex gap-4 flex-column flex-md-row">
-                <div class="drop-cards d-flex flex-column justify-content-center">
-                    <h4>Select Location</h4>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <span id="selected-location">My Location</span>
-                        </button>
-                        <ul class="dropdown-menu" id="location-dropdown">
-                        <?php if($cityList) : ?>
-                        <?php foreach($cityList as $list) : ?>
-                            <li><a class="dropdown-item" data-location="<?=$list['cityname'];?>"><?=$list['cityname'];?></a></li>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-                        </ul>
-                    </div>
-                </div>
                 <div class="drop-cards d-flex flex-column justify-content-center">
                     <h4>Select Date</h4>
                     <div class="input-group date" id="datepicker">
@@ -116,43 +100,43 @@
         <div class="slider-section bottom-slider-sec">
             <div class="slider">
                 <div class="slide" data-city="Denver">
-                    <img src="img/denver.png" alt="Denver">
+                    <img src="img/Denver.png" alt="Denver">
                     <h3>Denver</h3>
                 </div>
                 <div class="slide" data-city="Baltimore">
-                    <img src="img/baltimore.png" alt="Baltimore">
+                    <img src="img/Baltimore.png" alt="Baltimore">
                     <h3>Baltimore</h3>
                 </div>
                 <div class="slide" data-city="Austin">
-                    <img src="img/austin.png" alt="Austin">
+                    <img src="img/Austin.png" alt="Austin">
                     <h3>Austin</h3>
                 </div>
                 <div class="slide" data-city="Jacksonville">
-                    <img src="img/jacksonville.png" alt="Jacksonville">
+                    <img src="img/Jacksonville.png" alt="Jacksonville">
                     <h3>Jacksonville</h3>
                 </div>
                 <div class="slide" data-city="San Antonio">
-                    <img src="img/san-antonio.png" alt="San Antonio">
+                    <img src="img/San-antonio.png" alt="San Antonio">
                     <h3>San Antonio</h3>
                 </div>
                 <div class="slide" data-city="Denver">
-                    <img src="img/denver.png" alt="Denver">
+                    <img src="img/Denver.png" alt="Denver">
                     <h3>Denver</h3>
                 </div>
                 <div class="slide" data-city="Baltimore">
-                    <img src="img/baltimore.png" alt="Baltimore">
+                    <img src="img/Baltimore.png" alt="Baltimore">
                     <h3>Baltimore</h3>
                 </div>
                 <div class="slide" data-city="Austin">
-                    <img src="img/austin.png" alt="Austin">
+                    <img src="img/Austin.png" alt="Austin">
                     <h3>Austin</h3>
                 </div>
                 <div class="slide" data-city="Jacksonville">
-                    <img src="img/jacksonville.png" alt="Jacksonville">
+                    <img src="img/Jacksonville.png" alt="Jacksonville">
                     <h3>Jacksonville</h3>
                 </div>
                 <div class="slide" data-city="San Antonio">
-                    <img src="img/san-antonio.png" alt="San Antonio">
+                    <img src="img/San-antonio.png" alt="San Antonio">
                     <h3>San Antonio</h3>
                 </div>
             </div>
@@ -165,7 +149,6 @@
 <script>
     $(document).ready(function() {
         var selectedCategory = '';
-        var selectedLocation = '';
         var selectedDate = '';
 
         // Initialize datepicker with the correct format and attach the change event
@@ -182,20 +165,6 @@
             selectedCategory = $(this).data('category');  // Update the selected category
             $(this).closest('.dropdown').find('.dropdown-toggle').text($(this).text());  // Set the dropdown button text
             loadEvents();  // Reload events based on the new category
-        });
-
-        // Handle location selection
-        $('#location-dropdown a').on('click', function() {
-            selectedLocation = $(this).data('location');  // Update the selected location
-            $('#selected-location').text($(this).text());  // Update location text
-
-            if (selectedLocation) {
-                $('.event-title h3').text(selectedLocation);  // Update the event title with city name
-                $('.event-title').show();  // Show the Popular Events section
-            } else {
-                $('.event-title').hide();  // Hide if no location is selected
-            }
-            loadEvents();  // Reload events based on the new location
         });
 
         var slider = $('.slider');
@@ -293,7 +262,6 @@
                 method: 'GET',
                 data: {
                     category: selectedCategory,  // Pass selected category
-                    location: selectedLocation,  // Pass selected location
                     date: selectedDate           // Pass selected date
                 },
                 success: function(response) {
@@ -311,37 +279,46 @@
                         const isFavoritedClass = event.is_favorited ? 'active' : '';
                         
                         let eventHTML = `
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card" style="width: 100%;">
-                                <img class="user-id" src="${event.image}" alt="User">
-                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
-                                <img src="${event.eventbanner}" style="height: 382px; object-fit: cover;" alt="${event.eventname}">
-                                <div class="card-body">
-                                    <a href="${event.slug}" style="text-decoration: none; color: black;">
-                                        <h3>${event.eventname}</h3>
-                                    </a>
-                                </div>
-                                <div class="card-bottom">
-                                    <div class="d-flex align-items-center">
-                                        <button class="heart-button" onclick="toggleFavorite(this, ${event.event_id})">
-                                            <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}"></i>
-                                        </button>
-                                        <p>
-                                            ${event.cityname} <br>
-                                            <span>${event.locationname}</span>
-                                        </p>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card">
+                                    <!-- User image (circular) -->
+                                    <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
+                                    
+                                    <!-- Event banner -->
+                                    <img src="${event.eventbanner}" class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="${event.eventname}">
+                                    
+                                    <div class="card-body">
+                                        <!-- Event name and heart icon on the right -->
+                                        <div class="d-flex align-items-center">
+                                            <a href="${event.slug}" style="text-decoration: none; color: black; flex-grow: 1;">
+                                                <h4 style="font-size: 1.2rem;">${event.eventname}</h4>
+                                            </a>
+                                            <!-- Heart icon positioned on the right -->
+                                            <button class="heart-button ml-auto" onclick="toggleFavorite(this, ${event.event_id})" style="border: none; background: transparent;">
+                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}" style="font-size: 1.5rem; color: red;"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <hr>
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-clock-fill"></i>
-                                        <p>
-                                            ${formatDate(event.eventdate)}<br>
-                                            <span>${formatTime(event.eventstartingtime)}</span>
-                                        </p>
+                                    
+                                    <div class="card-bottom p-2">
+                                        <div class="d-flex align-items-center">
+                                            <p class="ml-2">
+                                                ${event.city} <br>
+                                                <span>${event.locationname}</span>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-clock-fill"></i>
+                                            <p class="ml-2">
+                                                ${formatDate(event.eventdate)}<br>
+                                                <span>${formatTime(event.eventstartingtime)}</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>`;
+                            </div>`;
+
                         eventsContainer.append(eventHTML);  // Append the event HTML to the container
                     });
                 },
@@ -440,4 +417,40 @@
             }
         });
     }
+    
+    function initAutocomplete() {
+            // Initialize Google Places Autocomplete with restrictions to cities
+            const autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('city'),
+                { types: ['(cities)'] } // Restrict to cities only
+            );
+
+            // Add event listener when a place is selected
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+
+                // Loop through address components to extract only the city (locality)
+                const addressComponents = place.address_components;
+                let city = '';
+
+                for (let i = 0; i < addressComponents.length; i++) {
+                    const component = addressComponents[i];
+                    if (component.types.includes('locality')) {
+                        city = component.long_name; // Extract the city name
+                        break; // Stop once we get the city
+                    }
+                }
+
+                // Set the city in the input field
+                if (city) {
+                    document.getElementById('city').value = city;
+                } else {
+                    document.getElementById('city').value = ''; // Clear if no city found
+                    alert("Please select a valid city.");
+                }
+            });
+        }
+
+        // Initialize autocomplete when the page loads
+        window.onload = initAutocomplete;
 </script>

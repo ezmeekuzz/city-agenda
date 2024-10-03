@@ -97,7 +97,7 @@
                 <div class="col-lg-6 col-md-12 mt-lg-0">
                     <h3>Grow Eventfully</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed ullamcorper morbi tincidunt ornare. Nunc eget lorem dolor sed viverra ipsum nunc aliquet. Diam sollicitudin tempor id eu nisl nunc mi ipsum faucibus. </p>
-                    <button class="main-btn">Sign up Today!</button>
+                    <button class="main-btn" onclick="window.location.href='/register'">Sign up Today!</button>
                 </div>
                 <div class="col-lg-6 col-md-12 mt-lg-0 mt-4">
                     <img src="img/faq-img.png">

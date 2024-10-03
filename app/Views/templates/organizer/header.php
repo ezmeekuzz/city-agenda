@@ -193,58 +193,13 @@
                         <div class="navigation d-flex">
                             <ul class="navbar-nav nav-right ml-auto">
                                 <li class="nav-item dropdown user-profile">
-                                    <a href="javascript:void(0)" class="nav-link dropdown-toggle link-header" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a href="/organizer/profile/<?=session()->get('organizer_emailaddress')?>/<?=session()->get('organizer_user_id')?>" class="nav-link link-header" target="_blank">
                                         <?php
                                             $image = (session()->get('organizer_image') != "") ? '/' . session()->get('organizer_image') : base_url() . "assets/img/avatar.png";
                                         ?>
                                         <img src="<?=$image;?>" alt="avtar-img" id = "imageDisplaysideBar" class = "profilepic">
                                         <span class="bg-success user-status"></span>
                                     </a>
-                                    <div class="dropdown-menu animated fadeIn" aria-labelledby="navbarDropdown">
-                                        <div class="bg-gradient px-4 py-3 custom-bg-header">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="mr-1">
-                                                    <h4 class="text-white mb-0 profilename"><?=session()->get('organizer_firstname') .' '. session()->get('organizer_lastname');?></h4>
-                                                    <small class="text-white profileemail"><?=session()->get('organizer_emailaddress');?></small>
-                                                </div>
-                                                <a href="<?=base_url();?>organizer/logout" class="text-white font-20 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Logout"> <i class="zmdi zmdi-power"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/payment-method">
-                                                <i class=" ti ti-money pr-2 text-info"></i> Payment Method
-                                            </a>
-                                            <a class="dropdown-item d-flex nav-link" href="<?=base_url()?>organizer/edit-account/<?=session()->get('organizer_user_id');?>">
-                                                <i class=" ti ti-user pr-2 text-warning"></i> Edit Account
-                                            </a>
-                                            <a class="dropdown-item d-flex nav-link" href="javscript">
-                                                <div class="checkbox checbox-switch switch-success">
-                                                    <label>
-                                                        <input type="checkbox" value = "enabled" id="2faToggle" <?= (session()->get('organizer_two_factor_enabled ') == 1) ? 'checked' : ''; ?> />
-                                                        <span></span>
-                                                        2 Factor Authentication
-                                                    </label>
-                                                </div>
-                                            </a>
-                                            <a class="dropdown-item d-flex nav-link" href="javascript:void(0);" id="deactivateAccountBtn">
-                                                <i class=" ti ti-trash pr-2 text-danger"></i> <span class="text-danger">Deactivate Account</span>
-                                            </a>
-                                            <div class="row mt-2">
-                                                <div class="col">
-                                                    <a class="bg-light p-3 text-center d-block" href="<?=base_url()?>" target = "_blank">
-                                                        <i class="fe fe-search font-20 text-info"></i>
-                                                        <span class="d-block font-13 mt-2">Browse Events</span>
-                                                    </a>
-                                                </div>
-                                                <div class="col">
-                                                    <a class="bg-light p-3 text-center d-block" href="<?=base_url();?>organizer/add-event">
-                                                        <i class="fe fe-plus font-20 text-info"></i>
-                                                        <span class="d-block font-13 mt-2">Add New Event</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </li>
                             </ul>
                         </div>

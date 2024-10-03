@@ -5,8 +5,6 @@ namespace App\Controllers\Admin;
 use App\Controllers\Admin\SessionController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Admin\CategoriesModel;
-use App\Models\Admin\StatesModel;
-use App\Models\Admin\CitiesModel;
 use App\Models\Admin\EventsModel;
 use App\Models\Admin\AgendasModel;
 use App\Models\Admin\SpeakersModel;
@@ -18,24 +16,13 @@ class AddEventController extends SessionController
     public function index()
     {
         $categoriesModel = new CategoriesModel();
-        $stateModel = new StatesModel();
         $categoryList = $categoriesModel->findAll();
-        $stateList = $stateModel->findAll();
         $data = [
             'title' => 'City Agenda | Add Event',
             'currentpage' => 'addevent',
             'categoryList' => $categoryList,
-            'stateList' => $stateList,
         ];
         return view('pages/admin/addevent', $data);
-    }
-    public function getCities()
-    {
-        $cityModel = new CitiesModel();
-        $state_id = $this->request->getPost('state_id');
-        $cities = $cityModel->where('state_id', $state_id)->findAll();
-
-        return $this->response->setJSON($cities);
     }
     public function insert()
     {
@@ -56,7 +43,7 @@ class AddEventController extends SessionController
         $requiredFields = [
             'category_id', 'eventname', 'shortdescription', 'eventtype',
             'eventdate', 'eventstartingtime', 'eventendingtime', 
-            'locationname', 'state_id', 'city_id', 'eventdescription'
+            'locationname', 'state', 'city', 'eventdescription'
         ];
     
         // Check for missing required fields
@@ -87,8 +74,8 @@ class AddEventController extends SessionController
             'eventendingtime' => $this->request->getPost('eventendingtime'),
             'recurrence' => $this->request->getPost('recurrence'),
             'locationname' => $this->request->getPost('locationname'),
-            'state_id' => $this->request->getPost('state_id'),
-            'city_id' => $this->request->getPost('city_id'),
+            'state' => $this->request->getPost('state'),
+            'city' => $this->request->getPost('city'),
             'eventdescription' => $this->request->getPost('eventdescription'),
             'dateadded' => date('Y-m-d'),
         ];

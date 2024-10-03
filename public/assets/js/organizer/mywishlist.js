@@ -22,14 +22,28 @@ $(document).ready(function () {
                 }
             },
             { "data": "eventname" },
-            { "data": "eventtype" },
-            { "data": "eventdate" },
-            { "data": "eventstartingtime" },
-            { "data": "eventendingtime" },
-            { "data": "recurrence" },
             { "data": "locationname" },
-            { "data": "state_name" },
-            { "data": "cityname" },
+            {
+                "data": null, // Use null since you're combining two fields (eventdate and eventstartingtime)
+                "render": function (data, type, row) {
+                    // Format the date
+                    var eventDate = new Date(row.eventdate);
+                    var options = { month: 'short', day: 'numeric', year: 'numeric' };
+                    var formattedDate = eventDate.toLocaleDateString('en-US', options); // Jul 19, 2024
+                    var weekday = eventDate.toLocaleDateString('en-US', { weekday: 'long' }); // Saturday
+                    
+                    // Format the time (eventstartingtime is already in time format "HH:MM:SS")
+                    var timeString = row.eventstartingtime;
+                    var [hours, minutes] = timeString.split(':');
+                    
+                    // Convert to 12-hour format with AM/PM
+                    var period = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+                    var formattedTime = `${hours}:${minutes} ${period}`; // 05:05 AM
+    
+                    return `${formattedDate} · ${formattedTime} ${weekday}`;
+                }
+            },
             {
                 "data": null,
                 "render": function (data, type, row) {

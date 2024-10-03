@@ -37,7 +37,7 @@
                                         <div class="form-group">
                                             <div class="checkbox checbox-switch switch-success">
                                                 <label>
-                                                    <input type="checkbox" value = "Yes" name="publishstatus" <?php if ($property['publishstatus'] == 'Published') echo 'checked'; ?> />
+                                                    <input type="checkbox" value = "Yes" name="publishstatus" <?php if ($eventDetails['publishstatus'] == 'Published') echo 'checked'; ?> />
                                                     <span></span>
                                                     Publish
                                                 </label>
@@ -137,24 +137,15 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="locationname">Location Name</label>
-                                    <input type="text" name="locationname" id="locationname" class="form-control" value="<?=$eventDetails['locationname'];?>" placeholder="Enter Location Name">
+                                    <input type="text" name="locationname" value="<?=$eventDetails['locationname'];?>" id="locationname" class="form-control" placeholder="Enter Location Name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="state_id">State</label>
-                                    <select id="state_id" name="state_id" class="form-control chosen-select" data-placeholder="Choose a state...">
-                                        <option></option>
-                                        <?php if($stateList) : ?>
-                                        <?php foreach($stateList as $list) : ?>
-                                        <option value="<?=$list['state_id'];?>" <?php if($eventDetails['state_id'] == $list['state_id']) { echo "selected"; } ?> ><?=$list['state_name'];?></option>
-                                        <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </select>
+                                    <label for="state">State</label>
+                                    <input type="text" name="state" value="<?=$eventDetails['state'];?>" id="state" class="form-control" placeholder="Enter State" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="city_id">City</label>
-                                    <select id="city_id" name="city_id" class="form-control chosen-select" data-placeholder="Choose a city...">
-                                        <option></option>
-                                    </select>
+                                    <label for="city">City</label>
+                                    <input type="text" name="city" value="<?=$eventDetails['city'];?>" id="city" class="form-control" placeholder="Enter City" readonly>
                                 </div>
                                 <div id="map" style="height: 400px; width: 100%;"></div>
                             </div>
@@ -445,7 +436,4 @@
         </div>
     </div>
 </div><?=$this->include('templates/organizer/footer');?>
-<script>
-    var selectedCityId = '<?php echo $eventDetails['city_id']; ?>';
-</script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/organizer/editevent.js"></script>

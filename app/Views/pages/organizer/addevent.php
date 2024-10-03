@@ -136,21 +136,12 @@
                                     <input type="text" name="locationname" id="locationname" class="form-control" placeholder="Enter Location Name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="state_id">State</label>
-                                    <select id="state_id" name="state_id" class="form-control chosen-select" data-placeholder="Choose a state...">
-                                        <option></option>
-                                        <?php if($stateList) : ?>
-                                        <?php foreach($stateList as $list) : ?>
-                                        <option value="<?=$list['state_id'];?>"><?=$list['state_name'];?></option>
-                                        <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </select>
+                                    <label for="state">State</label>
+                                    <input type="text" name="state" id="state" class="form-control" placeholder="Enter State" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="city_id">City</label>
-                                    <select id="city_id" name="city_id" class="form-control chosen-select" data-placeholder="Choose a city...">
-                                        <option></option>
-                                    </select>
+                                    <label for="city">City</label>
+                                    <input type="text" name="city" id="city" class="form-control" placeholder="Enter City" readonly>
                                 </div>
                                 <div id="map" style="height: 400px; width: 100%;"></div>
                             </div>

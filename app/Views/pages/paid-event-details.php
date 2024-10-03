@@ -6,6 +6,9 @@
     #card-element {
         height: 60px; /* Adjust the height of the container */
     }
+    #countdown {
+        color: #fff;
+    }
 </style>
 <section class="container-fluid normal-event-section">
     <div class="container event-banner" style="background-image: url(<?=$eventDetails['eventbanner'];?>);">
@@ -56,7 +59,7 @@
                 <h5><?=$eventDetails['shortdescription'];?></h5>
                 <div class="event-user-sec">
                     <div class="user-profile">
-                        <img src="/<?=$eventDetails['image'];?>">
+                        <img src="/<?=$eventDetails['image'];?>" alt="User Profile Image" style="border-radius: 50%; width: 80px; height: 80px; object-fit: cover;">
                         <ul>
                             <li><a href="#">By <?=$eventDetails['firstname'] . ' ' . $eventDetails['lastname'];?></a></li>
                             <!--<li><a href="#"> 26.6K Followers</a></li>-->
@@ -71,7 +74,7 @@
                     </div>
                     <div class="dl-sec">
                         <h3>Location</h3>
-                        <p><i class="bi bi-geo-alt-fill"></i><?=$eventDetails['locationname'];?>, <?=$eventDetails['cityname'];?></p>
+                        <p><i class="bi bi-geo-alt-fill"></i><?=$eventDetails['locationname'];?></p>
                     </div>
                 </div>
                 <h2>About This Event</h2>
@@ -109,7 +112,7 @@
                 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content d-flex flex-column gap-2 align-items-center p-5">
-                            <h4>Get Updated By Email</h4>
+                            <h4>Share this event</h4>
                             <hr>
                             <form class="form-email">
                                 <input type="email" placeholder="Email Address">
@@ -270,14 +273,6 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="credit-debit">
-                                            <label>
-                                                <input type="radio" name="collapseGroup" value="section2"> Paypal
-                                            </label>
-                                            <div id="section2" class="collapse">
-                                                <p>Proceed Below With Your Paypal Account And Complete Your Purchase.</p>
-                                            </div>
-                                        </div>
                                         <script>
                                             document.addEventListener("DOMContentLoaded", function() {
                                             // Get all radio buttons with the name 'collapseGroup'
@@ -411,38 +406,8 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div id="find-free-political" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="card" >
-                        <img class="user-id" src="img/user-img.png">
-                        <i class="bi bi-suit-heart-fill heartIcon"></i>
-                        <img src="img/image-6.png" class="card-img" alt="image-1">
-                        <div class="card-body">
-                            <h3>California Piano Concert Events 2024</h3>
-                        </div>
-                        <div class="card-bottom">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-geo-alt-fill"></i>
-                                <p>
-                                    Amsterdam <br>
-                                    <span>Schipol Airport</span>
-                                </p>
-                            </div>
-                            <hr>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-clock-fill"></i>
-                                <p>
-                                    17 July 2024<br>
-                                    <span>6:00 Am</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="row" id="events-container">
+        
     </div>
 </section>
 <?=$this->include('templates/footer');?>
@@ -541,5 +506,162 @@
                 }
             });
         }
+        function loadEvents() {
+            $.ajax({
+                url: '/getEvents',  // Endpoint to get events
+                method: 'GET',
+                data: {
+                    category: '',  // Pass selected category
+                    date: ''           // Pass selected date
+                },
+                success: function(response) {
+                    let eventsContainer = $('#events-container');
+                    eventsContainer.empty();  // Clear the previous events
+
+                    if (response.length === 0) {
+                        eventsContainer.html('<center> <img src="img/page-not-found.png" alt=""></center><center><h1 style="color: #741774;">No Events Found</h1></center>');
+                        return;
+                    }
+
+                    // Loop through the response and create HTML for each event
+                    response.forEach(function(event) {
+                        // Determine if the event is favorited
+                        const isFavoritedClass = event.is_favorited ? 'active' : '';
+                        
+                        let eventHTML = `
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card">
+                                    <!-- User image (circular) -->
+                                    <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
+                                    
+                                    <!-- Event banner -->
+                                    <img src="${event.eventbanner}" class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="${event.eventname}">
+                                    
+                                    <div class="card-body">
+                                        <!-- Event name and heart icon on the right -->
+                                        <div class="d-flex align-items-center">
+                                            <a href="${event.slug}" style="text-decoration: none; color: black; flex-grow: 1;">
+                                                <h4 style="font-size: 1.2rem;">${event.eventname}</h4>
+                                            </a>
+                                            <!-- Heart icon positioned on the right -->
+                                            <button class="heart-button ml-auto" onclick="toggleFavorite(this, ${event.event_id})" style="border: none; background: transparent;">
+                                                <i class="bi bi-suit-heart-fill heartIcon ${isFavoritedClass}" style="font-size: 1.5rem; color: red;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-bottom p-2">
+                                        <div class="d-flex align-items-center">
+                                            <p class="ml-2">
+                                                ${event.city} <br>
+                                                <span>${event.locationname}</span>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-clock-fill"></i>
+                                            <p class="ml-2">
+                                                ${formatDate(event.eventdate)}<br>
+                                                <span>${formatTime(event.eventstartingtime)}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                        eventsContainer.append(eventHTML);  // Append the event HTML to the container
+                    });
+                },
+                error: function() {
+                    $('#events-container').html('<p>Error loading events</p>');  // Show error message
+                }
+            });
+        }
+        // Initial load of events
+        loadEvents();
+
+        // Formatting helper functions
+        function formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', options);
+        }
+
+        function formatTime(timeString) {
+            let [hours, minutes] = timeString.split(':');
+            let period = 'AM';
+
+            hours = parseInt(hours);
+            if (hours >= 12) {
+                period = 'PM';
+                if (hours > 12) hours -= 12;
+            } else if (hours === 0) hours = 12;
+
+            return `${hours}:${minutes} ${period}`;
+        }
     });
+    
+    function toggleFavorite(button, eventId) {
+        const heartIcon = button.querySelector('.heartIcon');
+        const isActive = heartIcon.classList.contains('active'); // Check the current state
+
+        // Toggle the active class
+        heartIcon.classList.toggle('active');
+
+        // Send an AJAX request to update the wishlist in the database
+        $.ajax({
+            url: '/wishlist/toggle',  // Change this to your actual API route
+            type: 'POST',
+            data: {
+                event_id: eventId,  // The ID of the event being favorited/unfavorited
+                is_favorited: !isActive  // True if adding to favorites, False if removing
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Show success notification
+                    Swal.fire({
+                        icon: 'success',
+                        title: !isActive ? 'Added to Wishlist' : 'Removed from Wishlist',
+                        text: !isActive ? 'The item has been added to your wishlist.' : 'The item has been removed from your wishlist.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else if (response.status === 'error' && response.message === 'You need to log in first to add this event to your wishlist.') {
+                    // Show login required error message
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Login Required',
+                        text: response.message, // The error message from the server
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    // Reverse the toggle state since the user is not logged in
+                    heartIcon.classList.toggle('active');
+                } else {
+                    // Show error notification
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error updating the wishlist. Please try again.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    // If there's an error, reverse the toggle state
+                    heartIcon.classList.toggle('active');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Show error notification for AJAX failure
+                Swal.fire({
+                    icon: 'error',
+                    title: 'AJAX Error',
+                    text: 'There was a problem with your request. Please try again.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                // In case of error, reverse the toggle state
+                heartIcon.classList.toggle('active');
+            }
+        });
+    }
 </script>

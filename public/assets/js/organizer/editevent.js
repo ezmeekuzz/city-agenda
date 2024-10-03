@@ -50,41 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the display based on the default selected option
     toggleRecurrenceOptions();
-    var stateId = $('#state_id').val();
-
-    // Check if state ID has a value
-    if (stateId) {
-        // Trigger the AJAX request to load cities based on the selected state
-        loadCities(stateId);
-    }
-
-    // Function to load cities based on state ID
-    function loadCities(stateId) {
-        $.ajax({
-            url: '/organizer/editevent/getCities', // Replace with your actual URL
-            type: 'POST',
-            data: {state_id: stateId},
-            success: function(data) {
-                $('#city_id').empty().append('<option></option>');
-            
-                $.each(data, function(key, city) {
-                    var selected = (city.city_id == selectedCityId) ? ' selected' : '';
-                    $('#city_id').append('<option value="' + city.city_id + '"' + selected + '>' + city.cityname + '</option>');
-                });
-    
-                $('#city_id').trigger("chosen:updated");
-            },
-            error: function(xhr, status, error) {
-                console.error("An error occurred while fetching cities: " + error);
-            }
-        });
-    }
-
-    // On state change, load cities
-    $('#state_id').change(function () {
-        var stateId = $(this).val();
-        loadCities(stateId);
-    });
 
     $('#eventdescription').summernote({
         toolbar: [

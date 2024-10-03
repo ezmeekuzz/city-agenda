@@ -50,32 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the display based on the default selected option
     toggleRecurrenceOptions();
-    $('#state_id').on('change', function() {
-        var stateId = $(this).val();
-        
-        if (stateId) {
-            $.ajax({
-                url: '/admin/addevent/getCities',
-                type: 'POST',
-                data: {state_id: stateId},
-                dataType: 'json',
-                success: function(data) {
-                    $('#city_id').empty().append('<option></option>');
-                    
-                    $.each(data, function(key, city) {
-                        $('#city_id').append('<option value="' + city.city_id + '">' + city.cityname + '</option>');
-                    });
-                    
-                    $('#city_id').trigger("chosen:updated");
-                },
-                error: function(xhr, status, error) {
-                    console.error("An error occurred while fetching cities: " + error);
-                }
-            });
-        } else {
-            $('#city_id').empty().append('<option></option>').trigger("chosen:updated");
-        }
-    });
 
     $('#eventdescription').summernote({
         toolbar: [
@@ -250,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let map;
 let marker;
 let geocoder;
+let autocomplete;
 
 function initMap() {
     // Initialize the map centered on a default location
@@ -267,12 +242,47 @@ function initMap() {
     // Initialize the geocoder
     geocoder = new google.maps.Geocoder();
 
-    // Add an event listener for the location input
-    document.getElementById("locationname").addEventListener("input", function () {
-        let address = this.value;
-        if (address.length > 3) { // Start searching after typing more than 3 characters
-            geocodeAddress(geocoder, map, marker, address);
+    // Initialize the autocomplete for the locationname input (without restrictions)
+    let locationInput = document.getElementById("locationname");
+    autocomplete = new google.maps.places.Autocomplete(locationInput);
+
+    // When a user selects a place from the autocomplete dropdown
+    autocomplete.addListener('place_changed', function () {
+        let place = autocomplete.getPlace();
+        if (!place.geometry) {
+            console.log("No details available for input: '" + place.name + "'");
+            return;
         }
+
+        // Move the map to the selected location
+        map.setCenter(place.geometry.location);
+        marker.setPosition(place.geometry.location);
+
+        // Extract address components and populate state and city
+        let addressComponents = place.address_components;
+        let state = '';
+        let city = '';
+        
+        // Iterate through the address components
+        for (let i = 0; i < addressComponents.length; i++) {
+            let types = addressComponents[i].types;
+            // Get province or state from 'administrative_area_level_2' (for provinces in PH)
+            if (types.includes('administrative_area_level_2')) {
+                state = addressComponents[i].long_name;  // Province (e.g. Misamis Oriental)
+            }
+            // Get city or municipality from 'locality' or 'administrative_area_level_1'
+            if (types.includes('locality')) {
+                city = addressComponents[i].long_name;  // City (e.g. Cagayan de Oro)
+            }
+            // Backup: Get state from 'administrative_area_level_1' if city isn't found
+            if (types.includes('administrative_area_level_1') && !city) {
+                state = addressComponents[i].long_name;  // For backup (e.g. Northern Mindanao)
+            }
+        }
+
+        // Populate the state and city fields
+        document.getElementById("state").value = state;
+        document.getElementById("city").value = city;
     });
 
     // Add event listener to update the map on marker drag
@@ -281,22 +291,11 @@ function initMap() {
     });
 }
 
-// Function to geocode an address and place a marker on the map
-function geocodeAddress(geocoder, resultsMap, marker, address) {
-    geocoder.geocode({ 'address': address }, function (results, status) {
-        if (status === 'OK') {
-            resultsMap.setCenter(results[0].geometry.location);
-            marker.setPosition(results[0].geometry.location);
-        } else {
-            console.log('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
-
 // Initialize the map when the window loads
 window.onload = function() {
     initMap();
 };
+
 $(document).ready(function () {
     $('#addevent').submit(function(event) {
         // Prevent default form submission
