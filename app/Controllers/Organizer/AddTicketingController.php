@@ -14,7 +14,7 @@ class AddTicketingController extends SessionController
             'currentpage' => 'eventmasterlist',
             'event_id' => $id
         ];
-        return view('pages/organizer/addticketing', $data);
+        return view('pages/create-ticket', $data);
     }
 
     public function insert()

@@ -40,7 +40,6 @@
                                         <tr>
                                             <th>Full Name</th>
                                             <th>Email Address</th>
-                                            <th>Reason</th>
                                             <th>Message</th>
                                             <th>Date</th>
                                             <th></th>

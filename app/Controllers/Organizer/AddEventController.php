@@ -22,7 +22,7 @@ class AddEventController extends SessionController
             'currentpage' => 'addevent',
             'categoryList' => $categoryList,
         ];
-        return view('pages/organizer/addevent', $data);
+        return view('pages/create-new-event', $data);
     }
     public function insert()
     {

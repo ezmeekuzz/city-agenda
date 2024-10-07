@@ -282,8 +282,9 @@
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                                 <div class="card">
                                     <!-- User image (circular) -->
-                                    <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
-                                    
+                                    <a href="/profile/${event.user_id}">
+                                        <img class="user-id img-fluid" src="${event.image}" alt="User" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 10px;">
+                                    </a>
                                     <!-- Event banner -->
                                     <img src="${event.eventbanner}" class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="${event.eventname}">
                                     

@@ -5,6 +5,7 @@ namespace App\Controllers\Organizer;
 use App\Controllers\Organizer\SessionController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\PaymentsModel;
+use App\Models\QRCodesModel;
 
 class MyBookingsController extends SessionController
 {
@@ -24,4 +25,12 @@ class MyBookingsController extends SessionController
             ->where('payments.user_id', session()->get('organizer_user_id'))
             ->make();
     }    
+    public function getQRCodes($id)
+    {
+        $qRCodesModel = new QRCodesModel();
+        
+        $qrCodes = $qRCodesModel->where('payment_id', $id)->findAll();
+
+        return $this->response->setJSON($qrCodes);
+    }
 }

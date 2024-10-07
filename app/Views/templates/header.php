@@ -1,3 +1,6 @@
+<?php
+    $url = (session()->get('organizer_user_id')) ? '/profile/' . session()->get('organizer_user_id') : '/login';
+?>
 <!doctype html>
 <html lang="en">
 
@@ -5,7 +8,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <title><?=$title;?></title>
 
     <link rel="stylesheet" href="<?=base_url();?>css/styles.css">
@@ -15,6 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_H6wQhY-ksDyboh_b-Sa17kkUbeKPdmk&libraries=places"></script>
     <style>
         .owl-carousel{
@@ -83,7 +87,7 @@
             <!-- Navbar Links -->
             <div class="col-md-5 col-sm-12 collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="d-flex gap-3 align-items-center nav-control justify-content-lg-end justify-content-between pt-lg-0 pb-lg-0 pt-sm-3 pb-sm-3 p-0">
-                    <a href="/login"><button class="new-event">Create New Event</button></a>
+                    <a href="/organizer/add-event"><button class="new-event">Create New Event</button></a>
                     <div class="nav-action d-flex gap-3 align-items-center">
                         <!-- Professional Dropdown for grid icon -->
                         <div class="dropdown">
@@ -94,11 +98,6 @@
 
                             <!-- Dropdown menu -->
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="gridIconDropdown" style="min-width: 200px; border-radius: 10px;">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2" href="/organizer/add-event">
-                                        Create New Event
-                                    </a>
-                                </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center gap-2" href="/organizer/profile/<?=session()->get('organizer_emailaddress')?>/<?=session()->get('organizer_user_id')?>">
                                         My Profile
@@ -127,7 +126,7 @@
                             </ul>
                         </div>
                         <hr class="d-none d-sm-block">
-                        <a href="/profile/<?=session()->get('organizer_emailaddress')?>/<?=session()->get('organizer_user_id')?>">
+                        <a href="<?=$url;?>">
                             <i class="bi bi-person-fill"></i>
                         </a>
                     </div>

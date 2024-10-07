@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
     <style>
         body, select, input, textarea, .js-basic-single, label {
             color: #000;
@@ -193,7 +194,7 @@
                         <div class="navigation d-flex">
                             <ul class="navbar-nav nav-right ml-auto">
                                 <li class="nav-item dropdown user-profile">
-                                    <a href="/organizer/profile/<?=session()->get('organizer_emailaddress')?>/<?=session()->get('organizer_user_id')?>" class="nav-link link-header" target="_blank">
+                                    <a href="/profile/<?=session()->get('organizer_user_id')?>" class="nav-link link-header" target="_blank">
                                         <?php
                                             $image = (session()->get('organizer_image') != "") ? '/' . session()->get('organizer_image') : base_url() . "assets/img/avatar.png";
                                         ?>

@@ -1,4 +1,33 @@
 <?=$this->include('templates/organizer/header');?>
+<style>
+/* Ensure the modal backdrop is behind the lightbox */
+.modal-backdrop {
+    z-index: 1049; /* Below lightbox */
+}
+
+/* Magnific Popup background */
+.mfp-bg {
+    z-index: 1060; /* Ensure it's above modal backdrop */
+}
+
+/* Magnific Popup wrapper */
+.mfp-wrap {
+    z-index: 1061; /* Ensure the lightbox appears above the modal */
+}
+
+/* Magnific Popup content (image and body shadow) */
+.mfp-content {
+    z-index: 1062; /* Ensure the content and shadows appear above everything */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Adjust shadow for depth */
+}
+
+/* Body shadow or backdrop */
+body.mfp-active {
+    z-index: 1063; /* Ensure body has a higher z-index */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); /* Apply shadow if needed */
+}
+
+</style>
 <div class="app-container">
     <?=$this->include('templates/organizer/sidebar');?>
     <div class="app-main" id="main">
@@ -55,7 +84,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+<div class="modal fade" id="qrcodesModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,7 +94,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="attendees"></div>
+                <div id="qrCodes"></div>
             </div>
         </div>
     </div>

@@ -9,7 +9,6 @@ $(document).ready(function () {
         "columns": [
             { "data": "fullname" },
             { "data": "email" },
-            { "data": "reason" },
             { "data": "message" },
             { "data": "message_date" },
             {

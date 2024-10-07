@@ -103,6 +103,7 @@ $routes->delete('/organizer/mywishlist/delete/(:num)', 'Organizer\MyWishListCont
 $routes->get('/organizer/mywishlist/getData', 'Organizer\MyWishListController::getData');
 $routes->get('/organizer/my-bookings', 'Organizer\MyBookingsController::index');
 $routes->get('/organizer/mybookings/getData', 'Organizer\MyBookingsController::getData');
+$routes->get('/organizer/mybookings/getQRCodes/(:num)', 'Organizer\MyBookingsController::getQRCodes/$1');
 /*Event Organizer*/
 $routes->get('/', 'HomeController::index');
 $routes->get('/getEvents', 'HomeController::getEvents');
@@ -122,6 +123,11 @@ $routes->get('/events', 'EventsController::index');
 $routes->get('/events/getEvents', 'EventsController::getEvents');
 $routes->post('/wishlist/toggle', 'WishListController::index');
 $routes->post('/eventdetails/stripePayment', 'EventDetailController::stripePayment');
-$routes->get('/profile', 'ProfileController::index');
+$routes->get('/profile/(:num)', 'ProfileController::index/$1');
+$routes->get('/profile/getEvents', 'ProfileController::getEvents');
+$routes->post('/profile/updateCoverPhoto', 'ProfileController::updateCoverPhoto');
+$routes->post('/profile/updateProfilePicture', 'ProfileController::updateProfilePicture');
+$routes->post('/profile/updateAbout', 'ProfileController::updateAbout');
+$routes->post('/profile/updateFullName', 'ProfileController::updateFullName');
 require APPPATH . 'Config/EventsRoutes.php';
 require APPPATH . 'Config/BlogRoutes.php';
