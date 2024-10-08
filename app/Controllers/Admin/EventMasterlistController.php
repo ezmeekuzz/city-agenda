@@ -13,6 +13,7 @@ use App\Models\Admin\FaqsModel;
 use App\Models\Admin\TicketsModel;
 use App\Models\Admin\WishListModel;
 use App\Models\PaymentsModel;
+use App\Models\QRCodesModel;
 
 class EventMasterlistController extends SessionController
 {
@@ -41,6 +42,7 @@ class EventMasterlistController extends SessionController
         $faqsModel = new FaqsModel();
         $ticketsModel = new TicketsModel();
         $paymentsModel = new PaymentsModel();
+        $qRCodesModel = new QRCodesModel();
         $wishListModel = new WishListModel();
     
         // Delete related images and files for each table
@@ -65,15 +67,33 @@ class EventMasterlistController extends SessionController
         }
         $sponsorsModel->where('event_id', $id)->delete();
     
+        // Delete related payments and their associated QR codes
+        $payments = $paymentsModel->where('event_id', $id)->findAll();
+        foreach ($payments as $payment) {
+            // Delete QR codes related to the payment
+            $qrcodes = $qRCodesModel->where('payment_id', $payment['payment_id'])->findAll();
+            foreach ($qrcodes as $qr) {
+                if (is_file($qr['location']) && file_exists($qr['location'])) {
+                    unlink($qr['location']); // Delete the QR code image
+                }
+            }
+            // Delete the QR codes
+            $qRCodesModel->where('payment_id', $payment['payment_id'])->delete();
+        }
+    
+        // Now, delete the payments
+        $paymentsModel->where('event_id', $id)->delete();
+    
+        // Tickets table - delete the tickets now
+        $ticketsModel->where('event_id', $id)->delete();
+    
         // Agendas table (no images to delete, just delete the records)
         $agendasModel->where('event_id', $id)->delete();
-        
+    
+        // FAQs table (no images, just delete the records)
         $faqsModel->where('event_id', $id)->delete();
-
-        $paymentsModel->where('event_id', $id)->delete();
-
-        $ticketsModel->where('event_id', $id)->delete();
-
+    
+        // WishList table (no images, just delete the records)
         $wishListModel->where('event_id', $id)->delete();
     
         // Events table (eventbanner, event_image, event_video)
@@ -107,7 +127,7 @@ class EventMasterlistController extends SessionController
         } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the event from the database']);
         }
-    }  
+    }    
 
     public function getAttendees($id)
     {

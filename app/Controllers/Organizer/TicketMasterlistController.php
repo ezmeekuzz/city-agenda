@@ -4,8 +4,10 @@ namespace App\Controllers\Organizer;
 
 use App\Controllers\Organizer\SessionController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Modelsd\Admin\EventsModel;
-use App\Modelsd\Admin\TicketsModel;
+use App\Models\Admin\EventsModel;
+use App\Models\Admin\TicketsModel;
+use App\Models\PaymentsModel;
+use App\Models\QRCodesModel;
 
 class TicketMasterlistController extends SessionController
 {
@@ -27,7 +29,27 @@ class TicketMasterlistController extends SessionController
     public function delete($id)
     {
         $ticketsModel = new TicketsModel();
-
+        $paymentsModel = new PaymentsModel();
+        $qRCodesModel = new QRCodesModel();
+    
+        // Get all payments related to the event
+        $payments = $paymentsModel->where('ticket_id', $id)->findAll();
+        foreach ($payments as $pay) {
+            // Get all QR codes related to the payment
+            $qrcodes = $qRCodesModel->where('payment_id', $pay['payment_id'])->findAll();
+            foreach ($qrcodes as $qr) {
+                if (is_file($qr['location']) && file_exists($qr['location'])) {
+                    unlink($qr['location']); // Delete the QR code image
+                }
+            }
+            // Delete QR codes related to this payment
+            $qRCodesModel->where('payment_id', $pay['payment_id'])->delete();
+        }
+    
+        // Delete all payments related to the event
+        $paymentsModel->where('ticket_id', $id)->delete();
+    
+        // Delete the ticket related to the event
         $deleted = $ticketsModel->where('ticket_id', $id)->delete();
     
         if ($deleted) {
@@ -35,7 +57,7 @@ class TicketMasterlistController extends SessionController
         } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the ticket from the database']);
         }
-    }  
+    }    
     public function update()
     {
         // Load the model

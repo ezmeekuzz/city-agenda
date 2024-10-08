@@ -492,7 +492,7 @@
                         form.reset();
                         card.clear(); // Clear the card details from the Stripe element
                         // Redirect or reload page after confirmation
-                        window.location.href = '<?= base_url('payment/success'); ?>';
+                        window.location.href = '<?= base_url('/'); ?>';
                     });
                 },
                 error: function(xhr) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2024 at 10:53 AM
+-- Generation Time: Oct 08, 2024 at 11:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,27 +111,6 @@ INSERT INTO `categories` (`category_id`, `categoryname`, `slug`, `categoryimage`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cities`
---
-
-CREATE TABLE `cities` (
-  `city_id` int(11) NOT NULL,
-  `state_id` int(11) NOT NULL,
-  `cityname` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cities`
---
-
-INSERT INTO `cities` (`city_id`, `state_id`, `cityname`) VALUES
-(19819, 73, 'Auburn 1'),
-(19823, 73, 'Birmingham'),
-(19824, 74, 'Testing');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `events`
 --
 
@@ -150,8 +129,8 @@ CREATE TABLE `events` (
   `eventendingtime` time NOT NULL,
   `recurrence` varchar(20) DEFAULT NULL,
   `locationname` varchar(110) NOT NULL,
-  `state_id` int(11) NOT NULL,
-  `city_id` int(11) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `city` varchar(50) NOT NULL,
   `event_image` varchar(110) DEFAULT NULL,
   `event_video` varchar(110) DEFAULT NULL,
   `eventdescription` longtext NOT NULL,
@@ -159,6 +138,17 @@ CREATE TABLE `events` (
   `refundpolicy` varchar(220) NOT NULL,
   `dateadded` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`event_id`, `user_id`, `publishstatus`, `eventbanner`, `category_id`, `eventname`, `slug`, `shortdescription`, `eventtype`, `eventdate`, `eventstartingtime`, `eventendingtime`, `recurrence`, `locationname`, `state`, `city`, `event_image`, `event_video`, `eventdescription`, `publishsetting`, `refundpolicy`, `dateadded`) VALUES
+(55, 4, 'Yes', 'uploads/event_banners/1727859964_a8468ba461da254c2bac.jpg', 3, 'sdsds', 'sdsds', 'sadasdsad', 'Single', '2024-10-31', '05:05:00', '17:05:00', NULL, 'Pelaez Sports Center, Don Apolinar Velez Street, Cagayan de Oro, Misamis Oriental, Philippines', 'Misamis Oriental', 'Cagayan de Oro', NULL, NULL, '<p>sadsadsad</p>', 'Public', 'Do Not Allow Refund.', '2024-10-02'),
+(56, 9, 'No', 'uploads/event_banners/1727869006_98fb20b13ef6b58c10e3.jpg', 9, 'dasdsad', 'dasdsad', 'sdasdas', 'Single', '2024-10-30', '10:36:00', '22:36:00', NULL, 'Pelaez Sports Center, Don Apolinar Velez Street, Cagayan de Oro, Misamis Oriental, Philippines', 'Misamis Oriental', 'Cagayan de Oro', NULL, NULL, '<p>sadasd</p>', 'Public', 'Do Not Allow Refund.', '2024-10-02'),
+(57, 9, 'Yes', 'uploads/event_banners/1727972534_28f18e173d38457512d0.jpg', 3, 'College Footballe', 'college-footballe', 'werwer', 'Single', '2024-10-28', '00:21:00', '12:22:00', NULL, 'Birmingham, UK', 'West Midlands', 'Birmingham', NULL, NULL, '<p>dfsdfsdfsdf</p>', 'Public', 'Do Not Allow Refund.', '2024-10-03'),
+(58, 9, 'No', 'uploads/event_banners/1728303941_b5dd9a2784769ce005be.jpg', 3, 'College Football', 'college-football', 'sadsadasd', 'Single', '2024-10-31', '08:25:00', '20:25:00', NULL, 'Pelaez Sports Center, Don Apolinar Velez Street, Cagayan de Oro, Misamis Oriental, Philippines', 'Misamis Oriental', 'Cagayan de Oro', NULL, NULL, 'dsfdsf', '', '', '2024-10-07'),
+(59, 9, 'Yes', 'uploads/event_banners/1728304010_138e25f2c4023f06d02f.jpg', 9, 'sdsds dfsd dsfsdf', 'sdsds-dfsd-dsfsdf', 'dsfsdfd', 'Single', '2024-10-31', '08:26:00', '20:26:00', NULL, 'Pelaez Sports Center, Don Apolinar Velez Street, Cagayan de Oro, Misamis Oriental, Philippines', 'Misamis Oriental', 'Cagayan de Oro', NULL, NULL, 'dsfsdfdsf', 'Public', 'Do Not Allow Refund.', '2024-10-07');
 
 -- --------------------------------------------------------
 
@@ -183,7 +173,6 @@ CREATE TABLE `messages` (
   `message_id` int(11) NOT NULL,
   `fullname` varchar(110) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `reason` varchar(100) NOT NULL,
   `message` longtext NOT NULL,
   `message_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -205,6 +194,26 @@ CREATE TABLE `payments` (
   `ticket_type` varchar(30) NOT NULL,
   `paymentdate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `user_id`, `event_id`, `ticket_id`, `price`, `quantity`, `total_amount`, `ticket_type`, `paymentdate`) VALUES
+(14, 9, 57, 21, 250.00, 4, 1000.00, 'Paid', '2024-10-03'),
+(15, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(16, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(17, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(18, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(19, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(20, 9, 55, 19, 450.00, 4, 1800.00, 'Paid', '2024-10-06'),
+(21, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(22, 9, 55, 19, 450.00, 5, 2250.00, 'Paid', '2024-10-06'),
+(23, 9, 57, 21, 250.00, 3, 750.00, 'Paid', '2024-10-07'),
+(24, 9, 57, 21, 250.00, 4, 1000.00, 'Paid', '2024-10-07'),
+(25, 9, 57, 21, 250.00, 5, 1250.00, 'Paid', '2024-10-07'),
+(26, 9, 57, 21, 250.00, 4, 1000.00, 'Paid', '2024-10-07'),
+(27, 9, 57, 21, 250.00, 2, 500.00, 'Paid', '2024-10-07');
 
 -- --------------------------------------------------------
 
@@ -239,6 +248,53 @@ INSERT INTO `payment_methods` (`payment_method_id`, `user_id`, `payment_type`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `qrcodes`
+--
+
+CREATE TABLE `qrcodes` (
+  `qrcode_id` int(11) NOT NULL,
+  `payment_id` int(11) NOT NULL,
+  `location` varchar(110) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `qrcodes`
+--
+
+INSERT INTO `qrcodes` (`qrcode_id`, `payment_id`, `location`) VALUES
+(1, 20, 'uploads/qrcodes/qrcode_6702f08344a47.png'),
+(2, 21, 'uploads/qrcodes/qrcode_6702f191596bc.png'),
+(3, 21, 'uploads/qrcodes/qrcode_6702f191693f9.png'),
+(4, 21, 'uploads/qrcodes/qrcode_6702f19172901.png'),
+(5, 21, 'uploads/qrcodes/qrcode_6702f1917b441.png'),
+(6, 21, 'uploads/qrcodes/qrcode_6702f1918239b.png'),
+(7, 22, 'uploads/qrcodes/qrcode_6702f335c47d6.png'),
+(8, 22, 'uploads/qrcodes/qrcode_6702f335dcbcf.png'),
+(9, 22, 'uploads/qrcodes/qrcode_6702f335e71d2.png'),
+(10, 22, 'uploads/qrcodes/qrcode_6702f335f3faf.png'),
+(11, 22, 'uploads/qrcodes/qrcode_6702f3360ba2b.png'),
+(12, 23, 'uploads/qrcodes/qrcode_67037e905a56b.png'),
+(13, 23, 'uploads/qrcodes/qrcode_67037e906ea2a.png'),
+(14, 23, 'uploads/qrcodes/qrcode_67037e907df66.png'),
+(15, 24, 'uploads/qrcodes/qrcode_67037f49a97ef.png'),
+(16, 24, 'uploads/qrcodes/qrcode_67037f49caf28.png'),
+(17, 24, 'uploads/qrcodes/qrcode_67037f49d4898.png'),
+(18, 24, 'uploads/qrcodes/qrcode_67037f49e0205.png'),
+(19, 25, 'uploads/qrcodes/qrcode_67037f83e865e.png'),
+(20, 25, 'uploads/qrcodes/qrcode_67037f8401014.png'),
+(21, 25, 'uploads/qrcodes/qrcode_67037f840bbc7.png'),
+(22, 25, 'uploads/qrcodes/qrcode_67037f841914f.png'),
+(23, 25, 'uploads/qrcodes/qrcode_67037f8422cf6.png'),
+(24, 26, 'uploads/qrcodes/qrcode_670385e965e38.png'),
+(25, 26, 'uploads/qrcodes/qrcode_670385ea319ab.png'),
+(26, 26, 'uploads/qrcodes/qrcode_670385ea41fc0.png'),
+(27, 26, 'uploads/qrcodes/qrcode_670385ea549d7.png'),
+(28, 27, 'uploads/qrcodes/qrcode_670386e91c7ee.png'),
+(29, 27, 'uploads/qrcodes/qrcode_670386e934b6a.png');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `speakers`
 --
 
@@ -266,26 +322,6 @@ CREATE TABLE `sponsors` (
   `sponsor_description` longtext NOT NULL,
   `sponsor_logo` varchar(110) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `states`
---
-
-CREATE TABLE `states` (
-  `state_id` int(11) NOT NULL,
-  `state_code` varchar(50) NOT NULL,
-  `state_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `states`
---
-
-INSERT INTO `states` (`state_id`, `state_code`, `state_name`) VALUES
-(73, 'AL', 'Alabama'),
-(74, 'Testing', 'Testing');
 
 -- --------------------------------------------------------
 
@@ -325,6 +361,15 @@ CREATE TABLE `tickets` (
   `salesend` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`ticket_id`, `event_id`, `tickettype`, `ticketname`, `ticketdescription`, `availablequantity`, `soldticket`, `price`, `salesstart`, `salesend`) VALUES
+(19, 55, 'Paid', 'sad', 'sadasd', 6, 39, 450.00, '2024-10-02 17:06:00', '2024-10-30 17:06:00'),
+(20, 56, 'Paid', 'sds', 'dsdsd', 2323, 0, 23231.00, '2024-10-29 19:37:00', '2024-10-31 19:37:00'),
+(21, 57, 'Paid', 'Ticket College Football', 'dsfdsfsdf', 428, 22, 250.00, '2024-10-27 00:22:00', '2024-10-31 00:22:00');
+
 -- --------------------------------------------------------
 
 --
@@ -334,6 +379,7 @@ CREATE TABLE `tickets` (
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `image` varchar(110) NOT NULL,
+  `coverphoto` varchar(110) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `jobtitle` varchar(100) NOT NULL,
@@ -353,10 +399,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `image`, `firstname`, `lastname`, `jobtitle`, `username`, `emailaddress`, `phonenumber`, `password`, `usertype`, `encryptedpass`, `aboutyourself`, `account_status`, `two_factor_enabled`, `created_at`) VALUES
-(4, 'uploads/profile-image/1725874017_5d0ea71d123c2cfb1284.jpg', 'Rustom', 'Codilan', '', 'admin', 'rustomcodilan@gmail.com', NULL, 'mis137', 'Administrator', '$2y$10$WdL/jStypgyMUCRef37b9elIOPeoBGpKiaiEWk3py7Lzmbsr.hP76', '', '', '', '2024-09-20'),
-(8, 'uploads/profile-image/1726463378_5d4bd4f019c2efb4a50c.jpg', 'Rustom', 'Codilan', 'PHP Backend Developer', '', 'rustom@braveegg.com', '09975304890', 'mis137', 'Event Organizer', '$2y$10$8rIQ72d/j6ls0FJQBp1J7.OLawOT/uaR8IeLL/gvqs0Mkw1iRQ2OW', 'Hard Working!', 'Active', '0', '2024-09-20'),
-(9, 'uploads/profile-image/1726575528_4c72746d1489a2e8bf8e.jpg', 'Rustom', 'Codilan', 'PHP Backend Developer', '', 'rustomlacrecodilan@gmail.com', '09975304890', 'mis137', 'Event Organizer', '$2y$10$DmGrgkRVxwVQBYFgfXoxo.C2cDxi9MSHmxqdwJPZJeKIVcxP0xiqS', 'Hello World!', 'Active', '0', '2024-09-20');
+INSERT INTO `users` (`user_id`, `image`, `coverphoto`, `firstname`, `lastname`, `jobtitle`, `username`, `emailaddress`, `phonenumber`, `password`, `usertype`, `encryptedpass`, `aboutyourself`, `account_status`, `two_factor_enabled`, `created_at`) VALUES
+(4, 'uploads/profile-image/1725874017_5d0ea71d123c2cfb1284.jpg', '', 'Rustom', 'Codilan', '', 'admin', 'rustomcodilan@gmail.com', NULL, 'mis137', 'Administrator', '$2y$10$WdL/jStypgyMUCRef37b9elIOPeoBGpKiaiEWk3py7Lzmbsr.hP76', '', '', '', '2024-09-20'),
+(8, 'uploads/profile-image/1726463378_5d4bd4f019c2efb4a50c.jpg', '', 'Rustom', 'Codilan', 'PHP Backend Developer', '', 'rustom@braveegg.com', '09975304890', 'mis137', 'Event Organizer', '$2y$10$8rIQ72d/j6ls0FJQBp1J7.OLawOT/uaR8IeLL/gvqs0Mkw1iRQ2OW', 'Hard Working!', 'Active', '0', '2024-09-20'),
+(9, 'uploads/profile-image/1728317713_c9c9af66708e9eeade88.png', 'uploads/cover-photo/1728317706_9b87bd01966917f1349b.png', 'Richard', 'Peterson', 'PHP Backend Developer', '', 'rustomlacrecodilan@gmail.com', '09975304890', 'mis137', 'Event Organizer', '$2y$10$DmGrgkRVxwVQBYFgfXoxo.C2cDxi9MSHmxqdwJPZJeKIVcxP0xiqS', 'Hello World! Hooray! Praise!!!', 'Active', '1', '2024-09-20');
 
 -- --------------------------------------------------------
 
@@ -369,6 +415,14 @@ CREATE TABLE `wishlists` (
   `user_id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wishlists`
+--
+
+INSERT INTO `wishlists` (`wishlist_id`, `user_id`, `event_id`) VALUES
+(40, 9, 55),
+(42, 9, 57);
 
 --
 -- Indexes for dumped tables
@@ -403,21 +457,14 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `cities`
---
-ALTER TABLE `cities`
-  ADD PRIMARY KEY (`city_id`),
-  ADD KEY `state_id` (`state_id`);
-
---
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`event_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `state_id` (`state_id`),
-  ADD KEY `city_id` (`city_id`);
+  ADD KEY `state_id` (`state`),
+  ADD KEY `city_id` (`city`);
 
 --
 -- Indexes for table `faqs`
@@ -449,6 +496,13 @@ ALTER TABLE `payment_methods`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `qrcodes`
+--
+ALTER TABLE `qrcodes`
+  ADD PRIMARY KEY (`qrcode_id`),
+  ADD KEY `payment_id` (`payment_id`);
+
+--
 -- Indexes for table `speakers`
 --
 ALTER TABLE `speakers`
@@ -461,12 +515,6 @@ ALTER TABLE `speakers`
 ALTER TABLE `sponsors`
   ADD PRIMARY KEY (`sponsor_id`),
   ADD KEY `event_id` (`event_id`);
-
---
--- Indexes for table `states`
---
-ALTER TABLE `states`
-  ADD PRIMARY KEY (`state_id`);
 
 --
 -- Indexes for table `subscribers`
@@ -524,16 +572,10 @@ ALTER TABLE `categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `cities`
---
-ALTER TABLE `cities`
-  MODIFY `city_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19825;
-
---
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `faqs`
@@ -545,19 +587,25 @@ ALTER TABLE `faqs`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
 --
 ALTER TABLE `payment_methods`
   MODIFY `payment_method_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `qrcodes`
+--
+ALTER TABLE `qrcodes`
+  MODIFY `qrcode_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `speakers`
@@ -572,12 +620,6 @@ ALTER TABLE `sponsors`
   MODIFY `sponsor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT for table `states`
---
-ALTER TABLE `states`
-  MODIFY `state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
-
---
 -- AUTO_INCREMENT for table `subscribers`
 --
 ALTER TABLE `subscribers`
@@ -587,7 +629,7 @@ ALTER TABLE `subscribers`
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -599,7 +641,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Constraints for dumped tables
@@ -625,19 +667,11 @@ ALTER TABLE `blogs`
   ADD CONSTRAINT `blogs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
--- Constraints for table `cities`
---
-ALTER TABLE `cities`
-  ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`state_id`) REFERENCES `states` (`state_id`);
-
---
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
-  ADD CONSTRAINT `events_ibfk_3` FOREIGN KEY (`state_id`) REFERENCES `states` (`state_id`),
-  ADD CONSTRAINT `events_ibfk_4` FOREIGN KEY (`city_id`) REFERENCES `cities` (`city_id`);
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
 
 --
 -- Constraints for table `faqs`
@@ -658,6 +692,12 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `payment_methods`
   ADD CONSTRAINT `payment_methods_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `qrcodes`
+--
+ALTER TABLE `qrcodes`
+  ADD CONSTRAINT `qrcodes_ibfk_1` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`);
 
 --
 -- Constraints for table `speakers`

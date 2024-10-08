@@ -18,6 +18,7 @@ use Stripe\Charge;
 use Stripe\Customer;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use DateTime;
 
 class EventDetailController extends BaseController
 {
@@ -139,7 +140,9 @@ class EventDetailController extends BaseController
         $token = $this->request->getPost('stripeToken');
         $formattedEventId = sprintf('CA%05d', $event_id);
     
-        $ticketDetails = $ticketsModel->find($ticket_id);
+        $ticketDetails = $ticketsModel
+        ->join('events', 'events.event_id=tickets.event_id', 'left')
+        ->find($ticket_id);
     
         // Check if enough tickets are available
         if ($ticketDetails && $ticketDetails['availablequantity'] < $quantity) {
@@ -210,15 +213,30 @@ class EventDetailController extends BaseController
     
             // Step 3: Send email after successful payment
             $recipientEmail = session()->get('organizer_emailaddress');
-    
+            $eventDate = $ticketDetails['eventdate'];  // Assuming format 'Y-m-d', e.g., '2024-08-09'
+            $startTime = $ticketDetails['eventstartingtime'];  // Assuming '12:00:00'
+            $endTime = $ticketDetails['eventendingtime'];  // Assuming '05:00:00'
+            
+            // Convert event date to desired format
+            $eventDateTime = new DateTime($eventDate);
+            $formattedDate = $eventDateTime->format('l, F j'); // e.g., 'Friday, August 9'
+            
+            // Format the start and end times (convert them to 12-hour format with AM/PM)
+            $formattedStartTime = date('gA', strtotime($startTime)); // e.g., '12AM'
+            $formattedEndTime = date('gA', strtotime($endTime));     // e.g., '5AM'
+            
+            // Combine everything
+            $formattedEventDetails = $formattedDate . ' . ' . $formattedStartTime . '-' . $formattedEndTime . ' PST';
+            
             // Prepare email content using ticket.php
             $attendeeName = session()->get('organizer_firstname') . ' ' . session()->get('organizer_lastname');
             $emailContent = view('email-template/ticket', [
-                'eventName' => 'Football League 2024',
-                'attendeeName' => $attendeeName,
-                'eventDate' => 'Friday, August 9 . 12-5AM PST',
-                'eventLocation' => 'Albuquerque, New Mexico',
-                'eventId' => $formattedEventId,
+                'eventName' => $ticketDetails['eventname'],
+                'attendeeName' => session()->get('organizer_firstname').' '.session()->get('organizer_lastname'),
+                'eventDate' => $formattedEventDetails,
+                'eventLocation' => $ticketDetails['locationname'],
+                'eventId' => sprintf('CA%05d', $ticketDetails['event_id']),
+                'shortDescription' => $ticketDetails['shortdescription'],
                 'ticketType' => $ticketType,
                 'price' => $price,
             ]);
