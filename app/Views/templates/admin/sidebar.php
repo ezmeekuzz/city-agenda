@@ -19,26 +19,6 @@
                                     <li class="<?php if($currentpage === 'usermasterlist') { echo 'active'; } ?>"> <a href='/admin/user-masterlist'>User Masterlist</a></li>
                                 </ul>
                             </li>
-                            <li class="<?php if($currentpage === 'addstate' || $currentpage === 'statemasterlist') { echo 'active'; } ?>">
-                                <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="nav-icon fa fa-map-o"></i>
-                                    <span class="nav-title">States</span>
-                                </a>
-                                <ul aria-expanded="false" class="custom-style">
-                                    <li class="<?php if($currentpage === 'addstate') { echo 'active'; } ?>"><a href='/admin/add-state'>Add State</a></li>
-                                    <li class="<?php if($currentpage === 'statemasterlist') { echo 'active'; } ?>"> <a href='/admin/state-masterlist'>State Masterlist</a></li>
-                                </ul>
-                            </li>
-                            <li class="<?php if($currentpage === 'addcity' || $currentpage === 'citymasterlist') { echo 'active'; } ?>">
-                                <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="nav-icon fa fa-map-o"></i>
-                                    <span class="nav-title">Cities</span>
-                                </a>
-                                <ul aria-expanded="false" class="custom-style">
-                                    <li class="<?php if($currentpage === 'addcity') { echo 'active'; } ?>"><a href='/admin/add-city'>Add City</a></li>
-                                    <li class="<?php if($currentpage === 'citymasterlist') { echo 'active'; } ?>"> <a href='/admin/city-masterlist'>City Masterlist</a></li>
-                                </ul>
-                            </li>
                             <li class="<?php if($currentpage === 'addcategory' || $currentpage === 'categorymasterlist') { echo 'active'; } ?>">
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <i class="nav-icon fa fa-list"></i>

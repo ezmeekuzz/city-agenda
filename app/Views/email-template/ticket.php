@@ -1,166 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football League 2024 Ticket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,100&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Email Template</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
+        *{
             padding: 0;
-        }
-
-        table {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-spacing: 0;
-            border-collapse: collapse;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
             margin: 0;
-            padding: 0;
+            box-sizing: border-box;
         }
 
-        .header {
-            background-color: #741774;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .content {
-            padding: 20px 0;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .attendee {
-            padding: 20px 0;
-        }
-
-        .attendee h1 {
-            font-size: 24px;
-            color: #741774;
-        }
-
-        .attendee span {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .date_location {
+        body{
             width: 100%;
+            height: auto;
             display: flex;
-            justify-content: space-between;
-        }
-
-        .date_box {
-            width: 48%;
-            background-color: #f4f4f4;
-            padding: 10px;
-            text-align: center;
-            color: #741774;
-            font-size: 16px;
-        }
-
-        .date_box h2 {
-            font-size: 18px;
-            color: #741774;
-            margin-bottom: 10px;
-        }
-
-        .footer {
-            margin-top: 20px;
-            background-color: #741774;
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            padding:20px;
         }
 
-        .footer img {
-            max-width: 150px;
-            display: block;
+        h1, h2, h3, h4, h5, h6, p, a,
+        div{
+            font-family: "Raleway", sans-serif;
+            padding: 0;
+            margin: 0;
         }
 
-        .ticket-details {
-            text-align: right;
-            color: white;
+        .emailTempSec{
+            width: 100%;
+            max-width: 1000px;
+            padding:50px;
+            border-radius: 10px;
+            background: rgb(170,70,150);
+            background: linear-gradient(180deg, rgba(170,70,150,1) 15%, rgba(89,39,82,1) 83%);
         }
 
-        .ticket-details h3 {
-            margin-top: 10px;
+        .emailCont h3{
+            font-size: 45px;
+            font-weight: 700;
+            color:#fff;
+        }
+
+        .emailCont p{
+            font-size: 17px;
+            font-weight: 400;
+            color:#fff;
+        }
+
+        .userInfo{
+            margin:20px 0px;
+        }
+
+        .userInfo span{
+            font-size: 18px;
+            font-weight: 500;
+            color:#fff;
+        }
+
+        .userInfo h2{
+            font-size: 40px;
+            font-weight: 700;
+            color:#fff;
+        }
+
+        .emailCont h5{
+            font-size: 20px;
+            font-weight: 600;
+            color:#fff;
+            margin:30px 0px;
+        }
+
+        .dateLoc{
+            margin-top: 15px;
+        }
+
+        .datelocSec{
+            background-color: #fff;
+            padding:20px;
+            width: 47%;
+            margin-right: 20px;
+            float: left;
+            margin-bottom: 20px;
+        }
+
+        .datelocSec h4{
+            font-size: 20px;
+            font-weight: 600;
+            color:#741774;
+        }
+
+        .datelocSec p{
+            font-size: 18px;
+            font-weight: 500;
+            color:#000;
+        }
+
+        .datelocSec p i{
+            font-size: 18px;
+        }
+
+
+        .emailImgs{
+            width: 45%;
+            gap:20px;
+            float: left;
+        }
+
+        .emailImgs img{
+            width: 45%;
+            height: 150px;
+            object-fit: contain;
+            float: left;
+            margin-right: 20px;
+        }
+
+        .emailDeatils{
+            width: 45%;
+            float: right;
+        }
+
+        .emailDeatils p{
+            font-size: 20px;
+            font-weight: 700!important;
+            font-style: italic;
+            text-align: center;
+            color:#fff;
+        }
+
+        .emailDeatils h1{
+            font-size: 45px;
+            font-weight: 700;
+            text-align: center;
+            color:#fff;
+            padding-bottom:30px;
+            border-bottom: 2px solid #fff;
+            margin-top: 20px!important;
+        }
+
+
+        @media only screen and (max-width:500px) {
+
+            
+
+            body{
+                height: 100%;
+            }
+
+
+            .emailCont h3{
+                font-size: 35px;
+            }
+
+            .emailCont p{
+                font-size: 15px;
+            }
+
+            .emailDeatils h1{
+                font-size: 35px;
+            }
+
+            .emailTempSec{
+                height: auto;
+                padding:30px 20px;
+                border-radius: 0px;
+            }
+
+
+            .emailImgs img{
+                width: 43%;
+                margin-right: 15px;
+            }
+
+            .emailBtm{
+                flex-direction: column-reverse;
+            }
+
+            .datelocSec{
+                width: 100%;
+                padding: 15px;
+                margin:0;
+                margin-bottom: 20px;
+            }
+            .emailImgs, .emailDeatils{
+                width: 100%;
+            }
+
+            
         }
     </style>
 </head>
-
 <body>
-    <table>
-        <!-- Header Section -->
-        <tr>
-            <td class="header">
-                <h1><?=$eventName;?></h1>
-            </td>
-        </tr>
-
-        <!-- Main Content -->
-        <tr>
-            <td>
-                <div class="content">
+    <section class="emailTempSec">
+        <div class="emailCont">
+            <h3><?=$eventName;?></h3>
+            <p>
                 <?=$shortDescription;?>
-                </div>
-
-                <!-- Attendee Info -->
-                <div class="attendee">
-                    <span>Attendee Full Name</span>
-                    <h1><?=$attendeeName;?></h1>
-                </div>
-
-                <!-- Date and Location Section -->
-                <div class="date_location">
-                    <div class="date_box">
-                        <h2>Date & Time</h2>
-                        <p><i class="fas fa-calendar icon"></i> <?=$eventDate;?></p>
+            </p>
+            <div class="userInfo">
+                <span>Attendee Full Name</span>
+                <h2><?=$attendeeName;?></h2>
+                <div class="dateLoc">
+                    <div class="datelocSec">
+                        <h4>Date And Time</h4>
+                        <p><i class="bi bi-calendar-check"></i><?=$eventDate;?></p>
                     </div>
-                    <div class="date_box">
-                        <h2>Event Location</h2>
-                        <p><i class="fas fa-map-marker-alt icon"></i> <?=$eventLocation;?></p>
+                    <div class="datelocSec">
+                        <h4>Event Location</h4>
+                        <p><i class="bi bi-calendar-check"></i><?=$eventLocation;?></p>
                     </div>
                 </div>
+            </div>
+            <h5>Event ID: <?=$eventId;?></h5>
 
-                <!-- Event ID -->
-                <div class="eventId">
-                    <h1>Event ID: <?=$eventId;?></h1>
+            <div class="emailBtm">
+                <div class="emailImgs">
+                    <img src="https://website-584df99e.teq.hju.mybluehost.me/img/bannerImg.png">     
+                    <img src="https://website-584df99e.teq.hju.mybluehost.me/img/bannerImg.png">           
                 </div>
-            </td>
-        </tr>
-
-        <!-- Footer Section -->
-        <tr>
-            <td>
-                <div class="footer">
-                    <!-- Logo on the left -->
-                    <div class="logo">
-                        <img src="<?=base_url();?>img/bannerImg.png" alt="Event Logo"> <!-- Placeholder logo -->
-                    </div>
-
-                    <!-- Ticket Details on the right -->
-                    <div class="ticket-details">
-                        <h3>Ticket Name: <?=$eventName;?></h3>
-                        <h3>Price Was Paid</h3>
-                    </div>
+                <div class="emailDeatils">
+                    <p>Ticket Name :<br><?=strtoupper($eventName);?></p>
+                    <h1>PRICE WAS PAID</h1>
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </section>
 </body>
-
 </html>

@@ -243,7 +243,7 @@ class EventDetailController extends BaseController
     
             // Configure and send the email
             $email->setTo($recipientEmail);
-            $email->setSubject('Your Ticket for Football League 2024');
+            $email->setSubject($ticketDetails['eventname']);
             $email->setMessage($emailContent);
     
             if ($email->send()) {

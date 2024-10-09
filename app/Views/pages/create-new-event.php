@@ -825,23 +825,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 $(document).ready(function () {
-    // Capture selected category_id from the dropdown
-    $('.dropdown-menu .dropdown-item').on('click', function() {
-        // Get the category_id from the clicked item
-        const selectedCategoryId = $(this).data('id');
-
-        // Set the hidden input field with the selected category_id
-        $('#category_id').val(selectedCategoryId);
-
+    // Update hidden input when category is selected from the dropdown
+    $('.dropdown-menu').on('click', 'a.dropdown-item', function() {
+        var selectedCategory = $(this).text();
+        var selectedCategoryId = $(this).data('id');
+        
         // Update the dropdown button text to show the selected category
-        $('.dropdown-toggle').text($(this).text());
+        $(this).closest('.dropdown').find('.dropdown-toggle').text(selectedCategory);
+        
+        // Set the hidden input field with the selected category ID
+        $('#category_id').val(selectedCategoryId);
     });
 
-    // Form submission for add event
     $('#addevent').submit(function(event) {
         // Prevent default form submission
         event.preventDefault();
     
+        // Ensure the hidden category_id field has a value before submission
+        var categoryId = $('#category_id').val();
+        if (!categoryId) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please select a category before submitting the form.',
+            });
+            return;
+        }
+
         // Enable any potentially disabled input fields
         $('#addevent').find('input, textarea, select').prop('disabled', false);
     
@@ -867,6 +877,7 @@ $(document).ready(function () {
                 if (response.success) {
                     // Reset form fields
                     $('#addevent')[0].reset();
+                    $('#eventdescription').summernote('reset');
                     
                     Swal.fire({
                         icon: 'success',
@@ -897,5 +908,4 @@ $(document).ready(function () {
         });
     });
 });
-
 </script>

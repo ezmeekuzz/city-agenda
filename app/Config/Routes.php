@@ -66,6 +66,7 @@ $routes->get('/admin/events-happening-today', 'Admin\EventsHappeningTodayControl
 $routes->get('/admin/eventshappeningtoday/getData', 'Admin\EventsHappeningTodayController::getData');
 $routes->get('/admin/archived-events', 'Admin\ArchivedEventsController::index');
 $routes->get('/admin/archivedevents/getData', 'Admin\ArchivedEventsController::getData');
+$routes->get('organizer/mybookings/generatePDF/(:num)', 'Organizer\MyBookingsController::generatePDF/$1');
 /*Administrator*/
 /*Event Organizer*/
 $routes->get('/organizer/dashboard', 'Organizer\DashboardController::index');

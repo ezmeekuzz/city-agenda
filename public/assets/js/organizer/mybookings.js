@@ -67,7 +67,7 @@ $(document).ready(function () {
                     qrHtml += `
                         <tr>
                             <td><a href="/${qrImageUrl}" class="qr-popup"><img src="/${qrImageUrl}" alt="QR Code" class="img-fluid" style="max-width: 100px;"></a></td>
-                            <td><a href="/${qrImageUrl}" download class="btn btn-primary">Download</a></td>
+                            <td><a href="javascript:void(0)" data-event-id="${eventId}" data-id="${qrCode.qrcode_id}" class="btn btn-primary download-pdf">Download</a></td>
                         </tr>`;
                 });
 
@@ -94,4 +94,11 @@ $(document).ready(function () {
             }
         });
     });
+});
+$(document).on('click', '.download-pdf', function () {
+    var qrcode_id = $(this).data('id');
+    var eventId = $(this).data('event-id');
+
+    // Trigger the PDF generation and download
+    window.location.href = `/organizer/mybookings/generatePDF/${qrcode_id}`;
 });
