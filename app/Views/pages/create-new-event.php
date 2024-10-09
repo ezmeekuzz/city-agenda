@@ -56,6 +56,7 @@ input[type="radio"] {
             </div>
         </div>
         <form class="container mt-5 upload-section" id="addevent" enctype="multipart/form-data">
+            <input type="hidden" name="publishstatus" value="Yes">
             <h2>Add Event Banner</h2>
             <div class="upload-container mt-4">
                 <div class="upload-banner" id="uploadBanner" style="background-image: url('img/upload-img-bg.png');">
