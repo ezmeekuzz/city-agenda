@@ -878,8 +878,6 @@ $(document).ready(function () {
                 if (response.success) {
                     // Reset form fields
                     $('#addevent')[0].reset();
-                    $('#eventdescription').summernote('reset');
-                    
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
